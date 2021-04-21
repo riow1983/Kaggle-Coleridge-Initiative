@@ -5,6 +5,7 @@
 *.npy
 .DS_Store
 *.zip
+/notebooks/NERDA
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
