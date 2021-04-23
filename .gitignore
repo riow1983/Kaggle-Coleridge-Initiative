@@ -6,6 +6,9 @@
 .DS_Store
 *.zip
 /notebooks/NERDA
+pytorch-xla-env-setup.py
+*.whl
+*.pth
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

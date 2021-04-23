@@ -1,16 +1,26 @@
 # Kaggle-Coleridge-Initiative
 
 
+#### notebook命名規則
+- kagglenb001-hoge.ipynb: Kaggle platform上で新規作成されたKaggle notebook (kernel).
+- nb001-hoge.ipynb: kagglenb001-hoge.ipynbをlocalにpullしlocalで変更を加えるもの. 番号はkagglenb001-hoge.ipynbと共通.
+- localnb001-hoge.ipynb: localで新規作成されたnotebook. 
+
 #### papers
 |name|url|status|comment|
 |----|----|----|----|
 |Big Bird: Transformers for Longer Sequences|https://arxiv.org/pdf/2007.14062.pdf|reading|turing completeの意味が分からん|
 
 
-#### Kaggle notebooks
+#### Kaggle Notebooks
 |name|url|status|comment|
 |----|----|----|----|
 |Coleridge - Huggingface Question Answering|https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering|read|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
+
+#### Kaggle Datasets
+|name|url|status|comment|
+|----|----|----|----|
+|nb003-annotation-data|https://www.kaggle.com/riow1983/nb003-annotation-data |created|CVデータ|
 
 
 #### 2021-04-15  
@@ -36,7 +46,7 @@ function ClickConnect(){
 }
 setInterval(ClickConnect,1000*60);
 ```
-https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/
+https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/  
 デメリットもありそうだが今のところ大きな問題には遭遇していない. セッション切れがあまりない(と言われている)Colab Proでも必要かどうかは微妙. 
 長時間学習する時などには有効かも.  
 
@@ -88,4 +98,29 @@ Wed Apr 21 00:48:32 2021
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
+
+#### 2021-04-22
+BERT Uncased / BERT Cased の違いについて  
+> In BERT uncased, the text has been lowercased before WordPiece tokenization step while in BERT cased, the text is same as the input text (no changes).
+
+> For example, if the input is "OpenGenus", then it is converted to "opengenus" for BERT uncased while BERT cased takes in "OpenGenus".
+https://iq.opengenus.org/bert-cased-vs-bert-uncased/  
+
+大文字と小文字の区別のことをletter caseというが, これを考慮するのがcased, 考慮しないのがuncasedだと覚えると良い. 
+Qiitaに逆の解説が上がっていたが, 間違いだと思う. (コメントしておいた.)  
+https://qiita.com/161abcd/items/c73af4fd422f664b3bf6  
+
+今回のコンペの元データは当然大文字と小文字両方出現するし, 固有表現は得てして大文字で始まる場合が多いので,   
+BERTなどのモデルもcased一択で良いと思う.
+
+
+#### 2021-04-23
+notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BERTモデルを  
+[localnb001-transformers-ner](https://www.kaggle.com/riow1983/localnb001-transformers-ner)にアップロードした.  
+なお, この学習済みモデルでinferenceするためのsample-submission.csvのテーブルデータの加工についての実装はまだできていない.  
+そこはフロムスクラッチするよりも公開カーネルを利用できないものかとも思っている.
+
+
+
+
 
