@@ -6,21 +6,37 @@
 - nb001-hoge.ipynb: kagglenb001-hoge.ipynbをlocalにpullしlocalで変更を加えるもの. 番号はkagglenb001-hoge.ipynbと共通.
 - localnb001-hoge.ipynb: localで新規作成されたnotebook. 
 
-#### papers
+#### Papers
 |name|url|status|comment|
 |----|----|----|----|
-|Big Bird: Transformers for Longer Sequences|https://arxiv.org/pdf/2007.14062.pdf|reading|turing completeの意味が分からん|
+|Big Bird: Transformers for Longer Sequences|https://arxiv.org/pdf/2007.14062.pdf|Reading|Turing completeの意味が分からん|
 
+#### Blogs
+|name|url|status|comment|
+|----|----|----|----|
+|Understanding BigBird's Block Sparse Attention|https://huggingface.co/blog/big-bird|Untouched||
+
+#### Documentation / Tutorials
+|name|url|status|comment|
+|----|----|----|----|
+|SAVING AND LOADING MODELS|https://pytorch.org/tutorials/beginner/saving_loading_models.html|Reading|PyTorch標準方式のモデルsave方法|
+|Source code for pytorch_transformers.tokenization_bert|https://huggingface.co/transformers/v1.2.0/_modules/pytorch_transformers/tokenization_bert.html|Done|bert-base-cased tokenizerをKaggle上で使用するためS3レポジトリからwget|
+|Huggign Face's notebooks|https://huggingface.co/transformers/notebooks.html|Bookmarked|-|
+|Fine-tuning a model on a token classification task|https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb|Done|huggingfaceによるNERタスクのチュートリアル.<br>ただしfine-tunedモデルの保存に関する実装はない<br>なお標準的なhuggingface方式では保存したいモデルはアカウントを作ってウェブレポジトリにアップロードするらしい<br>Kaggleから使える？|
+|Model sharing and uploading|https://huggingface.co/transformers/model_sharing.html|Bookmarked|huggingface方式のモデル保存方法について|
 
 #### Kaggle Notebooks
 |name|url|status|comment|
 |----|----|----|----|
-|Coleridge - Huggingface Question Answering|https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering|read|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
+|Coleridge - Huggingface Question Answering|https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering|Done|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
+|HuggingFace Tutorial | Custom PyTorch training|https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
+|Bert PyTorch HuggingFace Starter|https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
+
 
 #### Kaggle Datasets
 |name|url|status|comment|
 |----|----|----|----|
-|nb003-annotation-data|https://www.kaggle.com/riow1983/nb003-annotation-data |created|CVデータ|
+|nb003-annotation-data|https://www.kaggle.com/riow1983/nb003-annotation-data |Done|CVデータ|
 
 
 #### 2021-04-15  
@@ -103,7 +119,7 @@ Wed Apr 21 00:48:32 2021
 BERT Uncased / BERT Cased の違いについて  
 > In BERT uncased, the text has been lowercased before WordPiece tokenization step while in BERT cased, the text is same as the input text (no changes).
 
-> For example, if the input is "OpenGenus", then it is converted to "opengenus" for BERT uncased while BERT cased takes in "OpenGenus".
+> For example, if the input is "OpenGenus", then it is converted to "opengenus" for BERT uncased while BERT cased takes in "OpenGenus".  
 https://iq.opengenus.org/bert-cased-vs-bert-uncased/  
 
 大文字と小文字の区別のことをletter caseというが, これを考慮するのがcased, 考慮しないのがuncasedだと覚えると良い. 
@@ -118,7 +134,24 @@ BERTなどのモデルもcased一択で良いと思う.
 notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BERTモデルを  
 [localnb001-transformers-ner](https://www.kaggle.com/riow1983/localnb001-transformers-ner)にアップロードした.  
 なお, この学習済みモデルでinferenceするためのsample-submission.csvのテーブルデータの加工についての実装はまだできていない.  
-そこはフロムスクラッチするよりも公開カーネルを利用できないものかとも思っている.
+そこはフロムスクラッチするよりも公開カーネルを利用できないものかとも思っている.  
+と思ったが, そのような公開カーネルは今のところなさそうだったので, 自分で実装することにした. 
+<br> 
+それにしてもColab Pro使いやすい. ネットワークが切れても途中から処理がresumeされるので環境要因に対してもrobustな印象. High memory RAMも35GBの強いやつを引くときもあり. これで環境構築の手間やconflictを気にするストレスを大幅に削減できるのはありがたい. 
+
+
+#### 2021-04-24
+huggingfaceのpre-trainedモデルをfine-tuningするところまではできるが, save方式がPyTorch標準方式とhuggingface独自方式とで整理がつかず混乱中.  今のところsaveしたバイナリファイルをKaggle notebookでloadすることに成功していない.  可能であればPyTorch標準方式で一本化したいが.  
+ちなみにhuggingface方式は以下のようにsaveしたファイルのデフォルトのファイル名をload前に変更しておく必要があるという糞仕様:  
+>```tokenizer = BertTokenizer.from_pretrained("/home/liping/liping/bert/")```
+The following files must be located in that folder:
+```
+vocab.txt - vocabulary file
+pytorch_model.bin - the PyTorch-compatible (and converted) model
+config.json - json-based model configuration
+Please make sure that these files exist and e.g. rename bert-base-cased-pytorch_model.bin to pytorch_model.bin.
+```  
+https://www.gitmemory.com/issue/huggingface/transformers/1620/545961654
 
 
 

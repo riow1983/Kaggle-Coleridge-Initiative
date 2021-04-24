@@ -9,6 +9,13 @@
 pytorch-xla-env-setup.py
 *.whl
 *.pth
+*.bin
+*.pt
+*.txt
+*.tar.gz
+
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
