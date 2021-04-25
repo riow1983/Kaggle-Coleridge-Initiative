@@ -55,16 +55,14 @@
 |Data preparation for NER|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)|Done|Dataset作成コードとTrainデータの実際のデータセット[NER Coleridge Initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)が<br>Kaggle Datasetにアップされている|
 
 ### Diary
-<br>
+
 #### 2021-04-15  
 実験管理方法のスライド作成し共有.
 
-<br>
 #### 2021-04-16
 どうやらQA系では精度がでないらしい. NER系は精度でていそう.  
 ひとまず学習済みBERTをNERタスクで事後学習させる方法を確立したい.
 
-<br>
 #### 2021-04-20
 Google Colab ProおよびGoogle Drive strage+185GB課金した.  
 課金した理由:  
@@ -94,9 +92,6 @@ https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%
 詳細はこちら:    
 https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551  
 
-
-
-<br>
 #### 2021-04-21  
 NERの事後学習(fine-tuning)を簡単に実装できるNERDAというPythonライブラリがあったので触り出す.    
 実装はできそうだ.  
@@ -132,7 +127,7 @@ Wed Apr 21 00:48:32 2021
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
-<br>
+
 #### 2021-04-22
 BERT Uncased / BERT Cased の違いについて  
 > In BERT uncased, the text has been lowercased before WordPiece tokenization step while in BERT cased, the text is same as the input text (no changes).
@@ -147,17 +142,14 @@ https://qiita.com/161abcd/items/c73af4fd422f664b3bf6
 今回のコンペの元データは当然大文字と小文字両方出現するし, 固有表現は得てして大文字で始まる場合が多いので,   
 BERTなどのモデルもcased一択で良いと思う.
 
-<br>
 #### 2021-04-23
 notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BERTモデルを  
 [localnb001-transformers-ner](https://www.kaggle.com/riow1983/localnb001-transformers-ner)にアップロードした.  
 なお, この学習済みモデルでinferenceするためのsample-submission.csvのテーブルデータの加工についての実装はまだできていない.  
 そこはフロムスクラッチするよりも公開カーネルを利用できないものかとも思っている.  
-と思ったが, そのような公開カーネルは今のところなさそうだったので, 自分で実装することにした. 
-<br> 
+と思ったが, そのような公開カーネルは今のところなさそうだったので, 自分で実装することにした.    
 それにしてもColab Pro使いやすい. ネットワークが切れても途中から処理がresumeされるので環境要因に対してもrobustな印象. High memory RAMも35GBの強いやつを引くときもあり. これで環境構築の手間やconflictを気にするストレスを大幅に削減できるのはありがたい. 
 
-<br>
 #### 2021-04-24
 huggingfaceのpre-trainedモデルをfine-tuningするところまではできるが, save方式がPyTorch標準方式とhuggingface独自方式とで整理がつかず混乱中.  今のところsaveしたバイナリファイルをKaggle notebookでloadすることに成功していない.  可能であればPyTorch標準方式で一本化したいが.  
 ちなみにhuggingface方式は以下のようにsaveしたファイルのデフォルトのファイル名をload前に変更しておく必要があるという糞仕様:  
@@ -170,9 +162,9 @@ config.json - json-based model configuration
 Please make sure that these files exist and e.g. rename bert-base-cased-pytorch_model.bin to pytorch_model.bin.
 ```  
 https://www.gitmemory.com/issue/huggingface/transformers/1620/545961654
-
-以下は[Kaggle Notebook](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)から   
-![input file image](png/'Screenshot 2021-04-25 at 7.16.04')  
+  
+以下は[Kaggle Notebook](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)から  
+![input file image]('png/Screenshot 2021-04-25 at 7.16.04')  
 を読み込もうとした際に遭遇するエラー. 格納されているconfigファイルの名称が`bert_config.json`であるのに対し, `config.json`を要求している.
 ```
 OSError: Can't load config for '../input/localnb001-transformers-ner/bert-base-cased'. Make sure that:
@@ -192,7 +184,7 @@ class BERTClass(torch.nn.Module):
         output_1= self.l1(ids, mask, labels = labels)
         return output_1
 ```
-<br>
+
 #### 2021-04-25
 huggingfaceをPyTorch nn.Moduleで訓練した後どのようにしてモデルをsaveすればいいかについて同じ質問が[huggingfaceのissue](https://github.com/huggingface/transformers/issues/7849)に上がっていた.  
 以下のコードで良いらしい.  
@@ -216,8 +208,7 @@ checkpoint = torch.load(output_model, map_location='cpu')
 model.load_state_dict(checkpoint['model_state_dict'])
 optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 ```  
-最初にやっていたものがこの方式の一部だった. `optimizer_state_dict`は記載していなかった.  
-<br>
+最初にやっていたものがこの方式の一部だった. というのは`optimizer_state_dict`は記載していなかった.    
 紆余曲折あったが[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)でloadからpredictまでエラーに遭遇することなくできた模様. predict結果のサニティチェックはまだできていない. tokenizerのロードについてはhuggingfaceデフォルトのtokenizer(`../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-vocab.txt`)を使用しているが問題ないのか不明.
 ```Python
 class BERTClass(torch.nn.Module):
