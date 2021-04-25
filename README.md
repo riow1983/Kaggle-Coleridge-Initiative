@@ -1,52 +1,70 @@
 # Kaggle-Coleridge-Initiative
 
 
-#### notebook命名規則
+### notebook命名規則
 - kagglenb001-hoge.ipynb: Kaggle platform上で新規作成されたKaggle notebook (kernel).
 - nb001-hoge.ipynb: kagglenb001-hoge.ipynbをlocalにpullしlocalで変更を加えるもの. 番号はkagglenb001-hoge.ipynbと共通.
 - localnb001-hoge.ipynb: localで新規作成されたnotebook. 
 
-#### Papers
+### Papers
 |name|url|status|comment|
 |----|----|----|----|
-|Big Bird: Transformers for Longer Sequences|https://arxiv.org/pdf/2007.14062.pdf|Reading|Turing completeの意味が分からん|
+|Big Bird: Transformers for Longer Sequences|[URL](https://arxiv.org/pdf/2007.14062.pdf)|Reading|Turing completeの意味が分からん|
 
-#### Blogs
+### Blogs
 |name|url|status|comment|
 |----|----|----|----|
-|Understanding BigBird's Block Sparse Attention|https://huggingface.co/blog/big-bird|Untouched||
+|Understanding BigBird's Block Sparse Attention|[URL](https://huggingface.co/blog/big-bird)|Untouched||
 
-#### Documentation / Tutorials
+### Documentation / Tutorials
 |name|url|status|comment|
 |----|----|----|----|
-|SAVING AND LOADING MODELS|https://pytorch.org/tutorials/beginner/saving_loading_models.html|Reading|PyTorch標準方式のモデルsave方法|
-|Source code for pytorch_transformers.tokenization_bert|https://huggingface.co/transformers/v1.2.0/_modules/pytorch_transformers/tokenization_bert.html|Done|bert-base-cased tokenizerをKaggle上で使用するためS3レポジトリからwget|
-|Huggign Face's notebooks|https://huggingface.co/transformers/notebooks.html|Bookmarked|-|
-|Fine-tuning a model on a token classification task|https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb|Done|huggingfaceによるNERタスクのチュートリアル.<br>ただしfine-tunedモデルの保存に関する実装はない<br>なお標準的なhuggingface方式では保存したいモデルはアカウントを作ってウェブレポジトリにアップロードするらしい<br>Kaggleから使える？|
-|Model sharing and uploading|https://huggingface.co/transformers/model_sharing.html|Bookmarked|huggingface方式のモデル保存方法について|
+|SAVING AND LOADING MODELS|[URL](https://pytorch.org/tutorials/beginner/saving_loading_models.html)|Reading|PyTorch標準方式のモデルsave方法|
+|Source code for pytorch_transformers.tokenization_bert|[URL](https://huggingface.co/transformers/v1.2.0/_modules/pytorch_transformers/tokenization_bert.html)|Done|bert-base-cased tokenizerをKaggle上で使用するためS3レポジトリからwget|
+|Huggign Face's notebooks|[URL](https://huggingface.co/transformers/notebooks.html)|Bookmarked|-|
+|Fine-tuning a model on a token classification task|[URL](https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb)|Done|huggingfaceによるNERタスクのチュートリアル.<br>ただしfine-tunedモデルの保存に関する実装はない<br>なお標準的なhuggingface方式では保存したいモデルはアカウントを作ってウェブレポジトリにアップロードするらしい<br>Kaggleから使える？|
+|Model sharing and uploading|[URL](https://huggingface.co/transformers/model_sharing.html)|Bookmarked|huggingface方式のモデル保存方法について|
 
-#### Kaggle Notebooks
+### GitHub
 |name|url|status|comment|
 |----|----|----|----|
-|Coleridge - Huggingface Question Answering|https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering|Done|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
-|HuggingFace Tutorial | Custom PyTorch training|https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
-|Bert PyTorch HuggingFace Starter|https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
+|how to save and load fine-tuned model?|[URL](https://github.com/huggingface/transformers/issues/7849)|Done|huggingfaceのpre-trainedモデルを<br>fine-tuningしたものをPyTorch標準方式でsaveする方法|
 
-
-#### Kaggle Datasets
+### Kaggle Notebooks
 |name|url|status|comment|
 |----|----|----|----|
-|nb003-annotation-data|https://www.kaggle.com/riow1983/nb003-annotation-data |Done|CVデータ|
+|Coleridge - Huggingface Question Answering|[URL](https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering)|Done|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
+|HuggingFace Tutorial; Custom PyTorch training|[URL](https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb)|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
+|Bert PyTorch HuggingFace Starter|[URL](https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter)|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
+|[Training] PyTorch-TPU-8-Cores (Ver.21)|[URL](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/data?scriptVersionId=48061653)|Bookmarked|offlineでPyTorch-XLAインストールスクリプトが有用|
 
 
+### Kaggle Datasets
+|name|url|status|comment|
+|----|----|----|----|
+|riow1983/nb003-annotation-data|[URL](https://www.kaggle.com/riow1983/nb003-annotation-data)|Done|CVデータ|
+|shahules/ner-coleridge-initiative|[URL](https://www.kaggle.com/shahules/ner-coleridge-initiative)|Bookmarked|NERタスク用のデータセット<br>[ディスカッション](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)に作成コードが紹介されている|
+|joshi98kishan/pytorch-xla-setup-script|[URL](https://www.kaggle.com/joshi98kishan/pytorch-xla-setup-script)|Bookmarked|PyTorch-XLAをofflineでインストールするためのスクリプト|
+
+
+
+
+### Kaggle Discussion
+|name|url|status|comment|
+|----|----|----|----|
+|Data preparation for NER|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)|Done|Dataset作成コードとTrainデータの実際のデータセット[NER Coleridge Initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)が<br>Kaggle Datasetにアップされている|
+
+### Diary
+<br>
 #### 2021-04-15  
 実験管理方法のスライド作成し共有.
 
-
+<br>
 #### 2021-04-16
 どうやらQA系では精度がでないらしい. NER系は精度でていそう.  
 ひとまず学習済みBERTをNERタスクで事後学習させる方法を確立したい.
 
+<br>
 #### 2021-04-20
 Google Colab ProおよびGoogle Drive strage+185GB課金した.  
 課金した理由:  
@@ -78,7 +96,7 @@ https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551
 
 
 
-
+<br>
 #### 2021-04-21  
 NERの事後学習(fine-tuning)を簡単に実装できるNERDAというPythonライブラリがあったので触り出す.    
 実装はできそうだ.  
@@ -114,7 +132,7 @@ Wed Apr 21 00:48:32 2021
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
-
+<br>
 #### 2021-04-22
 BERT Uncased / BERT Cased の違いについて  
 > In BERT uncased, the text has been lowercased before WordPiece tokenization step while in BERT cased, the text is same as the input text (no changes).
@@ -129,7 +147,7 @@ https://qiita.com/161abcd/items/c73af4fd422f664b3bf6
 今回のコンペの元データは当然大文字と小文字両方出現するし, 固有表現は得てして大文字で始まる場合が多いので,   
 BERTなどのモデルもcased一択で良いと思う.
 
-
+<br>
 #### 2021-04-23
 notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BERTモデルを  
 [localnb001-transformers-ner](https://www.kaggle.com/riow1983/localnb001-transformers-ner)にアップロードした.  
@@ -139,7 +157,7 @@ notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BE
 <br> 
 それにしてもColab Pro使いやすい. ネットワークが切れても途中から処理がresumeされるので環境要因に対してもrobustな印象. High memory RAMも35GBの強いやつを引くときもあり. これで環境構築の手間やconflictを気にするストレスを大幅に削減できるのはありがたい. 
 
-
+<br>
 #### 2021-04-24
 huggingfaceのpre-trainedモデルをfine-tuningするところまではできるが, save方式がPyTorch標準方式とhuggingface独自方式とで整理がつかず混乱中.  今のところsaveしたバイナリファイルをKaggle notebookでloadすることに成功していない.  可能であればPyTorch標準方式で一本化したいが.  
 ちなみにhuggingface方式は以下のようにsaveしたファイルのデフォルトのファイル名をload前に変更しておく必要があるという糞仕様:  
@@ -153,7 +171,63 @@ Please make sure that these files exist and e.g. rename bert-base-cased-pytorch_
 ```  
 https://www.gitmemory.com/issue/huggingface/transformers/1620/545961654
 
+以下は[Kaggle Notebook](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)から   
+![input file image](png/'Screenshot 2021-04-25 at 7.16.04')  
+を読み込もうとした際に遭遇するエラー. 格納されているconfigファイルの名称が`bert_config.json`であるのに対し, `config.json`を要求している.
+```
+OSError: Can't load config for '../input/localnb001-transformers-ner/bert-base-cased'. Make sure that:
 
+- '../input/localnb001-transformers-ner/bert-base-cased' is a correct model identifier listed on 'https://huggingface.co/models'
 
+- or '../input/localnb001-transformers-ner/bert-base-cased' is the correct path to a directory containing a config.json file
+```
+なお読み込み方法はhuggingfaceの`.from_pretrained`メソッドを使っている.
+```Python
+class BERTClass(torch.nn.Module):
+    def __init__(self):
+        super(BERTClass, self).__init__()
+        self.l1 = transformers.BertForTokenClassification.from_pretrained(f'../input/localnb001-transformers-ner/bert-base-cased')
+    
+    def forward(self, ids, mask, labels):
+        output_1= self.l1(ids, mask, labels = labels)
+        return output_1
+```
+<br>
+#### 2021-04-25
+huggingfaceをPyTorch nn.Moduleで訓練した後どのようにしてモデルをsaveすればいいかについて同じ質問が[huggingfaceのissue](https://github.com/huggingface/transformers/issues/7849)に上がっていた.  
+以下のコードで良いらしい.  
+```Python
+model = MyModel(num_classes).to(device)
+optimizer = AdamW(model.parameters(), lr=2e-5, weight_decay=1e-2)
+output_model = './models/model_xlnet_mid.pth'
 
+# save
+def save(model, optimizer):
+    # save
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict()
+    }, output_model)
+
+save(model, optimizer)
+
+# load
+checkpoint = torch.load(output_model, map_location='cpu')
+model.load_state_dict(checkpoint['model_state_dict'])
+optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+```  
+最初にやっていたものがこの方式の一部だった. `optimizer_state_dict`は記載していなかった.  
+<br>
+紆余曲折あったが[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)でloadからpredictまでエラーに遭遇することなくできた模様. predict結果のサニティチェックはまだできていない. tokenizerのロードについてはhuggingfaceデフォルトのtokenizer(`../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-vocab.txt`)を使用しているが問題ないのか不明.
+```Python
+class BERTClass(torch.nn.Module):
+    def __init__(self):
+        super(BERTClass, self).__init__()
+        self.l1 = transformers.BertForTokenClassification.from_pretrained('../input/d/riow1983/localnb001-transformers-ner')
+    
+    def forward(self, ids, mask, labels):
+        output_1= self.l1(ids, mask, labels = labels)
+        return output_1
+```
+なお, inputの一部フォルダパスのparentが`../input/`から`../input/d/riow1983/`に変更されてしまっていてそれに気づくまで時間を消費した. 謎.
 

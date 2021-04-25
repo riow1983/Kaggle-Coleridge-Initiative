@@ -13,7 +13,7 @@ pytorch-xla-env-setup.py
 *.pt
 *.txt
 *.tar.gz
-
+/png
 
 
 
