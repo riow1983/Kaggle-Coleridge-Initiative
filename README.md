@@ -170,7 +170,7 @@ Please make sure that these files exist and e.g. rename bert-base-cased-pytorch_
 https://www.gitmemory.com/issue/huggingface/transformers/1620/545961654
   
 以下は[Kaggle Notebook](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)から  
-![input file image](./png/'Screenshot 2021-04-25 at 7.16.04')  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/Screenshot%202021-04-25%20at%207.16.04.png?raw=true)  
 を読み込もうとした際に遭遇するエラー. 格納されているconfigファイルの名称が`bert_config.json`であるのに対し, `config.json`を要求している.
 ```
 OSError: Can't load config for '../input/localnb001-transformers-ner/bert-base-cased'. Make sure that:
@@ -235,10 +235,10 @@ tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transf
 [What is your best score without string matching?](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964)に気になる投稿があった.  
 > I am not doing any training yet. I am using a popular pretrained model and cleaning/filtering the results with basic string operations. These string operations are not informed by the training set labels.  
 https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964#1277297  
-いまいち英語が理解できていないが, モデルの予測結果をknown labelsとのstring-matchingでcalibrateしてやって初めてLB>0.7くらいのスコアになるのであって, calibrationをしない場合はLB~0.2くらいがいいとこということなのだろうか？  
-データ及びタスクについて理解が浅いことからEDAに立ち返ることから始めたい.  
-<br>
-ところで[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる件については, 今度は全て'o-adtaset'タグだった. validationデータでの予測結果を確認すると, 予測タグには'o'と'o-dataset'両者が出現していたものの, 99%以上が'o'であり, 'o-dataset'タグは10,915,020件中たったの1,549件でしかなかった. また'o-dataset'となっている語句を確認してみると全くdatasetらしいセンテンスが選ばれていないことが判明. 当該結果セルのリンクは[こちら](https://colab.research.google.com/drive/1spO8nZOOgmTiNCNhxMJ2KP0uBYtMtIPK#scrollTo=gpjTHhAo4fm6&line=1&uniqifier=1).  
+<!-- <!-- いまいち英語が理解できていないが, モデルの予測結果をknown labelsとのstring-matchingでcalibrateしてやって初めてLB\>0.7くらいのスコアになるのであって, calibrationをしない場合はLB\~0.2くらいがいいとこということなのだろうか？ データ及びタスクについて理解が浅いことからEDAに立ち返ることから始めたい.  
+<br> 
+ところで[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる件については, 今度は全て'o-adtaset'タグだった.  
+validationデータでの予測結果を確認すると, 予測タグには'o'と'o-dataset'両者が出現していたものの, 99%以上が'o'であり,  'o-dataset'タグは10,915,020件中たったの1,549件でしかなかった. また'o-dataset'となっている語句を確認してみると全くdatasetらしいセンテンスが選ばれていないことが判明. 当該結果セルのリンクは[こちら](https://colab.research.google.com/drive/1spO8nZOOgmTiNCNhxMJ2KP0uBYtMtIPK#scrollTo=gpjTHhAo4fm6&line=1&uniqifier=1).  
 ```
 # tmp
     sentence_idx    isTrain pred
@@ -269,4 +269,4 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964#
 75     which is a tributary of the St. Lawrence River...
 Name: pred, dtype: object
 ```
-おそらくシーケンス長が290では文脈を把握するには不十分であり, より長いものが求められるように思える. BigBirdのpre-trained modelがhuggingfaceから出ているので一度Colabで挑戦してみたい.
+おそらくシーケンス長が290では文脈を把握するには不十分であり, より長いものが求められるように思える.  BigBirdのpre-trained modelがhuggingfaceから出ているので一度Colabで挑戦してみたい.
