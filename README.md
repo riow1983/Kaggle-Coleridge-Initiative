@@ -211,14 +211,11 @@ optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 最初にやっていたものがこの方式の一部だった. というのは`optimizer_state_dict`は記載していなかった.    
 紆余曲折あったが[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)でloadからpredictまでエラーに遭遇することなくできた模様. predict結果のサニティチェックはまだできていない. tokenizerのロードについてはhuggingfaceデフォルトのtokenizer(`../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-vocab.txt`)を使用しているが問題ないのか不明.
 ```Python
-class BERTClass(torch.nn.Module):
-    def __init__(self):
-        super(BERTClass, self).__init__()
-        self.l1 = transformers.BertForTokenClassification.from_pretrained('../input/d/riow1983/localnb001-transformers-ner')
-    
-    def forward(self, ids, mask, labels):
-        output_1= self.l1(ids, mask, labels = labels)
-        return output_1
+# Defining some key variables that will be used later on in the training
+CV = 1
+MAX_LEN = 200
+BATCH_SIZE = 16
+tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-vocab.txt')
 ```
 なお, inputの一部フォルダパスのparentが`../input/`から`../input/d/riow1983/`に変更されてしまっていてそれに気づくまで時間を消費した. 謎.
 
