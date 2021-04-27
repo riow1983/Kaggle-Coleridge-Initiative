@@ -37,6 +37,7 @@
 |HuggingFace Tutorial; Custom PyTorch training|[URL](https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb)|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
 |Bert PyTorch HuggingFace Starter|[URL](https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter)|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
 |[Training] PyTorch-TPU-8-Cores (Ver.21)|[URL](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/data?scriptVersionId=48061653)|Bookmarked|offlineでPyTorch-XLAインストールスクリプトが有用|
+|EDA & Baseline Model|[URL](https://www.kaggle.com/prashansdixit/coleridge-initiative-eda-baseline-model)|Done|dataset_label, dataset_title, cleaned_labelをsetにして<br>existing_labelsにしている|
 
 
 ### Kaggle Datasets
@@ -53,6 +54,11 @@
 |name|url|status|comment|
 |----|----|----|----|
 |Data preparation for NER|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)|Done|Dataset作成コードとTrainデータの実際のデータセット[NER Coleridge Initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)が<br>Kaggle Datasetにアップされている|
+
+### EDA
+[EDA notes]  
+- trainデータのpub_titleのユニーク数は14271だが, trainデータのobs数は19661なので, １個のpub_titleが複数回現れている. 
+
 
 ### Diary
 
@@ -164,7 +170,7 @@ Please make sure that these files exist and e.g. rename bert-base-cased-pytorch_
 https://www.gitmemory.com/issue/huggingface/transformers/1620/545961654
   
 以下は[Kaggle Notebook](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)から  
-![input file image]('png/Screenshot 2021-04-25 at 7.16.04')  
+![input file image](./png/'Screenshot 2021-04-25 at 7.16.04')  
 を読み込もうとした際に遭遇するエラー. 格納されているconfigファイルの名称が`bert_config.json`であるのに対し, `config.json`を要求している.
 ```
 OSError: Can't load config for '../input/localnb001-transformers-ner/bert-base-cased'. Make sure that:
@@ -219,3 +225,48 @@ tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transf
 ```
 なお, inputの一部フォルダパスのparentが`../input/`から`../input/d/riow1983/`に変更されてしまっていてそれに気づくまで時間を消費した. 謎.
 
+#### 2021-04-26
+[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる. MAX_LENは200から290に変更した. ([訓練用データセット](https://www.kaggle.com/shahules/ner-coleridge-initiative)の固定長が290だったため.)  
+[transformers.BertForTokenClassificationに関する公式ドキュメント](https://huggingface.co/transformers/v3.1.0/model_doc/bert.html#bertfortokenclassification)を見てもわからないが, inference時testデータにlabelsがないことについては`labels=None`と引数を渡してやるだけで良かった.  
+> labels (torch.LongTensor of shape (batch_size, sequence_length), optional, defaults to None) – Labels for computing the token classification loss. Indices should be in [0, ..., config.num_labels - 1].  
+なお, TPUの場合はbatch sizeを多めに取れるという[記事](https://qiita.com/koshian2/items/fb989cebe0266d1b32fc)があったため試してみたが2倍でもTPUメモリに乗り切らなかった.
+
+#### 2021-04-27
+[What is your best score without string matching?](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964)に気になる投稿があった.  
+> I am not doing any training yet. I am using a popular pretrained model and cleaning/filtering the results with basic string operations. These string operations are not informed by the training set labels.  
+https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964#1277297  
+いまいち英語が理解できていないが, モデルの予測結果をknown labelsとのstring-matchingでcalibrateしてやって初めてLB>0.7くらいのスコアになるのであって, calibrationをしない場合はLB~0.2くらいがいいとこということなのだろうか？  
+データ及びタスクについて理解が浅いことからEDAに立ち返ることから始めたい.  
+<br>
+ところで[riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる件については, 今度は全て'o-adtaset'タグだった. validationデータでの予測結果を確認すると, 予測タグには'o'と'o-dataset'両者が出現していたものの, 99%以上が'o'であり, 'o-dataset'タグは10,915,020件中たったの1,549件でしかなかった. また'o-dataset'となっている語句を確認してみると全くdatasetらしいセンテンスが選ばれていないことが判明. 当該結果セルのリンクは[こちら](https://colab.research.google.com/drive/1spO8nZOOgmTiNCNhxMJ2KP0uBYtMtIPK#scrollTo=gpjTHhAo4fm6&line=1&uniqifier=1).  
+```
+# tmp
+    sentence_idx    isTrain pred
+0   10883   0   monitor
+1   160845  0   four or
+2   8318    0   site throughout the
+3   153839  0   h, determined by a
+4   164381  0   additive predictors that provided the
+... ... ... ...
+585 101627  0   application. Researchers
+586 50516   0   treatment as
+587 35504   0   Unveiling pathological
+588 48798   0   supported by
+589 60614   0   20,
+590 rows × 3 columns
+
+
+# tmp["pred"].sample(10)
+433                                        to compensate
+573                                          name entity
+92     a program designed to reduce the impact of flo...
+99      at the point of interest in the new datum (NOAA,
+277    species of tellinid bivalves, Macoma spp., at ...
+217    Flounder population include an increase in lar...
+490                                                of 12
+493                                          the scanner
+572                                           speed [89]
+75     which is a tributary of the St. Lawrence River...
+Name: pred, dtype: object
+```
+おそらくシーケンス長が290では文脈を把握するには不十分であり, より長いものが求められるように思える. BigBirdのpre-trained modelがhuggingfaceから出ているので一度Colabで挑戦してみたい.
