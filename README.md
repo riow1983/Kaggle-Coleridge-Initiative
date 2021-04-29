@@ -309,4 +309,11 @@ Name: pred, dtype: object
 
 #### 2021-04-29
 情報整理を兼ねてREADME.mdに`My Assets`セクションを追加し, 自分が作成したnotebooks, datases, modelsのメタ情報を記載. 今後新規作成の都度こまめに追記していく.  
-従来から記載していたものはレファレンスの意味合いが強かったので`参考資料`セクション配下に置いた.
+従来から記載していたものはレファレンスの意味合いが強かったので`参考資料`セクション配下に置いた.  
+<br>
+Focusedは常に1つに絞る. 以下のようにする.  
+[Focused]  
+nb005-pytorch-bert-for-nerにて, EPOCHS>5で訓練検討  
+<br>
+[Secondary]  
+nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討  
