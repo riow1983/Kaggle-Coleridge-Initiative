@@ -13,6 +13,8 @@ pytorch-xla-env-setup.py
 *.pt
 *.txt
 *.tar.gz
+/input
+notebooks/my_seqeval.py
 
 
 
