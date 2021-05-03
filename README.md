@@ -100,17 +100,19 @@ Google Colab ProおよびGoogle Drive strage+185GB課金した.
 - Google Drive無料版のストレージ(15GB)では中間ファイルの吐き出しですぐ満杯になる  
 
 ところでColabのセッション切れに対応する裏技としてChromeのデベロッパーツールのコンソールに  
-~定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.~
-~```Javascript
+定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.
+~~
+```Javascript
 function ClickConnect(){
   console.log("60sごとに再接続");
   document.querySelector("colab-connect-button").click()
 }
 setInterval(ClickConnect,1000*60);
-``` ~ 
-~https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/~    
-~もしくは~
-~https://towardsdatascience.com/10-tips-for-a-better-google-colab-experience-33f8fe721b82#8c1e~  
+```
+https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/  
+もしくは  
+https://towardsdatascience.com/10-tips-for-a-better-google-colab-experience-33f8fe721b82#8c1e  
+~~
 <br>
 2021-05-02追記) 上記コードでは実効性が無かった. 修正版は以下:  
 ```Javascript
@@ -343,8 +345,8 @@ nb005のinference notebook (Kaggle notebook)として[オリジナル](https://w
 [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にて, P100でおよそ10時間要したがnb005のepochs=5訓練完了. ただしepochs\>1でlossがepochs<=1よりも上昇していたため, 学習には失敗している可能性あり.  
 とはいえひとまずfine-tunedモデルを[nb005](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)としてKaggle dataset化し, [kagglenb008](https://www.kaggle.com/riow1983/kagglenb008-pytorch-bert-for-ner-inference)のinputにしてsubmission.csvを作成しsubmitしたが, LB=0.700とオリジナル(epochs=1)の結果と変わらず. やはり学習の失敗が原因か. nb005を中心に原因検証していきたい.  
 <br>
-[Tips: huggingfaceモデルのtraining途中再開方法]
-Colabのセッションが途中で切れるなどしてtrainingが中断しても, 中間ファイルcheckpoint-{num_checkpoint}を作成していればそこからtrainingを再開できる.  
+[Tips: huggingfaceモデルのtraining途中再開方法]  
+Colabのセッションが途中で切れるなどしてtrainingが中断しても, 中間ファイルcheckpoint-{num_checkpoint}を作成していればそこからtrainingを再開できる.    
 > Resuming training
 >You can resume training from a previous checkpoint like this:
 >
