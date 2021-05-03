@@ -100,21 +100,12 @@ Google Colab ProおよびGoogle Drive strage+185GB課金した.
 - Google Drive無料版のストレージ(15GB)では中間ファイルの吐き出しですぐ満杯になる  
 
 ところでColabのセッション切れに対応する裏技としてChromeのデベロッパーツールのコンソールに  
-定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.
-~~
-```Javascript
-function ClickConnect(){
-  console.log("60sごとに再接続");
-  document.querySelector("colab-connect-button").click()
-}
-setInterval(ClickConnect,1000*60);
-```
-https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/  
+定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.  
+[reference](https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/)    
 もしくは  
-https://towardsdatascience.com/10-tips-for-a-better-google-colab-experience-33f8fe721b82#8c1e  
-~~
+[reference](https://towardsdatascience.com/10-tips-for-a-better-google-colab-experience-33f8fe721b82#8c1e)  
 <br>
-2021-05-02追記) 上記コードでは実効性が無かった. 修正版は以下:  
+2021-05-02追記) 上記参照コードでは実効性が無かった. 修正版は以下:  
 ```Javascript
 function ClickConnect(){
   console.log("Connnect Clicked - Start"); 
@@ -123,7 +114,7 @@ function ClickConnect(){
 };
 setInterval(ClickConnect, 60000)
 ```  
-https://www.it-swarm-ja.com/ja/python/google-colab%E3%81%8C%E5%88%87%E6%96%AD%E3%81%97%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%E3%81%AB%E3%81%AF%E3%81%A9%E3%81%86%E3%81%99%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F/810821538/  
+[reference](https://www.it-swarm-ja.com/ja/python/google-colab%E3%81%8C%E5%88%87%E6%96%AD%E3%81%97%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%E3%81%AB%E3%81%AF%E3%81%A9%E3%81%86%E3%81%99%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F/810821538/)    
 デメリットもありそうだが今のところ大きな問題には遭遇していない. ~セッション切れがあまりない(と言われている)Colab Proでも必要かどうかは微妙.~ Colab Proでも一定時間操作していないとセッションが切れるので多いに必要. なおこれと合わせてPCの自動sleep機能の解除も必要. 参考: [Macノートブックのスリープ/スリープ解除の設定を指定する](https://support.apple.com/ja-jp/guide/mac-help/mchle41a6ccd/mac)  
 長時間学習する時などには有効かも.  
 
@@ -135,7 +126,7 @@ https://www.it-swarm-ja.com/ja/python/google-colab%E3%81%8C%E5%88%87%E6%96%AD%E3
 (4) metaファイルを編集  
 (5) フォルダごとアップロード  
 詳細はこちら:    
-https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551  
+[reference](https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551)    
 
 #### 2021-04-21  
 NERの事後学習(fine-tuning)を簡単に実装できるNERDAというPythonライブラリがあったので触り出す.    
