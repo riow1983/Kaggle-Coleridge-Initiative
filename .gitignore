@@ -15,6 +15,7 @@ pytorch-xla-env-setup.py
 *.tar.gz
 /input
 notebooks/my_seqeval.py
+notebooks/my_seqeval.py.lock
 
 
 

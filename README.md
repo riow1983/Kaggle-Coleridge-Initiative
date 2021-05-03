@@ -17,9 +17,11 @@
 |kagglenb003_annotation_data|[URL](https://www.kaggle.com/riow1983/kagglenb003-annotation-data)|[NERタスク用trainデータ](https://www.kaggle.com/shahules/ner-coleridge-initiative)|-|Done|NERDAを使ったNERタスク|
 |nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業中|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
 |kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv(未作成)|保留中|localnb001によるfine-tuneがうまくいっていないためsubmitは保留中|
-|kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
-|nb005-pytorch-BERT-for-NER|URL|-|fine-tuned BERT model(未作成)|EPOCHS>5で訓練予定|-|
+|kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
+|nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model(未作成)|EPOCHS>5で訓練予定|-|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
+|kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset<br>section構造をそのまま保持|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
+|kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|作成中|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
 |localnb001-transformers-ner|URL|[nb003-annotation-data (5 fold CV data)](https://www.kaggle.com/riow1983/nb003-annotation-data)|fine-tuned BERTモデル|POS taggingを入力に加えて精度向上するか試してみる|ネット上に落ちていたColab notebookを本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
 
@@ -37,6 +39,7 @@
 |name|url|status|comment|
 |----|----|----|----|
 |Big Bird: Transformers for Longer Sequences|[URL](https://arxiv.org/pdf/2007.14062.pdf)|Reading|Turing completeの意味が分からん|
+||[URL](https://arxiv.org/pdf/1603.01360.pdf)|Reading|[arXivTimesで"NER"と検索したら出てきた](https://github.com/arXivTimes/arXivTimes/issues/185)論文.<br>2016年の論文でLSTMベースのNER用モデルの提案.<br>BERT, Transformer系以外のものも見てみようという思い.<br>実装はTheano.|
 
 #### Blogs
 |name|url|status|comment|
@@ -61,15 +64,10 @@
 |name|url|status|comment|
 |----|----|----|----|
 |Coleridge - Huggingface Question Answering|[URL](https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering)|Done|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
-
 |HuggingFace Tutorial; Custom PyTorch training|[URL](https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb)|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
-
 |Bert PyTorch HuggingFace Starter|[URL](https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter)|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
-
 |[Training] PyTorch-TPU-8-Cores (Ver.21)|[URL](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/data?scriptVersionId=48061653)|Bookmarked|offlineでPyTorch-XLAインストールスクリプトが有用|
-
 |EDA & Baseline Model|[URL](https://www.kaggle.com/prashansdixit/coleridge-initiative-eda-baseline-model)|Done|dataset_label, dataset_title, cleaned_labelをsetにして<br>existing_labelsにしている|
-
 |data_preparation_ner|[URL](https://www.kaggle.com/shahules/coleridge-initiative-data-to-ner-format)|Done|[shahules/ner-coleridge-initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)作成コード|
 
 
@@ -102,16 +100,29 @@ Google Colab ProおよびGoogle Drive strage+185GB課金した.
 - Google Drive無料版のストレージ(15GB)では中間ファイルの吐き出しですぐ満杯になる  
 
 ところでColabのセッション切れに対応する裏技としてChromeのデベロッパーツールのコンソールに  
-定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.
-```Javascript
+~定期的にconnectボタンをクリックするJavascriptを入力しておくというものがあり試してみた.~
+~```Javascript
 function ClickConnect(){
   console.log("60sごとに再接続");
   document.querySelector("colab-connect-button").click()
 }
 setInterval(ClickConnect,1000*60);
-```
-https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/  
-デメリットもありそうだが今のところ大きな問題には遭遇していない. セッション切れがあまりない(と言われている)Colab Proでも必要かどうかは微妙. 
+``` ~ 
+~https://flat-kids.net/2020/07/28/google-colab-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%88%87%E3%82%8C%E3%82%92%E9%98%B2%E6%AD%A2%E3%81%99%E3%82%8B/~    
+~もしくは~
+~https://towardsdatascience.com/10-tips-for-a-better-google-colab-experience-33f8fe721b82#8c1e~  
+<br>
+2021-05-02追記) 上記コードでは実効性が無かった. 修正版は以下:  
+```Javascript
+function ClickConnect(){
+  console.log("Connnect Clicked - Start"); 
+  document.querySelector("#top-toolbar > colab-connect-button").shadowRoot.querySelector("#connect").click();
+  console.log("Connnect Clicked - End"); 
+};
+setInterval(ClickConnect, 60000)
+```  
+https://www.it-swarm-ja.com/ja/python/google-colab%E3%81%8C%E5%88%87%E6%96%AD%E3%81%97%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%E3%81%AB%E3%81%AF%E3%81%A9%E3%81%86%E3%81%99%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F/810821538/  
+デメリットもありそうだが今のところ大きな問題には遭遇していない. ~セッション切れがあまりない(と言われている)Colab Proでも必要かどうかは微妙.~ Colab Proでも一定時間操作していないとセッションが切れるので多いに必要. なおこれと合わせてPCの自動sleep機能の解除も必要. 参考: [Macノートブックのスリープ/スリープ解除の設定を指定する](https://support.apple.com/ja-jp/guide/mac-help/mchle41a6ccd/mac)  
 長時間学習する時などには有効かも.  
 
 それからKaggle APIの使い方についてKaggle Datasetsへのアップロード方法について学びがあった.    
@@ -313,7 +324,67 @@ Name: pred, dtype: object
 <br>
 Focusedは常に1つに絞る. 以下のようにする.  
 [Focused]  
-nb005-pytorch-bert-for-nerにて, EPOCHS>5で訓練検討  
+nb005-pytorch-bert-for-nerにて, EPOCHS>5で訓練検討  [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)
 <br>
 [Secondary]  
-nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討  
+nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討  [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)
+
+#### 2021-04-30
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にてnb005をepochs=5で訓練するもColab Proのセッションが途中で切れて学習がresumeできない状況.  
+<br>
+なおnb005の入力データ作成用にkagglenb007を作成した. これはkagglenb006とほぼ同じ処理内容だがtextのsection構造を保持している点が異なる. これのoutputファイルをretrieveするため`kaggle kernels output`コマンドを実行したがエラーになっていた. これはKaggle APIのバージョンが古いことが起因していた. Kaggle APIのバージョン更新方法はやや工夫が必要で`!pip install --upgrade --force-reinstall --no-deps kaggle`としなければならなかった. https://qiita.com/RIRIh/items/6c8495a190e3c978a48f  
+
+#### 2021-05-02
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にてnb005をepochs=5で訓練するもColab Proのセッションが途中で切れて学習がresumeできない状況について, idle timeoutが仕込んでいたJavascriptでも防げていなかったことが原因と分かった. 修正版のJavascriptで解決した. なお本学習にはTesla V100で10時間程度要する見込み.  
+<br>
+nb005のinference notebook (Kaggle notebook)として[オリジナル](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をコピーしてkagglenb008とした.
+
+#### 2021-05-03
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にて, P100でおよそ10時間要したがnb005のepochs=5訓練完了. ただしepochs\>1でlossがepochs<=1よりも上昇していたため, 学習には失敗している可能性あり.  
+とはいえひとまずfine-tunedモデルを[nb005](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)としてKaggle dataset化し, [kagglenb008](https://www.kaggle.com/riow1983/kagglenb008-pytorch-bert-for-ner-inference)のinputにしてsubmission.csvを作成しsubmitしたが, LB=0.700とオリジナル(epochs=1)の結果と変わらず. やはり学習の失敗が原因か. nb005を中心に原因検証していきたい.  
+<br>
+[Tips: huggingfaceモデルのtraining途中再開方法]
+Colabのセッションが途中で切れるなどしてtrainingが中断しても, 中間ファイルcheckpoint-{num_checkpoint}を作成していればそこからtrainingを再開できる.  
+> Resuming training
+>You can resume training from a previous checkpoint like this:
+>
+>Pass --output_dir previous_output_dir without --overwrite_output_dir to resume training from the latest checkpoint in output_dir (what you would use if the training was interrupted, for instance).
+>
+>Pass --model_name_or_path path_to_a_specific_checkpoint to resume training from that checkpoint folder.  
+
+[huggingface公式](https://huggingface.co/transformers/examples.html)    
+[how to continue training from a checkpoint with Trainer?](https://github.com/huggingface/transformers/issues/7198)     
+<br>
+具体例:
+```Python
+def train(resume_training=False, num_checkpoint=None):
+    if resume_training:
+        os.environ["MODEL_PATH"] = f"./{output_folder}/checkpoint-{num_checkpoint}"
+        !python ../input/kaggle-ner-utils/kaggle_run_ner.py \
+        --model_name_or_path $MODEL_PATH \
+        --train_file './train_ner.json' \
+        --validation_file './train_ner.json' \
+        --num_train_epochs 5 \
+        --per_device_train_batch_size 8 \
+        --per_device_eval_batch_size 8 \
+        --save_steps 15000 \
+        --output_dir $OUTPUT_DIR \
+        --report_to 'none' \
+        --seed 123 \
+        --do_train 
+    else:
+        !python ../input/kaggle-ner-utils/kaggle_run_ner.py \
+        --model_name_or_path 'bert-base-cased' \
+        --train_file './train_ner.json' \
+        --validation_file './train_ner.json' \
+        --num_train_epochs 5 \
+        --per_device_train_batch_size 8 \
+        --per_device_eval_batch_size 8 \
+        --save_steps 15000 \
+        --output_dir $OUTPUT_DIR \
+        --report_to 'none' \
+        --seed 123 \
+        --do_train 
+```
+
+
