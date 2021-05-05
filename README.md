@@ -383,9 +383,9 @@ def train(resume_training=False, num_checkpoint=None):
 nb005のMAX_LENをデフォルトの64のままepochs=5でsubmitしたところLB=0.533だった.  
 <br>
 huggingfaceでCV trainingする方法について少し調べたところ, 専用パイプライン的なものは無さそうだった.  
-[Do transformers need Cross-Validation](https://discuss.huggingface.co/t/do-transformers-need-cross-validation/4074)
-[K fold cross validation](https://discuss.huggingface.co/t/k-fold-cross-validation/5765)
-[Splits and slicing](https://huggingface.co/docs/datasets/splits.html)
+[Do transformers need Cross-Validation](https://discuss.huggingface.co/t/do-transformers-need-cross-validation/4074)  
+[K fold cross validation](https://discuss.huggingface.co/t/k-fold-cross-validation/5765)  
+[Splits and slicing](https://huggingface.co/docs/datasets/splits.html)  
 
 #### 2021-05-05
 nb005のMAX_LENを512まで延伸してepochs=5のsubmitをしてみたがLB=0.532だった. MAX_LEN=64でepochs=5はLB=0.533だったので精度低下である.  
