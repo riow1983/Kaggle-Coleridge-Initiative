@@ -18,7 +18,7 @@
 |nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業中|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
 |kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv(未作成)|保留中|localnb001によるfine-tuneがうまくいっていないためsubmitは保留中|
 |kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
-|nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model(未作成)|EPOCHS>5で訓練予定|-|
+|nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700<|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset<br>section構造をそのまま保持|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|作成中|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
@@ -311,7 +311,7 @@ Name: pred, dtype: object
 - チームシェアのためlocalnb001-transformers-nerをkaggle kernels push (l2knb001-transformers-ner)
 
 #### 2021-04-29
-情報整理を兼ねてREADME.mdに`My Assets`セクションを追加し, 自分が作成したnotebooks, datases, modelsのメタ情報を記載. 今後新規作成の都度こまめに追記していく.  
+情報整理を兼ねてREADME.mdに`My Assets`セクションを追加し, 自分が作成したnotebooks, datasets, modelsのメタ情報を記載. 今後新規作成の都度こまめに追記していく.  
 従来から記載していたものはレファレンスの意味合いが強かったので`参考資料`セクション配下に置いた.  
 <br>
 Focusedは常に1つに絞る. 以下のようにする.  
@@ -379,4 +379,8 @@ def train(resume_training=False, num_checkpoint=None):
         --do_train 
 ```
 
+#### 2021-05-05
+nb005のMAX_LENを512まで延伸してepochs=5のsubmitをしてみたがLB=0.532だった. MAX_LEN=64でepochs=5はLB=0.533だったので精度低下である.  
+<br>
+なお[testデータのannotationが見直されたらしく](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/236508)自チームへの影響で言うと, これまでLB=0.700だったものがLB=0.533になった. これに伴いPublic LB順位もshakeしている.　別スレッド[Test data are NOT fully labeled (!!)](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/233170)も要確認か. 
 
