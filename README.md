@@ -259,6 +259,7 @@ tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transf
 [riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる. MAX_LENは200から290に変更した. ([訓練用データセット](https://www.kaggle.com/shahules/ner-coleridge-initiative)の固定長が290だったため.)  
 [transformers.BertForTokenClassificationに関する公式ドキュメント](https://huggingface.co/transformers/v3.1.0/model_doc/bert.html#bertfortokenclassification)を見てもわからないが, inference時testデータにlabelsがないことについては`labels=None`と引数を渡してやるだけで良かった.  
 > labels (torch.LongTensor of shape (batch_size, sequence_length), optional, defaults to None) – Labels for computing the token classification loss. Indices should be in [0, ..., config.num_labels - 1].  
+
 なお, TPUの場合はbatch sizeを多めに取れるという[記事](https://qiita.com/koshian2/items/fb989cebe0266d1b32fc)があったため試してみたが2倍でもTPUメモリに乗り切らなかった.
 
 #### 2021-04-27
@@ -380,7 +381,7 @@ def train(resume_training=False, num_checkpoint=None):
 ```
 
 #### 2021-05-04
-nb005のMAX_LENをデフォルトの64のままepochs=5でsubmitしたところLB=0.533だった.  
+nb005のMAX_LENをデフォルトの64のままepochs=5でsubmitしたところLB=0.700だった.  
 <br>
 huggingfaceでCV trainingする方法について少し調べたところ, 専用パイプライン的なものは無さそうだった.  
 [Do transformers need Cross-Validation](https://discuss.huggingface.co/t/do-transformers-need-cross-validation/4074)  
@@ -388,7 +389,31 @@ huggingfaceでCV trainingする方法について少し調べたところ, 専�
 [Splits and slicing](https://huggingface.co/docs/datasets/splits.html)  
 
 #### 2021-05-05
-nb005のMAX_LENを512まで延伸してepochs=5のsubmitをしてみたがLB=0.532だった. MAX_LEN=64でepochs=5はLB=0.533だったので精度低下である.  
+[testデータのannotationが見直されたらしく](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/236508)自チームへの影響で言うと, これまでLB=0.700だったものがLB=0.533になった. これに伴いPublic LB順位もshakeしている.　別スレッド[Test data are NOT fully labeled (!!)](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/233170)も要確認か.  
 <br>
-なお[testデータのannotationが見直されたらしく](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/236508)自チームへの影響で言うと, これまでLB=0.700だったものがLB=0.533になった. これに伴いPublic LB順位もshakeしている.　別スレッド[Test data are NOT fully labeled (!!)](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/233170)も要確認か. 
+nb005のMAX_LENを512まで延伸してepochs=5のsubmitをしてみたがLB=0.532だった. MAX_LEN=64でepochs=5はLB=0.533(前日までは0.700)だったので精度低下である.  
+
+#### 2021-05-06
+nb005は行き詰まったため, nb003再開.  
+<br>
+[Focused]  
+nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討  [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)  
+<br>
+[Secondary]  
+nb005-pytorch-bert-for-nerにて, EPOCHS>5で訓練検討  [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)  
+<br>
+ところがspaCyによるPOS taggingのfor loopがColab Proの制限時間(24時間)以内に終わらない. 問題の箇所は以下:
+```Python
+pos = []
+for doc in nlp.pipe(df_train['text'].values, batch_size=50, n_process=-1):
+    if doc.is_parsed:
+        pos.append([n.pos_ for n in doc])
+    else:
+        # We want to make sure that the lists of parsed results have the
+        # same number of entries of the original Dataframe, so add some blanks in case the parse fails
+        pos.append(None)
+```
+
+#### 2021-05-07
+
 
