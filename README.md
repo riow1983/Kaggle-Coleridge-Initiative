@@ -88,10 +88,16 @@
 
 #### 2021-04-15  
 実験管理方法のスライド作成し共有.
+<br>
+<br>
+<br>
 
 #### 2021-04-16
 どうやらQA系では精度がでないらしい. NER系は精度でていそう.  
 ひとまず学習済みBERTをNERタスクで事後学習させる方法を確立したい.
+<br>
+<br>
+<br>
 
 #### 2021-04-20
 Google Colab ProおよびGoogle Drive strage+185GB課金した.  
@@ -126,7 +132,10 @@ setInterval(ClickConnect, 60000)
 (4) metaファイルを編集  
 (5) フォルダごとアップロード  
 詳細はこちら:    
-[reference](https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551)    
+[reference](https://kaeru-nantoka.hatenablog.com/entry/2020/01/17/015551)  
+<br>
+<br>
+<br> 
 
 #### 2021-04-21  
 NERの事後学習(fine-tuning)を簡単に実装できるNERDAというPythonライブラリがあったので触り出す.    
@@ -163,6 +172,9 @@ Wed Apr 21 00:48:32 2021
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
+<br>
+<br>
+<br>
 
 #### 2021-04-22
 BERT Uncased / BERT Cased の違いについて  
@@ -177,6 +189,9 @@ https://qiita.com/161abcd/items/c73af4fd422f664b3bf6
 
 今回のコンペの元データは当然大文字と小文字両方出現するし, 固有表現は得てして大文字で始まる場合が多いので,   
 BERTなどのモデルもcased一択で良いと思う.
+<br>
+<br>
+<br>
 
 #### 2021-04-23
 notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BERTモデルを  
@@ -185,6 +200,9 @@ notebooks/localnb001-transformers-ner.ipynbをColab Proで実行しfine-tuned BE
 そこはフロムスクラッチするよりも公開カーネルを利用できないものかとも思っている.  
 と思ったが, そのような公開カーネルは今のところなさそうだったので, 自分で実装することにした.    
 それにしてもColab Pro使いやすい. ネットワークが切れても途中から処理がresumeされるので環境要因に対してもrobustな印象. High memory RAMも35GBの強いやつを引くときもあり. これで環境構築の手間やconflictを気にするストレスを大幅に削減できるのはありがたい. 
+<br>
+<br>
+<br>
 
 #### 2021-04-24
 huggingfaceのpre-trainedモデルをfine-tuningするところまではできるが, save方式がPyTorch標準方式とhuggingface独自方式とで整理がつかず混乱中.  今のところsaveしたバイナリファイルをKaggle notebookでloadすることに成功していない.  可能であればPyTorch標準方式で一本化したいが.  
@@ -220,6 +238,9 @@ class BERTClass(torch.nn.Module):
         output_1= self.l1(ids, mask, labels = labels)
         return output_1
 ```
+<br>
+<br>
+<br>
 
 #### 2021-04-25
 huggingfaceをPyTorch nn.Moduleで訓練した後どのようにしてモデルをsaveすればいいかについて同じ質問が[huggingfaceのissue](https://github.com/huggingface/transformers/issues/7849)に上がっていた.  
@@ -254,6 +275,9 @@ BATCH_SIZE = 16
 tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-vocab.txt')
 ```
 なお, inputの一部フォルダパスのparentが`../input/`から`../input/d/riow1983/`に変更されてしまっていてそれに気づくまで時間を消費した. 謎.
+<br>
+<br>
+<br>
 
 #### 2021-04-26
 [riow1983/kagglenb004-transformers-ner-inference](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にて予測結果を確認すると, 全て'o'タグだったため[localnb001](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)のEPOCHS数を1から5に変更して再挑戦してみる. MAX_LENは200から290に変更した. ([訓練用データセット](https://www.kaggle.com/shahules/ner-coleridge-initiative)の固定長が290だったため.)  
@@ -261,6 +285,9 @@ tokenizer = BertTokenizer.from_pretrained('../input/d/riow1983/localnb001-transf
 > labels (torch.LongTensor of shape (batch_size, sequence_length), optional, defaults to None) – Labels for computing the token classification loss. Indices should be in [0, ..., config.num_labels - 1].  
 
 なお, TPUの場合はbatch sizeを多めに取れるという[記事](https://qiita.com/koshian2/items/fb989cebe0266d1b32fc)があったため試してみたが2倍でもTPUメモリに乗り切らなかった.
+<br>
+<br>
+<br>
 
 #### 2021-04-27
 [What is your best score without string matching?](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964)に気になる[投稿](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/232964#1277297)があった.  
@@ -301,6 +328,9 @@ validationデータでの予測結果を確認すると, 予測タグには'o'�
 Name: pred, dtype: object
 ```
 おそらくシーケンス長が290では文脈を把握するには不十分であり, より長いものが求められるように思える.  BigBirdのpre-trained modelがhuggingfaceから出ているので一度Colabで挑戦してみたい.  
+<br>
+<br>
+<br>
   
 #### 2021-04-28
 - nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討
@@ -310,6 +340,9 @@ Name: pred, dtype: object
     - spaCyによるPOS taggingの着想を得る (特にpipelineを使った並列バッチ処理は参考になる)
     - spaCy公式: https://spacy.io/usage/linguistic-features
 - チームシェアのためlocalnb001-transformers-nerをkaggle kernels push (l2knb001-transformers-ner)
+<br>
+<br>
+<br>
 
 #### 2021-04-29
 情報整理を兼ねてREADME.mdに`My Assets`セクションを追加し, 自分が作成したnotebooks, datasets, modelsのメタ情報を記載. 今後新規作成の都度こまめに追記していく.  
@@ -321,16 +354,25 @@ nb005-pytorch-bert-for-nerにて, EPOCHS>5で訓練検討  [issue #2](https://gi
 <br>
 [Secondary]  
 nb003-annotation-dataにて, spaCyによるPOS taggingの追加作業を検討  [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)
+<br>
+<br>
+<br>
 
 #### 2021-04-30
 [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にてnb005をepochs=5で訓練するもColab Proのセッションが途中で切れて学習がresumeできない状況.  
 <br>
 なおnb005の入力データ作成用にkagglenb007を作成した. これはkagglenb006とほぼ同じ処理内容だがtextのsection構造を保持している点が異なる. これのoutputファイルをretrieveするため`kaggle kernels output`コマンドを実行したがエラーになっていた. これはKaggle APIのバージョンが古いことが起因していた. Kaggle APIのバージョン更新方法はやや工夫が必要で`!pip install --upgrade --force-reinstall --no-deps kaggle`としなければならなかった. https://qiita.com/RIRIh/items/6c8495a190e3c978a48f  
+<br>
+<br>
+<br>
 
 #### 2021-05-02
 [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にてnb005をepochs=5で訓練するもColab Proのセッションが途中で切れて学習がresumeできない状況について, idle timeoutが仕込んでいたJavascriptでも防げていなかったことが原因と分かった. 修正版のJavascriptで解決した. なお本学習にはTesla V100で10時間程度要する見込み.  
 <br>
 nb005のinference notebook (Kaggle notebook)として[オリジナル](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をコピーしてkagglenb008とした.
+<br>
+<br>
+<br>
 
 #### 2021-05-03
 [issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/2)にて, P100でおよそ10時間要したがnb005のepochs=5訓練完了. ただしepochs\>1でlossがepochs<=1よりも上昇していたため, 学習には失敗している可能性あり.  
@@ -379,6 +421,9 @@ def train(resume_training=False, num_checkpoint=None):
         --seed 123 \
         --do_train 
 ```
+<br>
+<br>
+<br>
 
 #### 2021-05-04
 nb005のMAX_LENをデフォルトの64のままepochs=5でsubmitしたところLB=0.700だった.  
@@ -387,11 +432,17 @@ huggingfaceでCV trainingする方法について少し調べたところ, 専�
 [Do transformers need Cross-Validation](https://discuss.huggingface.co/t/do-transformers-need-cross-validation/4074)  
 [K fold cross validation](https://discuss.huggingface.co/t/k-fold-cross-validation/5765)  
 [Splits and slicing](https://huggingface.co/docs/datasets/splits.html)  
+<br>
+<br>
+<br>
 
 #### 2021-05-05
 [testデータのannotationが見直されたらしく](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/236508)自チームへの影響で言うと, これまでLB=0.700だったものがLB=0.533になった. これに伴いPublic LB順位もshakeしている.　別スレッド[Test data are NOT fully labeled (!!)](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/233170)も要確認か.  
 <br>
 nb005のMAX_LENを512まで延伸してepochs=5のsubmitをしてみたがLB=0.532だった. MAX_LEN=64でepochs=5はLB=0.533(前日までは0.700)だったので精度低下である.  
+<br>
+<br>
+<br>
 
 #### 2021-05-06
 nb005は行き詰まったため, nb003再開.  
@@ -413,6 +464,9 @@ for doc in nlp.pipe(df_train['text'].values, batch_size=50, n_process=-1):
         # same number of entries of the original Dataframe, so add some blanks in case the parse fails
         pos.append(None)
 ```
+<br>
+<br>
+<br>
 
 #### 2021-05-07
 
