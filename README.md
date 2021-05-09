@@ -18,7 +18,7 @@
 |nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業中|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
 |kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv(未作成)|保留中|localnb001によるfine-tuneがうまくいっていないためsubmitは保留中|
 |kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
-|nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700<|
+|nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset<br>section構造をそのまま保持|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|作成中|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
@@ -469,5 +469,21 @@ for doc in nlp.pipe(df_train['text'].values, batch_size=50, n_process=-1):
 <br>
 
 #### 2021-05-07
+nb003-annotation-dataにて, spaCyによるPOS tagging引き続き取組中.  
+<br>
+<br>
+<br>
+
+#### 2021-05-08
+nb003-annotation-dataにて, spaCyによるPOS tagging引き続き取組中.  
+<br>
+Discussion [Request to standardize the labels](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/236972)などannotationが一意に定まらない問題に触れたものを読んでいた. このままいくとコンペの質や信頼性はかなり低くなりそうだ.
+<br>
+<br>
+<br>
+
+#### 2021-05-09
+nb003-annotation-dataにて, spaCyによるPOS taggingが進捗した, というか妥協してシーケンスlength\>=3000はdropしたら数分で終わった. なおこのやり方は[Bert for Question Answering Baseline: Training](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-training)からヒントを得た.  
+これを入力とするlocalnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningを開始.
 
 
