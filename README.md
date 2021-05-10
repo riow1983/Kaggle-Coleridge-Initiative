@@ -21,8 +21,8 @@
 |nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset<br>section構造をそのまま保持|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
-|kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|作成中|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
-|localnb001-transformers-ner|URL|[nb003-annotation-data (5 fold CV data)](https://www.kaggle.com/riow1983/nb003-annotation-data)|fine-tuned BERTモデル|POS taggingを入力に加えて精度向上するか試してみる|ネット上に落ちていたColab notebookを本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
+|kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
+|localnb001-transformers-ner|URL|[nb003-annotation-data (5 fold CV data)](https://www.kaggle.com/riow1983/nb003-annotation-data)|fine-tuned BERTモデル|POS taggingを入力に加えて精度向上するか試してみる|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
 
 
@@ -54,6 +54,8 @@
 |Huggign Face's notebooks|[URL](https://huggingface.co/transformers/notebooks.html)|Bookmarked|-|
 |Fine-tuning a model on a token classification task|[URL](https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb)|Done|huggingfaceによるNERタスクのチュートリアル.<br>ただしfine-tunedモデルの保存に関する実装はない<br>なお標準的なhuggingface方式では保存したいモデルはアカウントを作ってウェブレポジトリにアップロードするらしい<br>Kaggleから使える？|
 |Model sharing and uploading|[URL](https://huggingface.co/transformers/model_sharing.html)|Bookmarked|huggingface方式のモデル保存方法について|
+|spaCy 101: Everything you need to know|[URL](https://spacy.io/usage/spacy-101)|Bookmarked|spaCyの全体像を把握できる|
+
 
 #### GitHub
 |name|url|status|comment|
@@ -484,6 +486,19 @@ Discussion [Request to standardize the labels](https://www.kaggle.com/c/coleridg
 
 #### 2021-05-09
 nb003-annotation-dataにて, spaCyによるPOS taggingが進捗した, というか妥協してシーケンスlength\>=3000はdropしたら数分で終わった. なおこのやり方は[Bert for Question Answering Baseline: Training](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-training)からヒントを得た.  
-これを入力とするlocalnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningを開始.
+これを入力とするlocalnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningを開始.  
+<br>
+<br>
+<br>
+
+#### 2021-05-10
+localnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningが完了し, それを入力とするkagglenb004を実行したが, fine-tunedモデルの読み込みの際, num_labelが合致しない(fine-tunedモデルのnum_labelは2, 初期化モデルのnum_labelは3)ためエラーとなっている. これは[PAD]トークンを'pad'というtagにして{'o', 'o-dataset', 'pad'}の3つのtag (label)を予測するBERTモデルを作成しているためnum_label=3が正しいのがだ, なぜかfine-tunedモデルのnum_labelが2のままになっているため保存方法に誤りはなかったかなど調査中.  
+<br>
+<br>
+<br>
+
+#### 2021-05-11
+
+
 
 
