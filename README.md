@@ -536,7 +536,8 @@ RuntimeError: Error(s) in loading state_dict for BertForTokenClassification:
 Kaggle dataset [localnb001](https://www.kaggle.com/riow1983/localnb001-transformers-ner)更新. s3に置いてあるhuggingface pre-trained BERT modelのconfigファイルbert_config.jsonをconfig.jsonに改名(Google Drive上で手動改名)し, Kaggleにupload. というのもこれをinputとするkagglenb004でpre-trained BERTを呼び出した際, num_labels=3としているにも関わらず, output featuresが3にならないという不具合があったため, config.jsonがおかしいと疑ったため. 結果改善した模様.  
 <br>
 kagglenb004の実装完了し, submission.csvも出力可能となったためsubmitしようとしたが, なんとaccerelatorにTPUを指定したnotebookからはinternet disabledでもsubmitが許可されていないということが判明.  
-![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/Screenshot%2021-05-12%at%8.12.58.png?raw=true) 
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/Screenshot%202021-05-12%20at%208.12.58.png?raw=true)  
+<br>
 こうなっている理由として今のところ見つけた説明としては"TPUは裏で(インターネット経由で)
 GCSにデータを取りに行くから"ということらしい. https://www.kaggle.com/c/hubmap-kidney-segmentation/discussion/199750  
 このtopic authorが作成したnotebook [[Training] PyTorch-TPU-8-Cores](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/comments?scriptVersionId=48061653)を参考にして作成したのがkaggle004だっただけに釈然としないところがある. これを受けて他コンペではあるが[Code Competition規約](https://www.kaggle.com/c/hubmap-kidney-segmentation/overview/code-requirements)にTPU使用に関する注意が加筆されていた.  
@@ -559,17 +560,15 @@ print(cond)
 out = " ".join(list(np.where(cond, a, "|")))
 print(out)
 ```  
+[False False  True  True False  True  True False False]    
+'| | 3 4 | 4 3 | |'  
+cond.shapeとa.shapeが一致していることが必要.  
 <br>
 <br>
 <br>
 
 #### 2021-05-12
 
-
-[False False  True  True False  True  True False False]    
-'| | 3 4 | 4 3 | |'  
-cond.shapeとa.shapeが一致していることが必要.  
-<br>
 
 
 
