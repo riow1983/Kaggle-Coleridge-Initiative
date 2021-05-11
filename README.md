@@ -45,6 +45,7 @@
 |name|url|status|comment|
 |----|----|----|----|
 |Understanding BigBird's Block Sparse Attention|[URL](https://huggingface.co/blog/big-bird)|Untouched||
+|BERT Fine-Tuning Tutorial with PyTorch|[URL](https://mccormickml.com/2019/07/22/BERT-fine-tuning/)|Bookmarked|これだけ読めばhuggingface BERTのfine-tuningがマスターできてしまいそうな勢い|
 
 #### Documentation / Tutorials
 |name|url|status|comment|
@@ -71,6 +72,10 @@
 |[Training] PyTorch-TPU-8-Cores (Ver.21)|[URL](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/data?scriptVersionId=48061653)|Bookmarked|offlineでPyTorch-XLAインストールスクリプトが有用|
 |EDA & Baseline Model|[URL](https://www.kaggle.com/prashansdixit/coleridge-initiative-eda-baseline-model)|Done|dataset_label, dataset_title, cleaned_labelをsetにして<br>existing_labelsにしている|
 |data_preparation_ner|[URL](https://www.kaggle.com/shahules/coleridge-initiative-data-to-ner-format)|Done|[shahules/ner-coleridge-initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)作成コード|
+|TPU|[URL](https://www.kaggle.com/docs/tpu)|Bookmarked|Kaggle Platform上でのTPUの使い方 (Kaggle公式)|
+|Bert for Question Answering Baseline: Training|[URL](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-training)|Reading|BERT Q&Aタスク (train)|
+|Bert for Question Answering Baseline: Inference|[URL](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-inference)|Reading|BERT Q&Atタスク (inference)|
+|score 57ish with additional govt datasets|[URL](https://www.kaggle.com/mlconsult/score-57ish-with-additional-govt-datasets/data)|Reading|Best score notebook (as of 11 May)<br>外部データgovt datasetを使用しているがPrivate Datasetになっている|
 
 
 #### Kaggle Datasets
@@ -492,13 +497,79 @@ nb003-annotation-dataにて, spaCyによるPOS taggingが進捗した, という
 <br>
 
 #### 2021-05-10
-localnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningが完了し, それを入力とするkagglenb004を実行したが, fine-tunedモデルの読み込みの際, num_labelが合致しない(fine-tunedモデルのnum_labelは2, 初期化モデルのnum_labelは3)ためエラーとなっている. これは[PAD]トークンを'pad'というtagにして{'o', 'o-dataset', 'pad'}の3つのtag (label)を予測するBERTモデルを作成しているためnum_label=3が正しいのがだ, なぜかfine-tunedモデルのnum_labelが2のままになっているため保存方法に誤りはなかったかなど調査中.  
+localnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningが完了し, それを入力とするkagglenb004を実行したが, fine-tunedモデルの読み込みの際, num_labelsが合致しない(fine-tunedモデルのnum_labelsは2, 初期化モデルのnum_labelsは3)ためエラーとなっている.  
+これは[PAD]トークンを'pad'というtagにして{'o', 'o-dataset', 'pad'}の3つのtag (label)を予測するBERTモデルを作成しているためnum_labels=3が正しいのだが, なぜかfine-tunedモデルのnum_labelが2のままになっているため保存方法に誤りはなかったかなど調査中.   
+エラー全文:  
+```Python
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+<ipython-input-28-c0b53fe32178> in <module>
+----> 1 model = BERTClass()
+      2 #model.load_state_dict(torch.load(f'../input/localnb001-transformers-ner/bert-base-cased-ner-cv{CV}.pt',
+      3 #                                 map_location=dev))
+      4 #output_model = f"../input/d/riow1983/localnb001-transformers-ner/bert-base-cased-ner-cv{CV}.pth"
+      5 #output_model = f"../input/localnb001-transformers-ner/bert-base-cased-ner-cv{CV}.pth"
+
+<ipython-input-25-905fd1052f1d> in __init__(self)
+      9         #self.l1 = transformers.BertForTokenClassification.from_pretrained(f'../input/localnb001-transformers-ner/bert-base-cased-ner-cv{CV}.bin')
+     10         #self.l1 = transformers.BertForTokenClassification.from_pretrained('../input/d/riow1983/localnb001-transformers-ner', num_labels=num_labels)
+---> 11         self.l1 = transformers.BertForTokenClassification.from_pretrained('../input/localnb001-transformers-ner', num_labels=num_labels)
+     12         #self.l1 = transformers.BertForTokenClassification#.from_pretrained('./')
+     13 
+
+/opt/conda/lib/python3.7/site-packages/transformers/modeling_utils.py in from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs)
+   1181             if len(error_msgs) > 0:
+   1182                 error_msg = "\n\t".join(error_msgs)
+-> 1183                 raise RuntimeError(f"Error(s) in loading state_dict for {model.__class__.__name__}:\n\t{error_msg}")
+   1184         # make sure token embedding weights are still tied if needed
+   1185         model.tie_weights()
+
+RuntimeError: Error(s) in loading state_dict for BertForTokenClassification:
+  size mismatch for classifier.weight: copying a param with shape torch.Size([2, 768]) from checkpoint, the shape in current model is torch.Size([3, 768]).
+  size mismatch for classifier.bias: copying a param with shape torch.Size([2]) from checkpoint, the shape in current model is torch.Size([3]).
+```  
 <br>
 <br>
 <br>
 
 #### 2021-05-11
+Kaggle dataset [localnb001](https://www.kaggle.com/riow1983/localnb001-transformers-ner)更新. s3に置いてあるhuggingface pre-trained BERT modelのconfigファイルbert_config.jsonをconfig.jsonに改名(Google Drive上で手動改名)し, Kaggleにupload. というのもこれをinputとするkagglenb004でpre-trained BERTを呼び出した際, num_labels=3としているにも関わらず, output featuresが3にならないという不具合があったため, config.jsonがおかしいと疑ったため. 結果改善した模様.  
+<br>
+kagglenb004の実装完了し, submission.csvも出力可能となったためsubmitしようとしたが, なんとaccerelatorにTPUを指定したnotebookからはinternet disabledでもsubmitが許可されていないということが判明.  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/Screenshot%2021-05-12%at%8.12.58.png?raw=true) 
+こうなっている理由として今のところ見つけた説明としては"TPUは裏で(インターネット経由で)
+GCSにデータを取りに行くから"ということらしい. https://www.kaggle.com/c/hubmap-kidney-segmentation/discussion/199750  
+このtopic authorが作成したnotebook [[Training] PyTorch-TPU-8-Cores](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/comments?scriptVersionId=48061653)を参考にして作成したのがkaggle004だっただけに釈然としないところがある. これを受けて他コンペではあるが[Code Competition規約](https://www.kaggle.com/c/hubmap-kidney-segmentation/overview/code-requirements)にTPU使用に関する注意が加筆されていた.  
+> TPUs will not be available for making submissions to this competition. You are still welcome to use them for training models. A walk-through for how to train on TPUs and run inference/submit on GPUs, see our TPU Docs.  
 
+本コンペのDiscussionに投稿しようかとも思ったが, TPUの仕様上GCSとonlineで繋ぐことになるということであればインターネット使用制限に抵触するためsubmitできないのは納得できる. 詳しい説明がなされている[notebook](https://www.kaggle.com/docs/tpu)があったのでこちらをまずは通読したい.  
+<br>
+と同時にkagglenb004をGPUでも動くように変更する作業に着手開始.  
+<br>
+閑話休題.  
+今更ながらnp.whereの使い方:  
+```Python
+a = np.array([1, 2, 3, 4, 5, 4, 3, 2, 1])
+np.where(a<=2, a, "-")
+```
+array(['1', '2', '-', '-', '-', '-', '-', '2', '1'], dtype='<U21')
+```Python
+cond = (a>=3)&(a<5)
+print(cond)
+out = " ".join(list(np.where(cond, a, "|")))
+print(out)
+```  
+<br>
+<br>
+<br>
+
+#### 2021-05-12
+
+
+[False False  True  True False  True  True False False]    
+'| | 3 4 | 4 3 | |'  
+cond.shapeとa.shapeが一致していることが必要.  
+<br>
 
 
 
