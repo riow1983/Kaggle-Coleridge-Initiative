@@ -46,6 +46,9 @@
 |----|----|----|----|
 |Understanding BigBird's Block Sparse Attention|[URL](https://huggingface.co/blog/big-bird)|Untouched||
 |BERT Fine-Tuning Tutorial with PyTorch|[URL](https://mccormickml.com/2019/07/22/BERT-fine-tuning/)|Bookmarked|これだけ読めばhuggingface BERTのfine-tuningがマスターできてしまいそうな勢い|
+|Pytorchでモデルの保存と読み込み|[URL](https://tzmi.hatenablog.com/entry/2020/03/05/222813)|Done|GPUで学習してCPUで読み込む場合の説明が参考になる<br>ただしTPUで学習してCPUで読み込む場合の説明はない|
+|GPUで使用したoptimizerをsave & load する時の注意|[URL](https://qiita.com/Takayoshi_Makabe/items/00eea382015c9d13911f)|Done|TPUの話はない|
+|PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
 
 #### Documentation / Tutorials
 |name|url|status|comment|
@@ -56,6 +59,8 @@
 |Fine-tuning a model on a token classification task|[URL](https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb)|Done|huggingfaceによるNERタスクのチュートリアル.<br>ただしfine-tunedモデルの保存に関する実装はない<br>なお標準的なhuggingface方式では保存したいモデルはアカウントを作ってウェブレポジトリにアップロードするらしい<br>Kaggleから使える？|
 |Model sharing and uploading|[URL](https://huggingface.co/transformers/model_sharing.html)|Bookmarked|huggingface方式のモデル保存方法について|
 |spaCy 101: Everything you need to know|[URL](https://spacy.io/usage/spacy-101)|Bookmarked|spaCyの全体像を把握できる|
+|TORCH.LOAD|[URL](https://pytorch.org/docs/stable/generated/torch.load.html)|Done|TPUで訓練したモデルをGPUで読むにはどうすればいいか書いていない|
+|SAVING AND LOADING MODELS ACROSS DEVICES IN PYTORCH|[URL](https://pytorch.org/tutorials/recipes/recipes/save_load_across_devices.html)|Done|TPUで訓練したモデルをCPU側に保存して, GPUでロードする際, <br>`5. Save on CPU, Load on GPU`セクションの通りにやってみたができない|
 
 
 #### GitHub
@@ -568,7 +573,86 @@ cond.shapeとa.shapeが一致していることが必要.
 <br>
 
 #### 2021-05-12
+kagglenb004をGPUでも動くように変更する作業難航中. localnb001で訓練したfine-tunedモデルをcpu側に移して保存したものをkagglenb004でloadする方法は今のところうまくいかない. この方式は[こちらのnotebook](https://www.kaggle.com/yasufuminakama/ranzcr-resnet200d-3-stage-training-step2#MODEL)で採用されているように見えるが細部が違うのかもしれない. 遭遇しているエラーは以下の通り:  
+```
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+<ipython-input-29-eb037b7c0e98> in <module>
+      7     checkpoint = torch.load(output_model, map_location='tpu')
+      8 else:
+----> 9     checkpoint = torch.load(output_model)
+     10 model.load_state_dict(checkpoint['model_state_dict'])
+     11 
 
+/opt/conda/lib/python3.7/site-packages/torch/serialization.py in load(f, map_location, pickle_module, **pickle_load_args)
+    593                     return torch.jit.load(opened_file)
+    594                 return _load(opened_zipfile, map_location, pickle_module, **pickle_load_args)
+--> 595         return _legacy_load(opened_file, map_location, pickle_module, **pickle_load_args)
+    596 
+    597 
+
+/opt/conda/lib/python3.7/site-packages/torch/serialization.py in _legacy_load(f, map_location, pickle_module, **pickle_load_args)
+    772     unpickler = pickle_module.Unpickler(f, **pickle_load_args)
+    773     unpickler.persistent_load = persistent_load
+--> 774     result = unpickler.load()
+    775 
+    776     deserialized_storage_keys = pickle_module.load(f, **pickle_load_args)
+
+/opt/conda/lib/python3.7/site-packages/torch/_utils.py in _rebuild_xla_tensor(data, dtype, device, requires_grad)
+    175 
+    176 def _rebuild_xla_tensor(data, dtype, device, requires_grad):
+--> 177     tensor = torch.from_numpy(data).to(dtype=dtype, device=device)
+    178     tensor.requires_grad = requires_grad
+    179     return tensor
+
+RuntimeError: Could not run 'aten::empty_strided' with arguments from the 'XLA' backend. 'aten::empty_strided' is only available for these backends: [CPU, CUDA, BackendSelect, Named, AutogradOther, AutogradCPU, AutogradCUDA, AutogradXLA, AutogradPrivateUse1, AutogradPrivateUse2, AutogradPrivateUse3, Tracer, Autocast, Batched, VmapMode].
+
+CPU: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/build/aten/src/ATen/CPUType.cpp:2127 [kernel]
+CUDA: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/build/aten/src/ATen/CUDAType.cpp:2983 [kernel]
+BackendSelect: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/build/aten/src/ATen/BackendSelectRegister.cpp:761 [kernel]
+Named: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/core/NamedRegistrations.cpp:7 [backend fallback]
+AutogradOther: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradCPU: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradCUDA: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradXLA: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradPrivateUse1: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradPrivateUse2: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+AutogradPrivateUse3: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/VariableType_0.cpp:7974 [autograd kernel]
+Tracer: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/torch/csrc/autograd/generated/TraceType_0.cpp:9341 [kernel]
+Autocast: fallthrough registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/autocast_mode.cpp:254 [backend fallback]
+Batched: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/BatchingRegistrations.cpp:511 [backend fallback]
+VmapMode: fallthrough registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/VmapModeRegistrations.cpp:33 [backend fallback]
+```  
+
+#### 2021-05-13
+kagglenb004をGPUでも動くように変更する作業成功か. localnb001(TPU)にてfine-tunedモデルを保存する際, `torch.save()`ではなく`xm.save()`をすることで, kagglenb004からGPUでloadできるようになった.
+```Python
+folder = "localnb001-transformers-ner"
+!mkdir {folder}
+#PATH = f"bert-base-cased-ner-cv{cv}.pth"
+PATH = f"bert-base-cased-ner-pad-cv{cv}.pth"
+
+def save(model, optimizer, folder, path, as_tpu=False):
+    # save
+    if as_tpu:
+        #torch.save({
+        xm.save({
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict()
+        }, "./"+folder+"/"+path)
+    else:
+        #torch.save({
+        xm.save({
+            'model_state_dict': model.to("cpu").state_dict(),
+            'optimizer_state_dict': optimizer.state_dict()
+        }, "./"+folder+"/"+path)
+
+save(model, optimizer, folder, PATH, as_tpu=False)
+```  
+これは以下のissues:  
+- [Loading a model checkpoint that is trained on TPU using a GPU #2303](https://github.com/PyTorchLightning/pytorch-lightning/issues/2303)
+- [Use xm.save to save model on TPU #3044](https://github.com/PyTorchLightning/pytorch-lightning/pull/3044)
+を参考にした.
 
 
 
