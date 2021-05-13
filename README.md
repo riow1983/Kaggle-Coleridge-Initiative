@@ -623,6 +623,9 @@ Autocast: fallthrough registered at /opt/conda/conda-bld/pytorch_1603729047590/w
 Batched: registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/BatchingRegistrations.cpp:511 [backend fallback]
 VmapMode: fallthrough registered at /opt/conda/conda-bld/pytorch_1603729047590/work/aten/src/ATen/VmapModeRegistrations.cpp:33 [backend fallback]
 ```  
+<br>
+<br>
+<br>
 
 #### 2021-05-13
 kagglenb004をGPUでも動くように変更する作業成功か. localnb001(TPU)にてfine-tunedモデルを保存する際, `torch.save()`ではなく`xm.save()`をすることで, kagglenb004からGPUでloadできるようになった.
@@ -651,7 +654,7 @@ save(model, optimizer, folder, PATH, as_tpu=False)
 ```  
 これは以下のissues:  
 - [Loading a model checkpoint that is trained on TPU using a GPU #2303](https://github.com/PyTorchLightning/pytorch-lightning/issues/2303)
-- [Use xm.save to save model on TPU #3044](https://github.com/PyTorchLightning/pytorch-lightning/pull/3044)
+- [Use xm.save to save model on TPU #3044](https://github.com/PyTorchLightning/pytorch-lightning/pull/3044)  
 を参考にした.
 
 
