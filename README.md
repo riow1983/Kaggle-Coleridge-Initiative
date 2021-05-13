@@ -655,6 +655,7 @@ save(model, optimizer, folder, PATH, as_tpu=False)
 これは以下のissues:  
 - [Loading a model checkpoint that is trained on TPU using a GPU #2303](https://github.com/PyTorchLightning/pytorch-lightning/issues/2303)
 - [Use xm.save to save model on TPU #3044](https://github.com/PyTorchLightning/pytorch-lightning/pull/3044)  
+
 を参考にした.
 
 
