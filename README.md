@@ -45,7 +45,7 @@
 |name|url|status|comment|
 |----|----|----|----|
 |Understanding BigBird's Block Sparse Attention|[URL](https://huggingface.co/blog/big-bird)|Untouched||
-|BERT Fine-Tuning Tutorial with PyTorch|[URL](https://mccormickml.com/2019/07/22/BERT-fine-tuning/)|Bookmarked|これだけ読めばhuggingface BERTのfine-tuningがマスターできてしまいそうな勢い|
+|BERT Fine-Tuning Tutorial with PyTorch|[URL](https://mccormickml.com/2019/07/22/BERT-fine-tuning/)|Done|~~これだけ読めばhuggingface BERTのfine-tuningがマスターできてしまいそうな勢い~~<br>BERTはLMではないなど間違った解釈やuncased/casedの違いを説明できないなど|
 |Pytorchでモデルの保存と読み込み|[URL](https://tzmi.hatenablog.com/entry/2020/03/05/222813)|Done|GPUで学習してCPUで読み込む場合の説明が参考になる<br>ただしTPUで学習してCPUで読み込む場合の説明はない|
 |GPUで使用したoptimizerをsave & load する時の注意|[URL](https://qiita.com/Takayoshi_Makabe/items/00eea382015c9d13911f)|Done|TPUの話はない|
 |PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
@@ -656,7 +656,25 @@ save(model, optimizer, folder, PATH, as_tpu=False)
 - [Loading a model checkpoint that is trained on TPU using a GPU #2303](https://github.com/PyTorchLightning/pytorch-lightning/issues/2303)
 - [Use xm.save to save model on TPU #3044](https://github.com/PyTorchLightning/pytorch-lightning/pull/3044)  
 
-を参考にした.
+を参考にした.  
+<br>
+<br>
+<br>
+
+#### 2021-05-14
+kagglenb004はsubmitできた. しかし２回のsubmitの内, 1つは"Kaggle Error", 1つはNotebook Timeout"だった.  
+<br>
+PyTorch(-XLA)によるtrain loop, inferenceのtemplateコードの作成を以下notebookを参考に開始.  
+- [RANZCR / ResNet200D / 3-stage training / step1](https://www.kaggle.com/yasufuminakama/ranzcr-resnet200d-3-stage-training-step1)  
+- [RANZCR / ResNet200D / 3-stage training / step2](https://www.kaggle.com/yasufuminakama/ranzcr-resnet200d-3-stage-training-step2)
+- [RANZCR / ResNet200D / 3-stage training / sub](https://www.kaggle.com/yasufuminakama/ranzcr-resnet200d-3-stage-training-sub)  
+<br>
+<br>
+<br>
+
+#### 2021-05-15
+
+
 
 
 
