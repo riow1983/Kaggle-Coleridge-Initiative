@@ -6,7 +6,7 @@
 
 COMP = "coleridge-initiative-show-us-the-data"
 FOLDS = "nb003-annotation-data"
-WEIGHTS = "localnb001-transformers-ner"
+WEIGHTS = "localnb002-transformers-ner"
 
 ## Train notebook ----------------------------------------------
 
@@ -15,8 +15,12 @@ WEIGHTS = "localnb001-transformers-ner"
 # Directory settings
 # ====================================================
 import os
+import sys
 
-OUTPUT_DIR = './'
+if 'google.colab' in sys.modules:
+    OUTPUT_DIR = 'localnb002-transformers-ner'
+elif 'kaggle_web_client' in sys.modules:
+    OUTPUT_DIR = './'
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
@@ -34,6 +38,7 @@ class CFG:
     print_freq=100
     num_workers=4
     model_name='bert-base-cased'
+    ft_name='ft'
     scheduler='CosineAnnealingLR' # ['ReduceLROnPlateau', 'CosineAnnealingLR', 'CosineAnnealingWarmRestarts']
     epochs=5
     lr=5e-4 # 1e-4
@@ -49,10 +54,14 @@ class CFG:
     tags_vals = ['o', 'o-dataset', 'pad']
     num_labels = 3
     target_cols = ['tag']
+    use_pos = False
 
     
 if CFG.debug:
     CFG.epochs = 1
+
+if CFG.use_pos:
+    CFG.ft_name += "-nopos"
 
 
 
@@ -196,9 +205,13 @@ class SentenceGetter(object):
         self.n_sent = 1
         self.dataset = dataset
         self.empty = False
-        agg_func = lambda s: [(w,p,t) for w,p,t in zip(s["word"].values.tolist(),
-                                                       s["pos"].values.tolist(),
-                                                       s["tag"].values.tolist())]
+        if CFG.use_pos:
+            agg_func = lambda s: [(w,p,t) for w,p,t in zip(s["word"].values.tolist(),
+                                                           s["pos"].values.tolist(),
+                                                           s["tag"].values.tolist())]
+        else:
+            agg_func = lambda s: [(w,t) for w,t in zip(s["word"].values.tolist(),
+                                                           s["tag"].values.tolist())]
         self.grouped = self.dataset.groupby("sentence_idx").apply(agg_func)
         self.sentences = [s for s in self.grouped]
     
@@ -237,7 +250,10 @@ class TrainDataset(Dataset):
 
     def __getitem__(self, idx):
         sentence = str(self.sentences[index])
-        pos = str(self.poses[idx])
+        if CFG.use_pos:
+            pos = str(self.poses[idx])
+        else:
+            pos = self.poses # which is None
         inputs = self.tokenizer.encode_plus(
             sentence,
             #### RIOW
@@ -275,7 +291,11 @@ class BERTClass(torch.nn.Module):
         super(BERTClass, self).__init__()
         self.model = transformers.BertForTokenClassification.from_pretrained(CFG.model_name, num_labels=CFG.num_labels)
         if pretrained:
-            pretrained_path = f'../input/{WEIGHTS}/hogehoge.pth'
+            if 'google.colab' in sys.modules:
+                pretrained_path = OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss_cpu.pth'
+            elif 'kaggle_web_client' in sys.modules:
+                pretrained_path = f'../input/{WEIGHTS}/{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss_cpu.pth'
+            
             if CFG.device == "TPU":
                 checkpoint = torch.load(pretrained_path, map_location='tpu')
             elif CFG.device == "GPU":
@@ -525,14 +545,22 @@ def train_loop(folds, fold):
 
     train_folds_getter = SentenceGetter(train_folds)
     train_folds_sentences = [' '.join([s[0] for s in sent]) for sent in train_folds_getter.sentences]
-    train_folds_poses = [' '.join([s[1] for s in sent]) for sent in train_folds_getter.sentences]
-    train_folds_labels = [[s[2] for s in sent] for sent in train_folds_getter.sentences]
+    if CFG.use_pos:
+        train_folds_poses = [' '.join([s[1] for s in sent]) for sent in train_folds_getter.sentences]
+        train_folds_labels = [[s[2] for s in sent] for sent in train_folds_getter.sentences]
+    else:
+        train_folds_poses = None
+        train_folds_labels = [[s[1] for s in sent] for sent in train_folds_getter.sentences]
     train_folds_labels = [[tag2idx.get(l) for l in lab] for lab in train_folds_labels]
 
     valid_folds_getter = SentenceGetter(valid_folds)
     valid_folds_sentences = [' '.join([s[0] for s in sent]) for sent in valid_folds_getter.sentences]
-    valid_folds_poses = [' '.join([s[1] for s in sent]) for sent in valid_folds_getter.sentences]
-    valid_folds_labels = [[s[2] for s in sent] for sent in valid_folds_getter.sentences]
+    if CFG.use_pos:
+        valid_folds_poses = [' '.join([s[1] for s in sent]) for sent in valid_folds_getter.sentences]
+        valid_folds_labels = [[s[2] for s in sent] for sent in valid_folds_getter.sentences]
+    else:
+        valid_folds_poses = None
+        valid_folds_labels = [[s[1] for s in sent] for sent in valid_folds_getter.sentences]
     valid_folds_labels = [[tag2idx.get(l) for l in lab] for lab in valid_folds_labels]
 
     
@@ -668,7 +696,7 @@ def train_loop(folds, fold):
                 LOGGER.info(f'Epoch {epoch+1} - Save Best Score: {best_score:.4f} Model')
                 torch.save({'model': model.state_dict(), 
                             'preds': preds},
-                           OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_score.pth')
+                           OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_score.pth')
             elif CFG.device == 'TPU':
                 if CFG.nprocs == 1:
                     LOGGER.info(f'Epoch {epoch+1} - Save Best Score: {best_score:.4f} Model')
@@ -676,7 +704,7 @@ def train_loop(folds, fold):
                     xm.master_print(f'Epoch {epoch+1} - Save Best Score: {best_score:.4f} Model')
                 xm.save({'model': model, 
                          'preds': preds}, 
-                        OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_score.pth')
+                        OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_score.pth')
         
         if avg_val_loss < best_loss:
             best_loss = avg_val_loss
@@ -684,7 +712,7 @@ def train_loop(folds, fold):
                 LOGGER.info(f'Epoch {epoch+1} - Save Best Loss: {best_loss:.4f} Model')
                 torch.save({'model': model.state_dict(), 
                             'preds': preds},
-                           OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_loss.pth')
+                           OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss.pth')
             elif CFG.device == 'TPU':
                 if CFG.nprocs == 1:
                     LOGGER.info(f'Epoch {epoch+1} - Save Best Loss: {best_loss:.4f} Model')
@@ -692,10 +720,10 @@ def train_loop(folds, fold):
                     xm.master_print(f'Epoch {epoch+1} - Save Best Loss: {best_loss:.4f} Model')
                 xm.save({'model': model, 
                          'preds': preds}, 
-                        OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_loss.pth')
+                        OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss.pth')
     
     if CFG.nprocs != 8:
-        check_point = torch.load(OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_score.pth')
+        check_point = torch.load(OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_score.pth')
         for c in [f'pred_{c}' for c in CFG.target_cols]:
             valid_folds[c] = np.nan
         valid_folds[[f'pred_{c}' for c in CFG.target_cols]] = check_point['preds']
@@ -765,13 +793,13 @@ if CFG.device == 'TPU':
     for fold in range(CFG.n_fold):
         if fold in CFG.trn_fold:
             # best score
-            state = torch.load(OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_score.pth')
+            state = torch.load(OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_score.pth')
             torch.save({'model': state['model'].to('cpu').state_dict(), 
                         'preds': state['preds']}, 
-                        OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_score_cpu.pth')
+                        OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_score_cpu.pth')
             # best loss
-            state = torch.load(OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_loss.pth')
+            state = torch.load(OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss.pth')
             torch.save({'model': state['model'].to('cpu').state_dict(), 
                         'preds': state['preds']}, 
-                        OUTPUT_DIR+f'{CFG.model_name}_fold{fold}_best_loss_cpu.pth')
+                        OUTPUT_DIR+f'{CFG.model_name}-{CFG.ft_name}_fold{fold}_best_loss_cpu.pth')
 

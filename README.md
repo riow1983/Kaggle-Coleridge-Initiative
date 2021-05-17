@@ -16,7 +16,7 @@
 |kagglenb002_NERDA_test|[URL](https://www.kaggle.com/riow1983/kagglenb002-nerda-test)|-|-|使用予定なし|NERDAを使ったNERタスク練習|
 |kagglenb003_annotation_data|[URL](https://www.kaggle.com/riow1983/kagglenb003-annotation-data)|[NERタスク用trainデータ](https://www.kaggle.com/shahules/ner-coleridge-initiative)|-|Done|NERDAを使ったNERタスク|
 |nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業中|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
-|kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv(未作成)|保留中|localnb001によるfine-tuneがうまくいっていないためsubmitは保留中|
+|kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv|submission error対応中|localnb001によるfine-tuneがうまくいっていないかもしれないがひとまずsubmit挑戦中|
 |kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
 |nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
@@ -35,6 +35,20 @@
 
 ***
 ## 参考資料
+#### Snipets
+```Python
+torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+```  
+```Python
+import warnings
+warnings.simplefilter('ignore')
+```  
+```Python
+# Sequence padding
+seq = np.pad(seq, (0, MAX_LEN-len(seq)), 'constant', constant_values="[PAD]")
+```  
+
+
 #### Papers
 |name|url|status|comment|
 |----|----|----|----|
@@ -81,6 +95,7 @@
 |Bert for Question Answering Baseline: Training|[URL](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-training)|Reading|BERT Q&Aタスク (train)|
 |Bert for Question Answering Baseline: Inference|[URL](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-inference)|Reading|BERT Q&Atタスク (inference)|
 |score 57ish with additional govt datasets|[URL](https://www.kaggle.com/mlconsult/score-57ish-with-additional-govt-datasets/data)|Reading|Best score notebook (as of 11 May)<br>外部データgovt datasetを使用しているがPrivate Datasetになっている|
+|The Ultimate PyTorch+TPU Tutorial (Jigsaw XLM-R)|[URL](https://www.kaggle.com/tanlikesmath/the-ultimate-pytorch-tpu-tutorial-jigsaw-xlm-r#Running-PyTorch-model-training-on-8-core-TPUs)|Bookmarked|PyTorch + TPUの参考程度|
 
 
 #### Kaggle Datasets
@@ -673,7 +688,62 @@ PyTorch(-XLA)によるtrain loop, inferenceのtemplateコードの作成を以�
 <br>
 
 #### 2021-05-15
+kagglenb004がsubmit errorになった主な原因はspaCyによるPOS taggingに時間がかかっていることだと思われ, 当該箇所を除外したもので再提出.  
+引き続きPyTorch(-XLA)によるtrain loop, inferenceのtemplateコードを作成中.   
+<br>
+<br>
+<br>
 
+#### 2021-05-16 ~ 2021-05-17
+kagglenb004のsubmission errorが解消されず対応中.  
+Dataset作成の前処理でデータセット全体をメモリに読み込む処理があり`Notebook Exceeded Allowed Compute`となっていた点はPyTorch Datasetでbatchごとに処理する方式に変更することで解消した模様.  
+これはモデルへの直接的な入力は, sentencesからindexを指定したもの(sentencesのsubset)になるが, sentencesはdfから作成されており, dfからindexを指定したもの(dfのsubset)に対して加工処理が必要になる, というもの. このindexのnest構造についてPyTorchのDatasetで実装する方法として以下の例が大変参考になった:  
+```Python
+class DatasetMaker(Dataset):
+    def __init__(self, datasets, transformFunc = transform_no_aug):
+        """
+        datasets: a list of get_class_i outputs, i.e. a list of list of images for selected classes
+        """
+        self.datasets = datasets
+        self.lengths  = [len(d) for d in self.datasets]
+        self.transformFunc = transformFunc
+    def __getitem__(self, i):
+        class_label, index_wrt_class = self.index_of_which_bin(self.lengths, i)
+        img = self.datasets[class_label][index_wrt_class]
+        img = self.transformFunc(img)
+        return img, class_label
+
+    def __len__(self):
+        return sum(self.lengths)
+    
+    def index_of_which_bin(self, bin_sizes, absolute_index, verbose=False):
+        """
+        Given the absolute index, returns which bin it falls in and which element of that bin it corresponds to.
+        """
+        # Which class/bin does i fall into?
+        accum = np.add.accumulate(bin_sizes)
+        if verbose:
+            print("accum =", accum)
+        bin_index  = len(np.argwhere(accum <= absolute_index))
+        if verbose:
+            print("class_label =", bin_index)
+        # Which element of the fallent class/bin does i correspond to?
+        index_wrt_class = absolute_index - np.insert(accum, 0, 0)[bin_index]
+        if verbose:
+            print("index_wrt_class =", index_wrt_class)
+
+        return bin_index, index_wrt_class
+```  
+[source](https://gist.github.com/Miladiouss/6ba0876f0e2b65d0178be7274f61ad2f)
+
+
+ただし今度は`Notebook Timeout`となった.  
+<br>
+<br>
+<br>
+
+#### 2021-05-18
+kagglenb004が`Notebook Timeout`になる件について, batch sizeを大きくしてみる.
 
 
 
