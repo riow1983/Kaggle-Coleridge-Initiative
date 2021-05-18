@@ -15,7 +15,7 @@
 |kagglenb001_transformers_test|[URL](https://www.kaggle.com/riow1983/kagglenb001-transformers-test)|-|-|使用予定なし|huggingface transformersの簡易メソッド<br>(AutoTokenizer, AutoModelForTokenClassification)<br>を使ったNERタスク練習|
 |kagglenb002_NERDA_test|[URL](https://www.kaggle.com/riow1983/kagglenb002-nerda-test)|-|-|使用予定なし|NERDAを使ったNERタスク練習|
 |kagglenb003_annotation_data|[URL](https://www.kaggle.com/riow1983/kagglenb003-annotation-data)|[NERタスク用trainデータ](https://www.kaggle.com/shahules/ner-coleridge-initiative)|-|Done|NERDAを使ったNERタスク|
-|nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業中|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
+|nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業完了<br>"5 folds in one dataset"作業完了|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
 |kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv|submission error対応中|localnb001によるfine-tuneがうまくいっていないかもしれないがひとまずsubmit挑戦中|
 |kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
 |nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
@@ -36,17 +36,81 @@
 ***
 ## 参考資料
 #### Snipets
+```Javascript
+// Auto click for Colab
+function ClickConnect(){
+  console.log("Connnect Clicked - Start"); 
+  document.querySelector("#top-toolbar > colab-connect-button").shadowRoot.querySelector("#connect").click();
+  console.log("Connnect Clicked - End"); 
+};
+setInterval(ClickConnect, 60000)
+```  
 ```Python
+# PyTorch device
 torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 ```  
 ```Python
+# Ignore warnings
 import warnings
-warnings.simplefilter('ignore')
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
 ```  
 ```Python
 # Sequence padding
 seq = np.pad(seq, (0, MAX_LEN-len(seq)), 'constant', constant_values="[PAD]")
 ```  
+```Python
+# Kaggle or Colab
+if 'kaggle_web_client' in sys.modules:
+    # Do something
+elif 'google.colab' in sys.modules:
+    # Do something
+```  
+```Python
+# Nested Indexing
+import numpy as np
+text_lengths = [5, 4, 5, 6, 3, 7, 5, 5]
+total_lengths = sum(text_lengths)
+accum = np.add.accumulate(text_lengths)
+print(accum)
+# Output:
+# [ 5  9 14 20 23 30 35 40]
+
+for original_index in range(total_lengths):
+    print("text_lengths:", text_lengths)
+    print("original_index:", original_index)
+    sentence_index = len(np.argwhere(accum <= original_index))
+    print("sentence_index:", sentence_index)
+    index_wrt_sentence = original_index - np.insert(accum, 0, 0)[sentence_index]
+    print("index_wrt_sentence:", index_wrt_sentence)
+    print("EOF")
+    print()
+
+# Output:
+# text_lengths: [5, 4, 5, 6, 3, 7, 5, 5]
+# original_index: 0
+# sentence_index: 0
+# index_wrt_sentence: 0
+# EOF
+
+# text_lengths: [5, 4, 5, 6, 3, 7, 5, 5]
+# original_index: 1
+# sentence_index: 0
+# index_wrt_sentence: 1
+# EOF
+
+# ...
+```  
+```Python
+# tagstring from taglist
+import numpy as np
+taglist = np.array(["aa", "ada", "dge"])
+tagstring = "|".join(taglist).strip("|")
+print(tagstring)
+
+# Output:
+# aa|ada|dge
+```
 
 
 #### Papers
@@ -520,7 +584,7 @@ nb003-annotation-dataにて, spaCyによるPOS taggingが進捗した, という
 localnb001-transformers-nerにて, posをsecond sentenceとするfine-tuningが完了し, それを入力とするkagglenb004を実行したが, fine-tunedモデルの読み込みの際, num_labelsが合致しない(fine-tunedモデルのnum_labelsは2, 初期化モデルのnum_labelsは3)ためエラーとなっている.  
 これは[PAD]トークンを'pad'というtagにして{'o', 'o-dataset', 'pad'}の3つのtag (label)を予測するBERTモデルを作成しているためnum_labels=3が正しいのだが, なぜかfine-tunedモデルのnum_labelが2のままになっているため保存方法に誤りはなかったかなど調査中.   
 エラー全文:  
-```Python
+```
 ---------------------------------------------------------------------------
 RuntimeError                              Traceback (most recent call last)
 <ipython-input-28-c0b53fe32178> in <module>
@@ -743,7 +807,12 @@ class DatasetMaker(Dataset):
 <br>
 
 #### 2021-05-18
-kagglenb004が`Notebook Timeout`になる件について, batch sizeを大きくしてみる.
+kagglenb004が`Notebook Timeout`になる件について, batch sizeを16から32にしてsubmitするも, やはり`Notebook Timeout`.  
+<br>
+効率化のための施作:  
+- パラメータなどをまとめた`/config/config.yml`作成開始  
+- train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`/src/bridge.py`を作成開始  
+
 
 
 

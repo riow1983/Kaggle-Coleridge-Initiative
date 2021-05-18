@@ -182,7 +182,7 @@ else:
 # ====================================================
 # Dataset
 # ====================================================
-class TrainDataset(Dataset):
+class TestDataset(Dataset):
     def __init__(self, 
                  df
                  #df_annotations, 
