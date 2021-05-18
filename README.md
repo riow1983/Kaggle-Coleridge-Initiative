@@ -812,6 +812,12 @@ kagglenb004が`Notebook Timeout`になる件について, batch sizeを16から3
 効率化のための施作:  
 - パラメータなどをまとめた`/config/config.yml`作成開始  
 - train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`/src/bridge.py`を作成開始  
+<br>
+<br>
+<br>
+
+#### 2021-05-19
+kagglenb004が`Notebook Timeout`になる件について, batch sizeを32から48にしてsubmitするも, やはり`Notebook Timeout`.  
 
 
 
