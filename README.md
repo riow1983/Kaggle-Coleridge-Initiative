@@ -132,7 +132,7 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |GPUで使用したoptimizerをsave & load する時の注意|[URL](https://qiita.com/Takayoshi_Makabe/items/00eea382015c9d13911f)|Done|TPUの話はない|
 |PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
 
-#### Documentation / Tutorials
+#### Documentation / Tutorials / StackOverflow
 |name|url|status|comment|
 |----|----|----|----|
 |SAVING AND LOADING MODELS|[URL](https://pytorch.org/tutorials/beginner/saving_loading_models.html)|Reading|PyTorch標準方式のモデルsave方法|
@@ -143,6 +143,9 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |spaCy 101: Everything you need to know|[URL](https://spacy.io/usage/spacy-101)|Bookmarked|spaCyの全体像を把握できる|
 |TORCH.LOAD|[URL](https://pytorch.org/docs/stable/generated/torch.load.html)|Done|TPUで訓練したモデルをGPUで読むにはどうすればいいか書いていない|
 |SAVING AND LOADING MODELS ACROSS DEVICES IN PYTORCH|[URL](https://pytorch.org/tutorials/recipes/recipes/save_load_across_devices.html)|Done|TPUで訓練したモデルをCPU側に保存して, GPUでロードする際, <br>`5. Save on CPU, Load on GPU`セクションの通りにやってみたができない|
+|Guidelines for assigning num_workers to DataLoader|[URL](https://discuss.pytorch.org/t/guidelines-for-assigning-num-workers-to-dataloader/813)|Done|num_workersはマイナス値で設定できないとのこと<br>挙動詳細はまだよく読めてない|
+|How to write boolean command line arguments with Python?|[URL](https://stackoverflow.com/questions/41006622/how-to-write-boolean-command-line-arguments-with-python)|Done|sys.argvで渡されたTrue/False (Python Boolean)<br>は"True"/"False"と文字列になってしまうが, <br>これをPython Booleanに戻す方法について|
+
 
 
 #### GitHub
@@ -176,6 +179,9 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |name|url|status|comment|
 |----|----|----|----|
 |Data preparation for NER|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)|Done|Dataset作成コードとTrainデータの実際のデータセット[NER Coleridge Initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)が<br>Kaggle Datasetにアップされている|
+|What is "the mention of datasets"|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/235297)|Done|各データセットに複数のラベル(省略形~完全形まで)が想定されるが, <br>どこまで想定すれば良いか基準が無い点について分かりやすく指摘|
+|Local CV is probably meaningless?|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/235026)|Done|trainのラベルが不完全なのでlocal CVは信頼できないのでは?という指摘<br>CV-LB相関の把握にはそれでも有用か|
+
 
 
 ***
@@ -814,22 +820,23 @@ class DatasetMaker(Dataset):
 kagglenb004が`Notebook Timeout`になる件について, batch sizeを16から32にしてsubmitするも, やはり`Notebook Timeout`.  
 <br>
 効率化のための施作:  
-- パラメータなどをまとめた`/config/config.yml`作成開始  
-- train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`/src/bridge.py`を作成開始  
+- パラメータなどをまとめた`config/config.yml`作成開始  
+- train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`src/bridge.py`を作成開始  
 <br>
 <br>
 <br>
 
 #### 2021-05-19
 kagglenb004が`Notebook Timeout`になる件について, batch sizeを32から48にしてsubmitするも, やはり`Notebook Timeout`.  
-PyTorch dataloaderのnum_workersが0になっていたので, これを8にして, なおかつsentence_idxをlabel encodingするといった不要な処理を除外して再度submitするも, これも`Notebook Timeout`.  
+PyTorch DataLoaderのnum_workersが0になっていたので, これを8にして, なおかつsentence_idxをlabel encodingするといった不要な処理を除外して再度submitするも, これも`Notebook Timeout`.  
 <br>
-train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`/src/bridge.py`完成. 実行&結果確認へ.  
+train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`src/bridge.py`完成. 実行&結果確認へ.  
 <br>
 <br>
 <br>
 
 #### 2021-05-20
+`src/bridge.py`の処理待ち中にディスカッションを読む.
 
 
 
