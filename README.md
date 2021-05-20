@@ -110,6 +110,10 @@ print(tagstring)
 
 # Output:
 # aa|ada|dge
+```  
+```Python
+# Move a file to a new path
+shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 ```
 
 
@@ -818,6 +822,15 @@ kagglenb004が`Notebook Timeout`になる件について, batch sizeを16から3
 
 #### 2021-05-19
 kagglenb004が`Notebook Timeout`になる件について, batch sizeを32から48にしてsubmitするも, やはり`Notebook Timeout`.  
+PyTorch dataloaderのnum_workersが0になっていたので, これを8にして, なおかつsentence_idxをlabel encodingするといった不要な処理を除外して再度submitするも, これも`Notebook Timeout`.  
+<br>
+train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datasetに入力するまでの処理を記載した`/src/bridge.py`完成. 実行&結果確認へ.  
+<br>
+<br>
+<br>
+
+#### 2021-05-20
+
 
 
 
