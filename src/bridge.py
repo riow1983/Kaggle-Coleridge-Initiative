@@ -8,6 +8,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GroupKFold
 from tqdm import tqdm
 import pickle
+import gc
 import re
 from joblib import Parallel, delayed
 import spacy
@@ -170,6 +171,8 @@ def pos_tagger(df, use_pos=False):
         df["tok"] = None
         df["pos"] = None
 
+    return df
+
 
 def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     """
@@ -182,7 +185,7 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     Returns:
         dataset: pd.DataFrame
     """
-    
+
     # Single process
     # dataset = pd.DataFrame()
     # bar = tqdm(total = df.shape[0])
@@ -192,20 +195,24 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     #     bar.update(1)
 
     # Parallel process
-    _dfs = Parallel(n_jobs=-1, verbose=3)(delayed(convert_tokens)(row,
-                                                                  i, 
-                                                                  max_len,
-                                                                  train=train,
-                                                                  use_pos=use_pos,
-                                                                  verbose=verbose) for i,row in df.iterrows())
-    dataset = pd.concat(_dfs, axis=0, ignore_index=True)
+    dfs = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
+                                                     i, 
+                                                     max_len,
+                                                     train=train,
+                                                     use_pos=use_pos,
+                                                     verbose=verbose) for i,row in tqdm(df.iterrows(), desc="Converting tokens..."))
+    #df = pd.concat(df, axis=0, ignore_index=True)
+    df = pd.DataFrame()
+    for _df in tqdm(dfs, desc="Appending..."):
+        df = df.append(_df, ignore_index=True)
+    
 
     
-    dataset["sentence_idx"] = dataset["sentence"] + dataset["sentence#"]
+    df["sentence_idx"] = df["sentence"] + df["sentence#"]
     #dataset = dataset[["sentence", "sentence_idx", "token", "pos"]].copy()
     #dataset.rename(columns={"token":"word"}, inplace=True)
 
-    return dataset
+    return df
 
 
 def get_cv(dataset, num_splits=5):
@@ -288,44 +295,52 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
         dname = "nb003-annotation-data"
         print("Reading train data...")
         if gettext:
-            df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/train.csv")
+            if debug:
+                df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/train.csv", nrows=500)
+            else:
+                df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/train.csv")
             print("Starting to get text...")
             df['text'] = df['Id'].apply(lambda x: get_text(x, train=train))
         else:
-            df = pd.read_csv("../input/kagglenb006-get-text/df_train.csv")
+            if debug:
+                df = pd.read_csv("../input/kagglenb006-get-text/df_train.csv", nrows=500)
+            else:
+                df = pd.read_csv("../input/kagglenb006-get-text/df_train.csv")
         
-        if debug:
-            df = df.sample(100).copy()
+        #if debug:
+        #    df = df.sample(100).copy()
 
         print("Starting to clean text...")
         df["text"] = df["text"].apply(lambda x: clean_text(x))
         
-        if use_pos:
-            print("Starting to POS tagging...")
-            df['length'] = df['text'].apply(lambda x: len(x.split()))
-            df = df[df['length'] < 3000]  # remove too long texts (mainly for POS tagging)
-            df.reset_index(drop=True, inplace=True)
-            df = pos_tagger(df, use_pos=use_pos)
+
             
         if cv:
+            if use_pos:
+                print("Starting to POS tagging...")
+                df['length'] = df['text'].apply(lambda x: len(x.split()))
+                df = df[df['length'] < 3000]  # remove too long texts (mainly for POS tagging)
+                df.reset_index(drop=True, inplace=True)
+                df = pos_tagger(df, use_pos=use_pos)
+            
             print("Starting to convert df to dataset...")
-            dataset = df2dataset(df, max_len=max_len, train=train, use_pos=use_pos, verbose=False)
+            df = df2dataset(df, max_len=max_len, train=train, use_pos=use_pos, verbose=False)
+            
             print("Starting to get cv...")
-            folds = get_cv(dataset)
+            df = get_cv(df)
 
             os.makedirs(dname, exist_ok=True)
             if use_pos:
                 #pickle.dump(folds, open("folds.pkl", "wb"))
-                folds.to_pickle(f"{dname}/folds_pos_{max_len}.pkl")
+                df.to_pickle(f"{dname}/folds_pos_{max_len}.pkl")
                 #shutil.move("folds.pkl", f"{dname}/folds.pkl")
             else:
-                folds.to_pickle(f"{dname}/folds_nopos_{max_len}.pkl")
-            dataset = folds.copy()
+                df.to_pickle(f"{dname}/folds_nopos_{max_len}.pkl")
         else:
             if use_pos:
-                dataset = pd.read_pickle(f"{dname}/folds_pos_{max_len}.pkl")
+                df = pd.read_pickle(f"{dname}/folds_pos_{max_len}.pkl")
             else:
-                dataset = pd.read_pickle(f"{dname}/folds_nopos_{max_len}.pkl")
+                df = pd.read_pickle(f"{dname}/folds_nopos_{max_len}.pkl")
     
     else:
         # Test data
@@ -344,13 +359,13 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
             df = pos_tagger(df, use_pos=use_pos)
         
         print("Starting to convert df to dataset...")
-        dataset = df2dataset(df)
+        df = df2dataset(df)
 
 
     print("Starting sentence_extractor...")
-    dataset = sentence_extractor(dataset, train=train, use_pos=use_pos)
+    df = sentence_extractor(df, train=train, use_pos=use_pos)
     
-    dataset.to_pickle("dataset.pkl")
+    df.to_pickle("dataset.pkl")
 
 
 
