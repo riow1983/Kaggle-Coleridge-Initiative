@@ -920,10 +920,6 @@ Appending...:  68% 13380/19661 [7:18:20<11:35:30,  6.64s/it]/usr/local/lib/pytho
 /usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
   (len(rtype_registry), rtype))
 ^C
-[ ]
-import pandas as pd
-pd.read_pickle("./dataset.pkl")
-
 ```  
 <br>
 CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましいについて  
