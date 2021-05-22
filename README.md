@@ -132,7 +132,7 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |GPUで使用したoptimizerをsave & load する時の注意|[URL](https://qiita.com/Takayoshi_Makabe/items/00eea382015c9d13911f)|Done|TPUの話はない|
 |PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
 
-#### Documentation / Tutorials / StackOverflow
+#### Documentation / Tutorials / StackOverflow / etc.
 |name|url|status|comment|
 |----|----|----|----|
 |SAVING AND LOADING MODELS|[URL](https://pytorch.org/tutorials/beginner/saving_loading_models.html)|Reading|PyTorch標準方式のモデルsave方法|
@@ -145,6 +145,9 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |SAVING AND LOADING MODELS ACROSS DEVICES IN PYTORCH|[URL](https://pytorch.org/tutorials/recipes/recipes/save_load_across_devices.html)|Done|TPUで訓練したモデルをCPU側に保存して, GPUでロードする際, <br>`5. Save on CPU, Load on GPU`セクションの通りにやってみたができない|
 |Guidelines for assigning num_workers to DataLoader|[URL](https://discuss.pytorch.org/t/guidelines-for-assigning-num-workers-to-dataloader/813)|Done|num_workersはマイナス値で設定できないとのこと<br>挙動詳細はまだよく読めてない|
 |How to write boolean command line arguments with Python?|[URL](https://stackoverflow.com/questions/41006622/how-to-write-boolean-command-line-arguments-with-python)|Done|sys.argvで渡されたTrue/False (Python Boolean)<br>は"True"/"False"と文字列になってしまうが, <br>これをPython Booleanに戻す方法について|
+|The YAML Format|[URL](https://symfony.com/doc/current/components/yaml/yaml_format.html#numbers)|Done|yamlファイル上での指数表記の書き方を参考にした|
+|Can I add message to the tqdm progressbar?|[URL](https://stackoverflow.com/questions/37506645/can-i-add-message-to-the-tqdm-progressbar)|Done|tqdmに説明文を記載する方法|
+
 
 
 
@@ -152,6 +155,7 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |name|url|status|comment|
 |----|----|----|----|
 |how to save and load fine-tuned model?|[URL](https://github.com/huggingface/transformers/issues/7849)|Done|huggingfaceのpre-trainedモデルを<br>fine-tuningしたものをPyTorch標準方式でsaveする方法|
+|Colab crashes due to tcmalloc large allocation|[URL](https://github.com/huggingface/transformers/issues/4668)|Done|不明だったエラーメッセージ`tcmalloc: large alloc`はやはりColab上のメモリーエラーを指すらしい|
 
 #### Kaggle Notebooks
 |name|url|status|comment|
@@ -181,6 +185,8 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |Data preparation for NER|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)|Done|Dataset作成コードとTrainデータの実際のデータセット[NER Coleridge Initiative](https://www.kaggle.com/shahules/ner-coleridge-initiative)が<br>Kaggle Datasetにアップされている|
 |What is "the mention of datasets"|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/235297)|Done|各データセットに複数のラベル(省略形~完全形まで)が想定されるが, <br>どこまで想定すれば良いか基準が無い点について分かりやすく指摘|
 |Local CV is probably meaningless?|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/235026)|Done|trainのラベルが不完全なのでlocal CVは信頼できないのでは?という指摘<br>CV-LB相関の把握にはそれでも有用か|
+|Separate IDs exist for the same pub_title|[URL](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/240384)|Done|同じpublication titleなのに, puclication IDが異なる場合があるとのこと.<br>CVを切るときはtitleを使うべきか|
+
 
 
 
@@ -836,9 +842,100 @@ train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datase
 <br>
 
 #### 2021-05-20
-`src/bridge.py`の処理待ち中にディスカッションを読む.
+`src/bridge.py`の処理待ち中にディスカッションを読む.  
+<br>
+チーム定例会にて以下課題を認識:  
+- kagglenb004が`Notebook Timeout`になる件については, 1 iterationごとの処理量を削減する方向 (batch size減らす, max_len減らす, など)も検討すべき
+- textをmax_lenごとに分割する場合, 分割前後でoverlapを20単語程度設けないとdataset言及途中で分割されることになる
+- localnb001系統はtagを`{"o", "o-dataset", "pad"}`にしていたが, BIO方式`{"o":O", "o-dataset":B", "o-dataset":I", "pad":O"}`にした方が良いか
+- CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましい:
+  - ただしpublicationのドメインカテゴリを把握するのは容易ではない
+  - したがって妥協策として, "publication ID (or title)をグループとしたlabelによる層別化"をするStratified Group Kfoldを実施すると良いかもしれない
+- dataset labelは大文字の場合も小文字の場合もあるので, casedモデルよりも大文字小文字の違いを区別しないuncasedモデルの方が望ましい可能性あり
+- labelの付け方など問題山積なコンペなので, 機械学習モデルを学習させて競うというよりは, string matchingを始めとする有象無象のハッキング手法を競うコンペなのかもしれない
+<br>
+<br>
+<br>
 
+#### 2021-05-21
+`src/bridge.py`の下記処理がメモリリークなのか処理が完結できない.  
+```Python
+def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
+    """
+    Args:
+        df: pd.DataFrame
+        max_len: Int
+        use_pos: Bool
+        make_cv: Bool
+        verbose: Bool
+    Returns:
+        dataset: pd.DataFrame
+    """
 
+    # Single process
+    # dataset = pd.DataFrame()
+    # bar = tqdm(total = df.shape[0])
+    # for i,row in df.iterrows():
+    #     _df = convert_tokens(row,i, max_len, train=train, use_pos=use_pos, verbose=verbose)
+    #     dataset = dataset.append(_df,ignore_index=True)
+    #     bar.update(1)
+
+    # Parallel process
+    dfs = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
+                                                     i, 
+                                                     max_len,
+                                                     train=train,
+                                                     use_pos=use_pos,
+                                                     verbose=verbose) for i,row in tqdm(df.iterrows(), desc="Converting tokens..."))
+    #df = pd.concat(df, axis=0, ignore_index=True)
+    df = pd.DataFrame()
+    for _df in tqdm(dfs, desc="Appending..."):
+        df = df.append(_df, ignore_index=True)
+    
+
+    
+    df["sentence_idx"] = df["sentence"] + df["sentence#"]
+    #dataset = dataset[["sentence", "sentence_idx", "token", "pos"]].copy()
+    #dataset.rename(columns={"token":"word"}, inplace=True)
+
+    return df
+```  
+エラーメッセージ:   
+```
+Starting to convert df to dataset...
+Converting tokens...: 13489it [01:31, 11.26it/s]/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/process_executor.py:691: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  "timeout or by a memory leak.", UserWarning
+Converting tokens...: 19661it [02:42, 121.18it/s]
+Appending...:  32% 6321/19661 [1:23:00<5:38:32,  1.52s/it]tcmalloc: large alloc 1359011840 bytes == 0x55b4e3a5a000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  36% 7039/19661 [1:42:11<6:00:38,  1.71s/it]tcmalloc: large alloc 1528913920 bytes == 0x55b548d72000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  40% 7902/19661 [2:08:13<6:16:55,  1.92s/it]tcmalloc: large alloc 1720107008 bytes == 0x55b4f9258000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  44% 8590/19661 [2:31:44<6:37:04,  2.15s/it]tcmalloc: large alloc 1934966784 bytes == 0x55b57946a000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  51% 10083/19661 [3:28:47<6:28:36,  2.43s/it]tcmalloc: large alloc 2176851968 bytes == 0x55b51463e000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  56% 11054/19661 [4:12:55<9:04:05,  3.79s/it]tcmalloc: large alloc 2448891904 bytes == 0x55b492a6a000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  63% 12309/19661 [5:42:47<9:32:49,  4.67s/it]tcmalloc: large alloc 2755297280 bytes == 0x55b536db8000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  66% 12980/19661 [6:37:33<10:05:42,  5.44s/it]tcmalloc: large alloc 3100139520 bytes == 0x55b492a6a000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  68% 13332/19661 [7:13:08<11:16:12,  6.41s/it]tcmalloc: large alloc 3487178752 bytes == 0x55b5627a8000 @  0x7f2560428001 0x7f255d94754f 0x7f255d997b58 0x7f255d997d18 0x7f255da3f010 0x7f255da3f73c 0x7f255da3f85d 0x55b22dcb2f68 0x7f255d984ef7 0x55b22dcb0c47 0x55b22dcb0a50 0x55b22dd24453 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dcb230a 0x55b22dd2060e 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f4ae 0x55b22dcb23ea 0x55b22dd2132a 0x55b22dd1f7ad 0x55b22dcb23ea
+Appending...:  68% 13380/19661 [7:18:20<11:35:30,  6.64s/it]/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 6 leaked semlock objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+^C
+[ ]
+import pandas as pd
+pd.read_pickle("./dataset.pkl")
+
+```  
+<br>
+CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましいについて  
+チームメイトと検討の結果以下の方法で行うこととした:
+- 対象は無加工のtrain.csv
+- cleaned_labelをカテゴライズしたものをgroupとしてGroup Kfoldを行う
+  - その際, 教師ラベルをどの変数(カラム)にするかは未定 (適当でいい?)
+<br>
+<br>
+<br>
+
+#### 2021-05-22
 
 
 
