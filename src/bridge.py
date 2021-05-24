@@ -10,7 +10,13 @@ from tqdm import tqdm
 import pickle
 import gc
 import re
-from joblib import Parallel, delayed
+
+#from joblib import Parallel, delayed
+import multiprocessing
+from multiprocessing import Process
+
+from functools import reduce
+from itertools import chain
 import spacy
 nlp = spacy.load("en_core_web_sm")
 
@@ -195,17 +201,49 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     #     bar.update(1)
 
     # Parallel process
+    #### RIOW
     dfs = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
-                                                     i, 
-                                                     max_len,
-                                                     train=train,
-                                                     use_pos=use_pos,
-                                                     verbose=verbose) for i,row in tqdm(df.iterrows(), desc="Converting tokens..."))
-    #df = pd.concat(df, axis=0, ignore_index=True)
-    df = pd.DataFrame()
-    for _df in tqdm(dfs, desc="Appending..."):
-        df = df.append(_df, ignore_index=True)
+                                                      i, 
+                                                      max_len,
+                                                      train=train,
+                                                      use_pos=use_pos,
+                                                      verbose=verbose) for i,row in tqdm(df.iterrows(), desc="    Converting tokens..."))
     
+    # with multiprocessing.Pool() as pool:
+    #     process = [pool.apply_async(convert_tokens, (row, 
+    #                                                  i, 
+    #                                                  max_len, 
+    #                                                  train=train, 
+    #                                                  use_pos=use_pos, 
+    #                                                  verbose=verbose)) for i,row in tqdm(df.iterrows(), desc="    Converting tokens...")]
+    #     dfs = [f.get() for f in process]
+    #### RIOWRIOW
+    print("    Starting to concatenate...")
+    #df = pd.concat(dfs, axis=0, ignore_index=True)
+    #del dfs
+    df = pd.DataFrame()
+    for _df in tqdm(dfs, desc="        Appending..."):
+        df = df.append(_df, ignore_index=True)
+    del dfs
+    
+    #### RIOW
+    #df = reduce(lambda x,y: pd.concat([x,y], axis=0, ignore_index=True), dfs)
+    
+    # print("Starting to concatenate...")
+    # def fast_flatten(input_list):
+    #     return list(chain.from_iterable(input_list))
+    
+    # COLUMN_NAMES = dfs[0].columns
+    # df_dict = dict.fromkeys(COLUMN_NAMES, [])
+    
+    # for col in COLUMN_NAMES:
+    #     extracted = (df[col] for df in dfs)
+    #     # Flatten and save to df_dict
+    #     df_dict[col] = fast_flatten(extracted)
+    
+    # df = pd.DataFrame.from_dict(df_dict)[COLUMN_NAMES]
+    # del dfs, df_dict
+    #### RIOWRIOW
 
     
     df["sentence_idx"] = df["sentence"] + df["sentence#"]
@@ -247,7 +285,9 @@ def get_cv(dataset, num_splits=5):
 
 
 
-def sentence_extractor(dataset, train=False, use_pos=False):
+
+
+def sentence_extractor(dataset, tags_vals=["o", "o-dataset", "pad"], train=False, use_pos=False):
     """
     Args:
         dataset: pd.DataFrame
@@ -257,14 +297,32 @@ def sentence_extractor(dataset, train=False, use_pos=False):
     getter = SentenceGetter(dataset, train=train, use_pos=use_pos)
 
     sentences = [' '.join([s[0] for s in sent]) for sent in getter.sentences]
+    
     if use_pos:
         poses = [' '.join([s[1] for s in sent]) for sent in getter.sentences]
+        if train:
+            tags = [' '.join([s[2] for s in sent]) for sent in getter.sentences]
+        else:
+            tags = None
     else:
         poses = None
+        if train:
+            tags = [' '.join([s[1] for s in sent]) for sent in getter.sentences]
+        else:
+            tags = None
+    
+    if tags:
+        # label encoding
+        # 'pad' never appeared at this point
+        tag2idx = {t: i for i, t in enumerate(tags_vals)}
+        #tags = [[tag2idx.get(t) for t in tag] for tag in tags]
+        tags = [[tag2idx.get(t) for t in tag.split(" ")] for tag in tags]
+
 
     dataset.drop_duplicates(subset="sentence_idx", inplace=True, ignore_index=True)
     dataset["sentences"] = sentences
     dataset["poses"] = poses
+    dataset["tags"] = tags
 
     return dataset
 
@@ -276,15 +334,18 @@ def sentence_extractor(dataset, train=False, use_pos=False):
 
 
 
-
-
-
-
-def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug=False):
+def main(train=False, 
+         max_len=290, 
+         tags_vals=["o", "o-dataset", "pad"], 
+         gettext=False, 
+         use_pos=False, 
+         cv=False, 
+         debug=False):
     """
     Args:
         train: Bool
         max_len: Int
+        tags_vals: List[str]
         gettext: Bool
         use_pos: Bool
         cv: Bool
@@ -313,14 +374,23 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
         print("Starting to clean text...")
         df["text"] = df["text"].apply(lambda x: clean_text(x))
         
+        #print("Removing too long texts...")
+        #df['length'] = df['text'].apply(lambda x: len(x.split()))
+        #df = df[df['length'] < 30_000]
+        #df.reset_index(drop=True, inplace=True)
+        print("Shortening too long texts...")
+        df["text"] = df["text"].apply(lambda x: " ".join(x.split()[:30_000]))
+        
 
-            
+
         if cv:
             if use_pos:
                 print("Starting to POS tagging...")
-                df['length'] = df['text'].apply(lambda x: len(x.split()))
-                df = df[df['length'] < 3000]  # remove too long texts (mainly for POS tagging)
-                df.reset_index(drop=True, inplace=True)
+                #df['length'] = df['text'].apply(lambda x: len(x.split()))
+                #df = df[df['length'] < 3000]  # remove too long texts (mainly for POS tagging)
+                #df.reset_index(drop=True, inplace=True)
+
+                #df["text"] = df["text"].apply(lambda x: " ".join(x.split()[:3_000]))
                 df = pos_tagger(df, use_pos=use_pos)
             
             print("Starting to convert df to dataset...")
@@ -354,6 +424,9 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
         print("Starting to clean text...")
         df["text"] = df["text"].apply(lambda x: clean_text(x))
         
+        print("Shortening too long texts...")
+        df["text"] = df["text"].apply(lambda x: " ".join(x.split()[:30_000]))
+        
         if use_pos:
             print("Starting to POS tagging...")
             df = pos_tagger(df, use_pos=use_pos)
@@ -363,9 +436,10 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
 
 
     print("Starting sentence_extractor...")
-    df = sentence_extractor(df, train=train, use_pos=use_pos)
+    df = sentence_extractor(df, tags_vals=tags_vals, train=train, use_pos=use_pos)
     
     df.to_pickle("dataset.pkl")
+    #pickle.dump(tags_vals, open("tags_vals.pkl", "wb"))
 
 
 
@@ -373,7 +447,7 @@ def main(train=False, max_len=290, gettext=False, use_pos=False, cv=False, debug
 if __name__ == '__main__':
     print("Usage example:")
     print()
-    print("!python bridge.py {train} {max_len} {gettext} {use_pos} {cv} {debug}")
+    print("!python bridge.py {train} {max_len} {gettext} {use_pos} {cv} {debug} {tags_vals}")
     print()
     print("Args:")
     
@@ -386,13 +460,16 @@ if __name__ == '__main__':
     use_pos = args[3].lower() == 'true'
     cv = args[4].lower() == 'true'
     debug = args[5].lower() == 'true'
+    tags_vals = args[6:]
     
     print(f"train: Bool: {train}")
     print(f"max_len: Int: {max_len}")
+    print(f"tags_vals: List[str]: {tags_vals}")
+    #print("....type of tags_vals: ", type(tags_vals))
     print(f"gettext: Bool: {gettext}")
     print(f"use_pos: Bool: {use_pos}")
     print(f"cv: Bool: {cv}")
     print(f"debug: Bool: {debug}")
     
-    main(train=train, max_len=max_len, gettext=gettext, use_pos=use_pos, cv=cv, debug=debug)
+    main(train=train, max_len=max_len, tags_vals=tags_vals, gettext=gettext, use_pos=use_pos, cv=cv, debug=debug)
     print("Output file has been saved at ./dataset.pkl")
