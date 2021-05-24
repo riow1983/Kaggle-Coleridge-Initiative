@@ -24,6 +24,7 @@
 |kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
 |localnb001-transformers-ner|URL|[nb003-annotation-data (5 fold CV data)](https://www.kaggle.com/riow1983/nb003-annotation-data)|fine-tuned BERTモデル|POS taggingを入力に加えて精度向上するか試してみる|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
+|kagglenb009-cv|[URL](https://www.kaggle.com/riow1983/kagglenb009-cv)|-|-|作成中|[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)に応じたCV作成ノートブック|
 
 
 
@@ -147,6 +148,11 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |How to write boolean command line arguments with Python?|[URL](https://stackoverflow.com/questions/41006622/how-to-write-boolean-command-line-arguments-with-python)|Done|sys.argvで渡されたTrue/False (Python Boolean)<br>は"True"/"False"と文字列になってしまうが, <br>これをPython Booleanに戻す方法について|
 |The YAML Format|[URL](https://symfony.com/doc/current/components/yaml/yaml_format.html#numbers)|Done|yamlファイル上での指数表記の書き方を参考にした|
 |Can I add message to the tqdm progressbar?|[URL](https://stackoverflow.com/questions/37506645/can-i-add-message-to-the-tqdm-progressbar)|Done|tqdmに説明文を記載する方法|
+|(spaCy) Word vectors and semantic similarity|[URL](https://spacy.io/usage/linguistic-features#vectors-similarity)|Done|spaCyによるコサイン類似度算出方法.<br>md, lgなどの大きいモデルを使用する必要があるとのこと|
+|Generate a graph using Dictionary in Python|[URL](https://www.geeksforgeeks.org/generate-graph-using-dictionary-python/)|Done|Pure Pythonでgraphを作成する方法<br>作成したedgesはnetworkxに渡すことが可能|
+|(NetworkX) Examining elements of a graph|[URL](https://networkx.org/documentation/stable/tutorial.html#examining-elements-of-a-graph)|Done|作成したgraphから任意の要素を抽出する方法|
+|(NetworkX) networkx.algorithms.components.node_connected_component|[URL](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.components.node_connected_component.html#networkx.algorithms.components.node_connected_component)|Done|　任意のnodeラベルを渡して接続している要素を全て取り出すメソッド|
+
 
 
 
@@ -156,6 +162,10 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |----|----|----|----|
 |how to save and load fine-tuned model?|[URL](https://github.com/huggingface/transformers/issues/7849)|Done|huggingfaceのpre-trainedモデルを<br>fine-tuningしたものをPyTorch標準方式でsaveする方法|
 |Colab crashes due to tcmalloc large allocation|[URL](https://github.com/huggingface/transformers/issues/4668)|Done|不明だったエラーメッセージ`tcmalloc: large alloc`はやはりColab上のメモリーエラーを指すらしい|
+|Fast Alternative to pd.concat() for row-wise concatenation|[URL](https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e)|Done|2018年時点の情報で, 今は必ずしもそうではないらしい|
+|Multiprocessing spaCy: Can't find model 'en_model.vectors' in en_core_web_lg|[URL](https://github.com/explosion/spaCy/issues/3552)|Done|spaCyを使った処理を並列化する際は, nlp.load()を対象の関数内に記載する必要がある|
+
+
 
 #### Kaggle Notebooks
 |name|url|status|comment|
@@ -932,7 +942,115 @@ CVを切る際, publicationのドメインカテゴリをグループにしたGr
 <br>
 
 #### 2021-05-22
+`src/bridge.py`のメモリリークに対応すべく, 以下の通り変更を加えた(functools.reduce導入)が同じ結果に.  
+```Python
+def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
+    """
+    Args:
+        df: pd.DataFrame
+        max_len: Int
+        use_pos: Bool
+        make_cv: Bool
+        verbose: Bool
+    Returns:
+        dataset: pd.DataFrame
+    """
 
+    # Single process
+    # dataset = pd.DataFrame()
+    # bar = tqdm(total = df.shape[0])
+    # for i,row in df.iterrows():
+    #     _df = convert_tokens(row,i, max_len, train=train, use_pos=use_pos, verbose=verbose)
+    #     dataset = dataset.append(_df,ignore_index=True)
+    #     bar.update(1)
+
+    # Parallel process
+    df = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
+                                                     i, 
+                                                     max_len,
+                                                     train=train,
+                                                     use_pos=use_pos,
+                                                     verbose=verbose) for i,row in tqdm(df.iterrows(), desc="Converting tokens..."))
+    #df = pd.concat(df, axis=0, ignore_index=True)
+    #df = pd.DataFrame()
+    #for _df in tqdm(dfs, desc="Appending..."):
+    #    df = df.append(_df, ignore_index=True)
+    df = reduce(lambda x,y: pd.concat([x,y], axis=0, ignore_index=True), df)
+    
+
+    
+    df["sentence_idx"] = df["sentence"] + df["sentence#"]
+    #dataset = dataset[["sentence", "sentence_idx", "token", "pos"]].copy()
+    #dataset.rename(columns={"token":"word"}, inplace=True)
+
+    return df
+```
+```
+Starting to convert df to dataset...
+Converting tokens...: 14844it [01:50, 14.90it/s]/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/process_executor.py:691: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
+  "timeout or by a memory leak.", UserWarning
+Converting tokens...: 19661it [02:40, 122.47it/s]
+tcmalloc: large alloc 1359011840 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 1528913920 bytes == 0x5575c4380000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 1720107008 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 1934966784 bytes == 0x5575dc6e6000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 2176851968 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 2448891904 bytes == 0x55776a488000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 2755297280 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 3100139520 bytes == 0x55776a488000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+tcmalloc: large alloc 3487178752 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f62eed8954f 0x7f62eedd9b58 0x7f62eedd9d18 0x7f62eee81010 0x7f62eee8173c 0x7f62eee8185d 0x5572fec79f68 0x7f62eedc6ef7 0x5572fec77c47 0x5572fec77a50 0x5572feceb453 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece67ad 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fec7930a 0x5572fece760e 0x5572fece64ae 0x5572fec793ea 0x5572fece832a 0x5572fece64ae 0x5572febb8eb1 0x5572fedea5df 0x5572fec77c47 0x5572fec77a50
+/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 6 leaked semlock objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+^C
+```  
+<br>
+<br>
+<br>
+
+#### 2021-05-23
+`src/bridge.py`のメモリリークに対応作業継続.  
+<br>
+<br>
+<br>
+
+#### 2021-05-24
+`src/bridge.py`のメモリリークについて, train.csvのtext長が3000以下の論文をdropすると正常かつ迅速に処理が完了することを確認.  
+ただしその場合`19661 rows`が`3000 rows`強まで落ち込んでいることに気づく. これは流石に減らしすぎだ.  
+train.csvのtext長の分布を見ると30000以下が大部分となっている.  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210524.png?raw=true)  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210524(2).png?raw=true)  
+またdropするのではなく, text長をtruncateすればdropする論文は0になる. その方式でひとまずやってみることにした.  
+またconcatenationはpd.concatではなくappend方式を採用した.  
+しかしやはり以下のエラーで処理が中断されてしまった.  
+```
+Starting to convert df to dataset...
+    Converting tokens...: 19661it [02:21, 139.19it/s]
+    Starting to concatenate...
+        Appending...:  32% 6351/19661 [1:25:45<5:41:28,  1.54s/it]tcmalloc: large alloc 1359241216 bytes == 0x560551c4c000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  36% 7047/19661 [1:44:38<6:02:46,  1.73s/it]tcmalloc: large alloc 1528823808 bytes == 0x560551c4c000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  40% 7915/19661 [2:11:03<6:20:45,  1.94s/it]tcmalloc: large alloc 1720090624 bytes == 0x560551c4c000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  44% 8605/19661 [2:34:52<6:43:34,  2.19s/it]tcmalloc: large alloc 1935032320 bytes == 0x560551c4c000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  51% 10106/19661 [3:32:59<6:31:20,  2.46s/it]tcmalloc: large alloc 2176942080 bytes == 0x56062bb34000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  56% 11075/19661 [4:18:23<9:17:12,  3.89s/it]tcmalloc: large alloc 2448932864 bytes == 0x5607df248000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  63% 12328/19661 [5:49:06<9:36:45,  4.72s/it]tcmalloc: large alloc 2755100672 bytes == 0x5606cfe28000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  66% 13034/19661 [6:49:12<10:36:24,  5.76s/it]tcmalloc: large alloc 3100155904 bytes == 0x5607df248000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  69% 13657/19661 [7:53:09<10:57:11,  6.57s/it]tcmalloc: large alloc 3486982144 bytes == 0x5606fb83a000 @  0x7f449de60001 0x7f449b37f54f 0x7f449b3cfb58 0x7f449b3cfd18 0x7f449b477010 0x7f449b47773c 0x7f449b47785d 0x560370374f68 0x7f449b3bcef7 0x560370372c47 0x560370372a50 0x5603703e6453 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x56037037430a 0x5603703e260e 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e14ae 0x5603703743ea 0x5603703e332a 0x5603703e17ad 0x5603703743ea
+        Appending...:  70% 13797/19661 [8:08:33<10:51:40,  6.67s/it]/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 6 leaked semlock objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+/usr/local/lib/python3.7/dist-packages/joblib/externals/loky/backend/resource_tracker.py:320: UserWarning: resource_tracker: There appear to be 1 leaked folder objects to clean up at shutdown
+  (len(rtype_registry), rtype))
+^C
+```  
+joblib特有の問題かもしれない.  
+<br>
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)作成開始.  
+<br>
+<br>
+<br>
+
+#### 2021-05-25
 
 
 
