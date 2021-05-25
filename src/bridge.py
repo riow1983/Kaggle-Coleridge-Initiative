@@ -202,21 +202,16 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
 
     # Parallel process
     #### RIOW
-    dfs = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
-                                                      i, 
-                                                      max_len,
-                                                      train=train,
-                                                      use_pos=use_pos,
-                                                      verbose=verbose) for i,row in tqdm(df.iterrows(), desc="    Converting tokens..."))
+    # dfs = Parallel(n_jobs=-1)(delayed(convert_tokens)(row,
+    #                                                   i, 
+    #                                                   max_len,
+    #                                                   train=train,
+    #                                                   use_pos=use_pos,
+    #                                                   verbose=verbose) for i,row in tqdm(df.iterrows(), desc="    Converting tokens..."))
     
-    # with multiprocessing.Pool() as pool:
-    #     process = [pool.apply_async(convert_tokens, (row, 
-    #                                                  i, 
-    #                                                  max_len, 
-    #                                                  train=train, 
-    #                                                  use_pos=use_pos, 
-    #                                                  verbose=verbose)) for i,row in tqdm(df.iterrows(), desc="    Converting tokens...")]
-    #     dfs = [f.get() for f in process]
+    with multiprocessing.Pool() as pool:
+        process = [pool.apply_async(convert_tokens, (row, i, max_len, train, use_pos, verbose)) for i,row in df.iterrows()]
+        dfs = [f.get() for f in tqdm(process, desc="    Converting tokens...")]
     #### RIOWRIOW
     print("    Starting to concatenate...")
     #df = pd.concat(dfs, axis=0, ignore_index=True)
@@ -243,6 +238,20 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     
     # df = pd.DataFrame.from_dict(df_dict)[COLUMN_NAMES]
     # del dfs, df_dict
+    #### RIOWRIOW
+
+    #### RIOW
+    # # reference: https://takazawa.github.io/hobby/pandas_append_fast/
+    # counter = 0
+    # dict_tmp = {}
+    # df = pd.DataFrame()
+    # for _df in dfs:
+    #     for _, row in _df.iteritems():
+    #         dict_tmp[counter] = row
+    #         counter += 1
+    # del dfs
+    # df = df.from_dict(dict_tmp, orient="index")
+    # del dict_tmp
     #### RIOWRIOW
 
     
