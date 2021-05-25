@@ -62,6 +62,7 @@ seq = np.pad(seq, (0, MAX_LEN-len(seq)), 'constant', constant_values="[PAD]")
 ```  
 ```Python
 # Kaggle or Colab
+import sys
 if 'kaggle_web_client' in sys.modules:
     # Do something
 elif 'google.colab' in sys.modules:
@@ -115,7 +116,49 @@ print(tagstring)
 ```Python
 # Move a file to a new path
 shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
-```
+```  
+```Python
+import pickle
+res = []
+
+# Dump a pickle file
+pickle.dump(res, open("./res.pkl", "wb"))
+
+# Load a pickle file
+res = pickle.load(open("./res.pkl", "rb"))
+```  
+```Python
+# Pbar for a nested for loop
+from tqdm import tqdm
+n = 5
+m = 300
+with tqdm(total=n * m) as pbar:
+    for i in tqdm(range(n)):
+        for j in tqdm(range(m)):
+            # do something, e.g. sleep
+            pbar.update(1)
+```  
+```Python
+# Lemmatizer by spaCy
+import spacy
+nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+doc = nlp('Hoge is hoging a hoge for hoges.')
+print (" ".join([token.lemma_ for token in doc]))
+```  
+```Python
+import multiprocessing
+from multiprocessing import Process
+
+def myfunc(i,j):
+  return i*j
+
+length = 1000
+
+with multiprocessing.Pool() as pool:
+    process = [pool.apply_async(myfunc, (i, j)) for j in range(length) for i in range(length)]
+    outs = [f.get() for f in process]
+```  
+
 
 
 #### Papers
@@ -124,7 +167,7 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |Big Bird: Transformers for Longer Sequences|[URL](https://arxiv.org/pdf/2007.14062.pdf)|Reading|Turing completeの意味が分からん|
 |Neural Architectures for Named Entity Recognition|[URL](https://arxiv.org/pdf/1603.01360.pdf)|Reading|[arXivTimesで"NER"と検索したら出てきた](https://github.com/arXivTimes/arXivTimes/issues/185)論文.<br>2016年の論文でLSTMベースのNER用モデルの提案.<br>BERT, Transformer系以外のものも見てみようという思い.<br>実装はTheano.|
 
-#### Blogs
+#### Blogs / Qiita / etc.
 |name|url|status|comment|
 |----|----|----|----|
 |Understanding BigBird's Block Sparse Attention|[URL](https://huggingface.co/blog/big-bird)|Untouched||
@@ -132,6 +175,8 @@ shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
 |Pytorchでモデルの保存と読み込み|[URL](https://tzmi.hatenablog.com/entry/2020/03/05/222813)|Done|GPUで学習してCPUで読み込む場合の説明が参考になる<br>ただしTPUで学習してCPUで読み込む場合の説明はない|
 |GPUで使用したoptimizerをsave & load する時の注意|[URL](https://qiita.com/Takayoshi_Makabe/items/00eea382015c9d13911f)|Done|TPUの話はない|
 |PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
+|PandasのDataFrameのappendの高速化|[URL](https://takazawa.github.io/hobby/pandas_append_fast/)|Done|df.iteritems()とdf.from_dict()を使ったdf.append()の高速化|
+|Python joblibの並列処理はuWSGI環境だと動かない。uWSGI上で並列処理するには？|[URL](https://qiita.com/taai/items/15bf6acb5121ae5f5060)|Done|joblib特有のエラーを疑うきっかけとなった記事|
 
 #### Documentation / Tutorials / StackOverflow / etc.
 |name|url|status|comment|
@@ -933,7 +978,7 @@ Appending...:  68% 13380/19661 [7:18:20<11:35:30,  6.64s/it]/usr/local/lib/pytho
 ```  
 <br>
 CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましいについて  
-チームメイトと検討の結果以下の方法で行うこととした ([issue](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)):  
+チームメイトと検討の結果以下の方法で行うこととした [issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9):  
 - 対象は無加工のtrain.csv  
 - cleaned_labelをカテゴライズしたものをgroupとしてGroup Kfoldを行う  
   - その際, 教師ラベルをどの変数(カラム)にするかは未定 (適当でいい?)  
@@ -1045,12 +1090,39 @@ Starting to convert df to dataset...
 ```  
 joblib特有の問題かもしれない.  
 <br>
-[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)作成開始.  
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)作成開始. 130 labelsについてlabels by labelsのペアワイズ・コサイン類似度を計算しようと思ったがやはり時間がかかるので他の方法を模索中.  
 <br>
 <br>
 <br>
 
 #### 2021-05-25
+`src/bridge.py`のメモリリークに対応作業継続. joblibを廃止しmultiprocessingへ変更したところAppeng処理は100%達成できたもののその直後に^C (中断)を喰らう. エラー内容が表示されておらず理由不明だが恐らくメモリーリーク.  
+```
+Starting to convert df to dataset...
+    Converting tokens...: 19661it [00:04, 4357.25it/s]
+    Starting to concatenate...
+        Appending...:  32% 6351/19661 [1:24:58<5:38:53,  1.53s/it]tcmalloc: large alloc 1359241216 bytes == 0x556faf58e000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  36% 7047/19661 [1:43:40<6:02:58,  1.73s/it]tcmalloc: large alloc 1528823808 bytes == 0x556faf58e000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  40% 7915/19661 [2:10:20<6:22:04,  1.95s/it]tcmalloc: large alloc 1720090624 bytes == 0x5570b7c8c000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  44% 8605/19661 [2:34:13<6:42:43,  2.19s/it]tcmalloc: large alloc 1935032320 bytes == 0x5570c4994000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  51% 10106/19661 [3:32:03<6:26:54,  2.43s/it]tcmalloc: large alloc 2176942080 bytes == 0x557154c1a000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  56% 11075/19661 [4:13:48<6:41:23,  2.80s/it]tcmalloc: large alloc 2448932864 bytes == 0x557175278000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  63% 12328/19661 [5:15:37<6:25:33,  3.15s/it]tcmalloc: large alloc 2755100672 bytes == 0x5570f5766000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  66% 13034/19661 [5:55:01<7:52:02,  4.27s/it]tcmalloc: large alloc 3100155904 bytes == 0x5571c2a16000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  69% 13657/19661 [6:34:46<6:32:33,  3.92s/it]tcmalloc: large alloc 3486982144 bytes == 0x557121178000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  75% 14768/19661 [8:05:27<8:27:37,  6.22s/it]tcmalloc: large alloc 3923599360 bytes == 0x55728fcec000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  81% 15925/19661 [10:17:13<7:50:12,  7.55s/it]tcmalloc: large alloc 4414021632 bytes == 0x5571584d6000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...:  91% 17887/19661 [14:25:41<2:51:24,  5.80s/it]tcmalloc: large alloc 4964737024 bytes == 0x557051472000 @  0x7fb3418e7001 0x7fb33ee0654f 0x7fb33ee56b58 0x7fb33ee56d18 0x7fb33eefe010 0x7fb33eefe73c 0x7fb33eefe85d 0x556de8426f68 0x7fb33ee43ef7 0x556de8424c47 0x556de8424a50 0x556de8498453 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de842630a 0x556de849460e 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84934ae 0x556de84263ea 0x556de849532a 0x556de84937ad 0x556de84263ea
+        Appending...: 100% 19661/19661 [17:24:39<00:00,  3.19s/it]
+^C
+```  
+<br>
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)をlocal(Colab)にpullしたnb009-cvで作業継続. 130 x 130のペアワイズコサイン類似度を求めることにしたが, その前段で目視確認による人手マッピングを噛ませて精度向上を図る.  
+<br>
+<br>
+<br>
+
+#### 2021-05-26
 
 
 
