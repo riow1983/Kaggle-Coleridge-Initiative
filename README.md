@@ -12,20 +12,22 @@
 作成したnotebook等の説明  
 |name|url|input|output|status|comment|
 |----|----|----|----|----|----|
-|kagglenb001_transformers_test|[URL](https://www.kaggle.com/riow1983/kagglenb001-transformers-test)|-|-|使用予定なし|huggingface transformersの簡易メソッド<br>(AutoTokenizer, AutoModelForTokenClassification)<br>を使ったNERタスク練習|
-|kagglenb002_NERDA_test|[URL](https://www.kaggle.com/riow1983/kagglenb002-nerda-test)|-|-|使用予定なし|NERDAを使ったNERタスク練習|
+|kagglenb001_transformers_test|[URL](https://www.kaggle.com/riow1983/kagglenb001-transformers-test)|-|-|廃止(使用予定なし)|huggingface transformersの簡易メソッド<br>(AutoTokenizer, AutoModelForTokenClassification)<br>を使ったNERタスク練習|
+|kagglenb002_NERDA_test|[URL](https://www.kaggle.com/riow1983/kagglenb002-nerda-test)|-|-|廃止(使用予定なし)|NERDAを使ったNERタスク練習|
 |kagglenb003_annotation_data|[URL](https://www.kaggle.com/riow1983/kagglenb003-annotation-data)|[NERタスク用trainデータ](https://www.kaggle.com/shahules/ner-coleridge-initiative)|-|Done|NERDAを使ったNERタスク|
-|nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|spaCyによるPOS tagging追加作業完了<br>"5 folds in one dataset"作業完了|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的.|
+|nb003-annotation-data|URL|NERタスク用trainデータ|[5 Fold CV data](https://www.kaggle.com/riow1983/nb003-annotation-data)|廃止(使用予定なし)|NERDAによるNERタスクは放擲. <br>5 Fold CV dataを作成することが目的だったがsrc/bridge.pyとnb009-cvで代替.|
 |kagglenb004-transformers-ner-inference|[URL](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)|localnb001によるfine-tuned BERTモデル他|submission.csv|submission error対応中|localnb001によるfine-tuneがうまくいっていないかもしれないがひとまずsubmit挑戦中|
 |kagglenb005-pytorch-BERT-for-NER|[URL](https://www.kaggle.com/riow1983/kagglenb005-pytorch-bert-for-ner)|-|fine-tuned BERT model(未作成)|停止中|公開カーネル中高スコア(LB=0.7)を記録している<br>[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)のtrain側. <br>EPOCHS=1でも９時間以上かかりそう. <br>Colabにpullしてnb005-pytorch-bert-for-nerとして訓練する|
 |nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
-|kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
-|kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|JSONファイルからパースしたtextを新規列として保持する<br>tran/test dataset<br>section構造をそのまま保持|Done|Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
+|kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|riow1983/nb009-cv/folds_pubcat.pkl|folds_pubcat.pkl|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
+|kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|train/test dataset<br>section構造をそのまま保持|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
-|localnb001-transformers-ner|URL|[nb003-annotation-data (5 fold CV data)](https://www.kaggle.com/riow1983/nb003-annotation-data)|fine-tuned BERTモデル|POS taggingを入力に加えて精度向上するか試してみる|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
+|localnb001-transformers-ner|URL|riow1983/kagglenb006-get-text/folds_pubcat.pkl|fine-tuned BERTモデル|作成中|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
-|kagglenb009-cv|[URL](https://www.kaggle.com/riow1983/kagglenb009-cv)|-|-|作成中|[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)に応じたCV作成ノートブック|
-
+|kagglenb009-cv|[URL](https://www.kaggle.com/riow1983/kagglenb009-cv)|../input/coleridgeinitiative-show-us-the-data/train.csv|-|nb009-cvへ引き継ぎ|[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)に応じたCV作成ノートブック|
+|nb009-cv|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb009-cv.ipynb)|../input/coleridgeinitiative-show-us-the-data/train.csv|riow1983/nb009-cv/folds_pubcat.pkl|作成中|kagglenb009-cvから引き継ぎ|
+|src/bridge.py|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/src/bridge.py)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|./dataset.pkl|作成中|CVデータ読み込みからPyTorch Datasetクラスへの受け渡しまでのgapを埋める処理をまとめたもの|
+|config/config.yml|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/config/config.yml)|-|-|作成中|nb009, src/bridge.py, localnb001, kagglenb004の各種パラメータを管理|
 
 
 
@@ -133,8 +135,8 @@ from tqdm import tqdm
 n = 5
 m = 300
 with tqdm(total=n * m) as pbar:
-    for i in tqdm(range(n)):
-        for j in tqdm(range(m)):
+    for i in range(n):
+        for j in range(m):
             # do something, e.g. sleep
             pbar.update(1)
 ```  
@@ -158,7 +160,40 @@ with multiprocessing.Pool() as pool:
     process = [pool.apply_async(myfunc, (i, j)) for j in range(length) for i in range(length)]
     outs = [f.get() for f in process]
 ```  
+```Python
+# pandas progress apply
+from tqdm.notebook import tqdm
+tqdm.pandas()
 
+df = pd.DataFrame({"original": [1, 2, 3]})
+def hogefunc(x):
+  return x**2
+
+df['applied'] = df['original'].progress_apply(lambda x: hogefunc(x))
+```  
+```Python
+# pd.DataFrame fast appending
+# dfs: List[pd.DataFrame]
+
+counter = 0
+cols = dfs[0].columns
+dict_tmp = {}
+df = pd.DataFrame()
+with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
+    for _df in dfs:
+        for row in _df.itertuples(): # itertuples is approx. 100x faster than iterrows
+            dict_tmp[counter] = row[1:]
+            counter += 1
+        pbar.update(1)
+
+# The above is faster than: 
+# df = pd.DataFrame()
+# for _df in tqdm(dfs, desc="Appending to df..."):
+#     df = df.append(_df, ignore_index=True)
+
+# Of course, concat is the best if memory allows:
+# df = pd.concat(dfs, axis=0, ignore_index=True)
+```
 
 
 #### Papers
@@ -177,6 +212,8 @@ with multiprocessing.Pool() as pool:
 |PyTorch Lightning を使用してノートブック コードを整理する|[URL](https://cloud.google.com/blog/ja/products/ai-machine-learning/increase-your-productivity-using-pytorch-lightning)|Bookmarked|PyTorchの柔軟性とzen性喪失についてすごく共感<br>PyTorch Lightningいずれやりたい|
 |PandasのDataFrameのappendの高速化|[URL](https://takazawa.github.io/hobby/pandas_append_fast/)|Done|df.iteritems()とdf.from_dict()を使ったdf.append()の高速化|
 |Python joblibの並列処理はuWSGI環境だと動かない。uWSGI上で並列処理するには？|[URL](https://qiita.com/taai/items/15bf6acb5121ae5f5060)|Done|joblib特有のエラーを疑うきっかけとなった記事|
+|os.path.join()を活用してパス結合をしてみよう！|[URL](https://www.sejuku.net/blog/64408)|Done|os.path.join()の挙動まとめ|
+
 
 #### Documentation / Tutorials / StackOverflow / etc.
 |name|url|status|comment|
@@ -197,6 +234,8 @@ with multiprocessing.Pool() as pool:
 |Generate a graph using Dictionary in Python|[URL](https://www.geeksforgeeks.org/generate-graph-using-dictionary-python/)|Done|Pure Pythonでgraphを作成する方法<br>作成したedgesはnetworkxに渡すことが可能|
 |(NetworkX) Examining elements of a graph|[URL](https://networkx.org/documentation/stable/tutorial.html#examining-elements-of-a-graph)|Done|作成したgraphから任意の要素を抽出する方法|
 |(NetworkX) networkx.algorithms.components.node_connected_component|[URL](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.components.node_connected_component.html#networkx.algorithms.components.node_connected_component)|Done|　任意のnodeラベルを渡して接続している要素を全て取り出すメソッド|
+|What is the most efficient way to loop through dataframes with pandas?|[URL](https://stackoverflow.com/questions/7837722/what-is-the-most-efficient-way-to-loop-through-dataframes-with-pandas)|Done|itertuplesのススメ|
+
 
 
 
@@ -978,9 +1017,10 @@ Appending...:  68% 13380/19661 [7:18:20<11:35:30,  6.64s/it]/usr/local/lib/pytho
 ```  
 <br>
 CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましいについて  
-チームメイトと検討の結果以下の方法で行うこととした [issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9):  
+チームメイトと検討の結果以下の方法で行うこととした  
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)  
 - 対象は無加工のtrain.csv  
-- cleaned_labelをカテゴライズしたものをgroupとしてGroup Kfoldを行う  
+- cleaned_labelをカテゴライズしたものをgroupとしてGroup Kfoldを行う
   - その際, 教師ラベルをどの変数(カラム)にするかは未定 (適当でいい?)  
 <br>
 <br>
