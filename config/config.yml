@@ -1,11 +1,16 @@
+# nb009
+use_cosine: false
+is_single: false
+
 # nb003
 train: true
 max_len: 512 #290
 tags_vals: "o o-dataset pad" # string w/ space delimiter
-gettext: false
+#gettext: false
 use_pos: false
-cv: true
-debug: false
+#cv: true
+debug: true
+text_len: 0 #0 if not truncate
 
 # localnb001
 train_batch_size: 32
@@ -13,5 +18,5 @@ valid_batch_size: 16
 epochs: 5
 learning_rate: 2.0e-05
 
-# kabblenb004
+# kagglenb004
 test_batch_size: 48
