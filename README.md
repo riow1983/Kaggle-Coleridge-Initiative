@@ -22,7 +22,7 @@
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|riow1983/nb009-cv/folds_pubcat.pkl|folds_pubcat.pkl|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|train/test dataset<br>section構造をそのまま保持|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
-|localnb001-transformers-ner|URL|riow1983/kagglenb006-get-text/folds_pubcat.pkl|fine-tuned BERTモデル|作成中|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
+|localnb001-transformers-ner|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|fine-tuned BERTモデル|作成中|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
 |kagglenb009-cv|[URL](https://www.kaggle.com/riow1983/kagglenb009-cv)|../input/coleridgeinitiative-show-us-the-data/train.csv|-|nb009-cvへ引き継ぎ|[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)に応じたCV作成ノートブック|
 |nb009-cv|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb009-cv.ipynb)|../input/coleridgeinitiative-show-us-the-data/train.csv|riow1983/nb009-cv/folds_pubcat.pkl|作成中|kagglenb009-cvから引き継ぎ|
@@ -952,7 +952,7 @@ train.csv (or sample_submission.csv)を読み込んだ時点からPyTorch Datase
 <br>
 
 #### 2021-05-21
-`src/bridge.py`の下記処理がメモリリークなのか処理が完結できない.  
+`src/bridge.py`の下記処理がメモリエラーなのか処理が完結できない.  
 ```Python
 def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     """
@@ -1027,7 +1027,7 @@ CVを切る際, publicationのドメインカテゴリをグループにしたGr
 <br>
 
 #### 2021-05-22
-`src/bridge.py`のメモリリークに対応すべく, 以下の通り変更を加えた(functools.reduce導入)が同じ結果に.  
+`src/bridge.py`のメモリエラーに対応すべく, 以下の通り変更を加えた(functools.reduce導入)が同じ結果に.  
 ```Python
 def df2dataset(df, max_len, train=False, use_pos=False, verbose=False):
     """
@@ -1095,13 +1095,13 @@ tcmalloc: large alloc 3487178752 bytes == 0x5575691ca000 @  0x7f62f186a001 0x7f6
 <br>
 
 #### 2021-05-23
-`src/bridge.py`のメモリリークに対応作業継続.  
+`src/bridge.py`のメモリエラーに対応作業継続.  
 <br>
 <br>
 <br>
 
 #### 2021-05-24
-`src/bridge.py`のメモリリークについて, train.csvのtext長が3000以下の論文をdropすると正常かつ迅速に処理が完了することを確認.  
+`src/bridge.py`のメモリエラーについて, train.csvのtext長が3000以下の論文をdropすると正常かつ迅速に処理が完了することを確認.  
 ただしその場合`19661 rows`が`3000 rows`強まで落ち込んでいることに気づく. これは流石に減らしすぎだ.  
 train.csvのtext長の分布を見ると30000以下が大部分となっている.  
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210524.png?raw=true)  
@@ -1136,7 +1136,7 @@ joblib特有の問題かもしれない.
 <br>
 
 #### 2021-05-25
-`src/bridge.py`のメモリリークに対応作業継続. joblibを廃止しmultiprocessingへ変更したところAppeng処理は100%達成できたもののその直後に^C (中断)を喰らう. エラー内容が表示されておらず理由不明だが恐らくメモリーリーク.  
+`src/bridge.py`のメモリエラーに対応作業継続. joblibを廃止しmultiprocessingへ変更したところAppend処理は100%達成できたもののその直後に^C (中断)を喰らう. エラー内容が表示されておらず理由不明だが恐らくメモリエラー.  
 ```
 Starting to convert df to dataset...
     Converting tokens...: 19661it [00:04, 4357.25it/s]
@@ -1166,6 +1166,22 @@ Starting to convert df to dataset...
 <br>
 
 #### 2021-05-26
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+`nb009-cv: CV作成 -> kagglenb006: get_text処理 -> src/bridge.py on localnb001: Dataset作成`
+の処理フローが正常に動作することを確認. この流れは今後別のコンペに参加する際も流用できる.  
+<br>
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+`src/bridge.py`のメモリエラーをpandasのappend処理の効率化で対応しおうとしていたが悉く失敗. 根本的な見直しとして:  
+- 文字列たるtextを配列化し, 要素単語ごとにdataframe１行を与える処理(縦持ち変換)がメモリ効率性が最悪  
+- 縦持ち変換をしていた主な理由は, CV作成のため教師ラベル列=`tag`列を作成することだった  
+- しかし新採用のnb009-cv方式では教師ラベル列=`cleaned_label`列なので`tag`列不要となった ([詳細](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9#issuecomment-848335514))      
+以上のことから縦持ち変換処理を廃止したところ, 処理は早期に終了した. これによりinference時の`Notebook Timeout`も回避できるのではないかと思う.  
+<br>
+<br>
+<br>
+
+#### 2021-05-27
+
 
 
 
