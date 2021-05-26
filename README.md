@@ -1017,8 +1017,7 @@ Appending...:  68% 13380/19661 [7:18:20<11:35:30,  6.64s/it]/usr/local/lib/pytho
 ```  
 <br>
 CVを切る際, publicationのドメインカテゴリをグループにしたGroup KFoldが望ましいについて  
-チームメイトと検討の結果以下の方法で行うこととした  
-[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)  
+チームメイトと検討の結果以下の方法で行うこととした [issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9):  
 - 対象は無加工のtrain.csv  
 - cleaned_labelをカテゴライズしたものをgroupとしてGroup Kfoldを行う
   - その際, 教師ラベルをどの変数(カラム)にするかは未定 (適当でいい?)  
@@ -1130,7 +1129,8 @@ Starting to convert df to dataset...
 ```  
 joblib特有の問題かもしれない.  
 <br>
-[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)作成開始. 130 labelsについてlabels by labelsのペアワイズ・コサイン類似度を計算しようと思ったがやはり時間がかかるので他の方法を模索中.  
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)作成開始. 130 labelsについてlabels by labelsのペアワイズ・コサイン類似度を計算しようと思ったがやはり時間がかかるので他の方法を模索中.  
 <br>
 <br>
 <br>
@@ -1157,10 +1157,8 @@ Starting to convert df to dataset...
 ^C
 ```  
 <br>
-[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)
-について
-[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)
-をlocal(Colab)にpullしたnb009-cvで作業継続. 130 x 130のペアワイズコサイン類似度を求めることにしたが, その前段で目視確認による人手マッピングを噛ませて精度向上を図る.  
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+[kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)をlocal(Colab)にpullしたnb009-cvで作業継続. 130 x 130のペアワイズコサイン類似度を求めることにしたが, その前段で目視確認による人手マッピングを噛ませて精度向上を図る.  
 <br>
 <br>
 <br>
