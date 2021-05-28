@@ -28,6 +28,8 @@
 |nb009-cv|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb009-cv.ipynb)|../input/coleridgeinitiative-show-us-the-data/train.csv|riow1983/nb009-cv/folds_pubcat.pkl|作成中|kagglenb009-cvから引き継ぎ|
 |src/bridge.py|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/src/bridge.py)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|./dataset.pkl|作成中|CVデータ読み込みからPyTorch Datasetクラスへの受け渡しまでのgapを埋める処理をまとめたもの|
 |config/config.yml|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/config/config.yml)|-|-|作成中|nb009, src/bridge.py, localnb001, kagglenb004の各種パラメータを管理|
+|kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|simple string matchingなどを試したもの|
+
 
 
 
@@ -128,6 +130,11 @@ pickle.dump(res, open("./res.pkl", "wb"))
 
 # Load a pickle file
 res = pickle.load(open("./res.pkl", "rb"))
+```  
+```Python
+import yaml
+with open('./hoge.yml') as file:
+    hoge = yaml.load(file, Loader=yaml.FullLoader) # Loader is recommended
 ```  
 ```Python
 # Pbar for a nested for loop
@@ -235,6 +242,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |(NetworkX) Examining elements of a graph|[URL](https://networkx.org/documentation/stable/tutorial.html#examining-elements-of-a-graph)|Done|作成したgraphから任意の要素を抽出する方法|
 |(NetworkX) networkx.algorithms.components.node_connected_component|[URL](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.components.node_connected_component.html#networkx.algorithms.components.node_connected_component)|Done|　任意のnodeラベルを渡して接続している要素を全て取り出すメソッド|
 |What is the most efficient way to loop through dataframes with pandas?|[URL](https://stackoverflow.com/questions/7837722/what-is-the-most-efficient-way-to-loop-through-dataframes-with-pandas)|Done|itertuplesのススメ|
+|DATASETS & DATALOADERS|[URL](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)|Done|Datasetのindexing方法は対象オブジェクト依存|
 
 
 
@@ -1169,16 +1177,33 @@ Starting to convert df to dataset...
 の処理フローが正常に動作することを確認. この流れは今後別のコンペに参加する際も流用できる.  
 <br>
 [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
-`src/bridge.py`のメモリエラーをpandasのappend処理の効率化で対応しおうとしていたが悉く失敗. 根本的な見直しとして:  
+`src/bridge.py`のメモリエラーをpandasのappend処理の効率化で対応しようとしていたが悉く失敗. 根本的な見直しとして:
 - 文字列たるtextを配列化し, 要素単語ごとにdataframe１行を与える処理(縦持ち変換)がメモリ効率性が最悪  
 - 縦持ち変換をしていた主な理由は, CV作成のため教師ラベル列=`tag`列を作成することだった  
-- しかし新採用のnb009-cv方式では教師ラベル列=`cleaned_label`列なので`tag`列不要となった ([詳細](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9#issuecomment-848335514))      
+- しかし新採用のnb009-cv方式では教師ラベル列=`cleaned_label`列なので`tag`列不要となった ([詳細](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9#issuecomment-848335514))  
+
 以上のことから縦持ち変換処理を廃止したところ, 処理は早期に終了した. これによりinference時の`Notebook Timeout`も回避できるのではないかと思う.  
 <br>
 <br>
 <br>
 
 #### 2021-05-27
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+`src/bridge.py`, `config/config.yml`もKaggle Dataset [localnb001-transformers-ner](https://www.kaggle.com/riow1983/localnb001-transformers-ner)にuploadしてinference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)で実行. submission.csv作成のためのマイナー処理記載.  
+<br>
+<br>
+<br>
+
+#### 2021-05-28
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にてsubmit失敗(`submission scoring error`)  
+状況確認中.  
+<br>
+<br>
+<br>
+
+#### 2021-05-29
+
 
 
 

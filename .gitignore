@@ -16,7 +16,7 @@ pytorch-xla-env-setup.py
 /input
 notebooks/my_seqeval.py
 notebooks/my_seqeval.py.lock
-
+/notebooks/localnb001-transformers-ner
 
 
 # Byte-compiled / optimized / DLL files
@@ -97,7 +97,6 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-setup_kaggle.ipynb
 
 # IPython
 profile_default/
