@@ -2,9 +2,9 @@
 use_cosine: false
 is_single: false
 
-# nb003
+# src/bridge.py
 train: true
-max_len: 512 #290
+max_len: 200 #290
 tags_vals: "o o-dataset pad" # string w/ space delimiter
 #gettext: false
 use_pos: false
@@ -19,4 +19,4 @@ epochs: 5
 learning_rate: 2.0e-05
 
 # kagglenb004
-test_batch_size: 48
+test_batch_size: 16

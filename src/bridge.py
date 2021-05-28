@@ -376,6 +376,48 @@ def df2dataset(df, max_len, train=False, use_pos=False, verbose=False, tags_vals
 
 
 
+def sentence_getter(dataset, use_pos=False, train=False):
+    """
+    Args:
+        dataset: pd.DataFrame
+        use_pos: bool
+        train: bool
+    Returns:
+        sentences: List[tuple]
+    """
+    sentences = []
+    for _,row in tqdm(dataset.iterrows(), desc="Starting to get sentences..."):
+        #id = row["Id"]
+        
+        hashes = np.array(row["sentence#"])
+        num_sentences = len(np.unique(hashes))
+        
+        words = np.array(row["word"])
+        
+        if use_pos:
+            poses = np.array(row["pos"])
+        else:
+            poses = None
+
+        if train:
+            tags = np.array(row["tag"])
+        else:
+            tags = None
+            ids = row["Id"]
+        
+        for i in range(num_sentences):
+            hash = np.where(hashes==f"sentence#{i}")[0]
+            if train:
+                if use_pos:
+                    sentences.append((words[hash], poses[hash], tags[hash]))
+                else:
+                    sentences.append((words[hash], poses, tags[hash]))
+            else:
+                if use_pos:
+                    sentences.append((words[hash], poses[hash], tags, ids))
+                else:
+                    sentences.append((words[hash], poses, tags, ids))
+    return sentences
 
 
 
@@ -408,7 +450,8 @@ def main(train=False,
         print("Reading train data (CV folds)...")
         if debug:
             df = pd.read_pickle(f"../input/kagglenb006-get-text/folds_pubcat.pkl")
-            df = df.iloc[0:500, :]
+            #df = df.iloc[0:500, :]
+            df = df.sample(500)
         else:
             df = pd.read_pickle(f"../input/kagglenb006-get-text/folds_pubcat.pkl")
 
@@ -456,6 +499,9 @@ def main(train=False,
         
         print("Starting to convert df to dataset...")
         df = df2dataset(df, max_len=max_len, train=train, use_pos=use_pos, verbose=False, tags_vals=tags_vals)
+        df.to_pickle("dataset.pkl")
+        print("dataset.pkl has been saved at your current working directory.")
+        #sentences = sentence_getter(df, use_pos=use_pos, train=train)
         
         #print("Starting to get cv...")
         #df = get_cv(df)
@@ -476,10 +522,7 @@ def main(train=False,
     else:
         # Test data
         print("Reading sample_submission.csv...")
-        if debug:
-            df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/sample_submission.csv", nrows=500)
-        else:
-            df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/sample_submission.csv")
+        df = pd.read_csv("../input/coleridgeinitiative-show-us-the-data/sample_submission.csv")
 
         
         print("Starting to get text...")
@@ -498,6 +541,9 @@ def main(train=False,
         
         print("Starting to convert df to dataset...")
         df = df2dataset(df, max_len=max_len, train=train, use_pos=use_pos, verbose=False, tags_vals=tags_vals)
+        sentences = sentence_getter(df, use_pos=use_pos, train=train)
+        pickle.dump(sentences, open("sentences.pkl", "wb"))
+        print("sentences.pkl has been saved at your current working directory.")
 
     
     #### RIOW
@@ -505,8 +551,9 @@ def main(train=False,
     #df = sentence_extractor(df, tags_vals=tags_vals, train=train, use_pos=use_pos)
     #### RIOWRIOW
     
-    df.to_pickle("dataset.pkl")
+    #df.to_pickle("dataset.pkl")
     #pickle.dump(tags_vals, open("tags_vals.pkl", "wb"))
+    #print("Process ends.")
 
 
 
@@ -548,4 +595,4 @@ if __name__ == '__main__':
          #cv=cv, 
          debug=debug, 
          text_len=text_len)
-    print("Output file has been saved at ./dataset.pkl")
+    print("Output file has been saved at your current working directory.")
