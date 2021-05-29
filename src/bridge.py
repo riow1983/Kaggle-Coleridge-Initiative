@@ -55,6 +55,12 @@ nlp = spacy.load("en_core_web_sm")
 
 
 def get_text(filename, train=False):
+    """
+    Args:
+        filename: str (publication Id)
+    Returns:
+        text: str
+    """
     if train:
         df = pd.read_json(f'../input/coleridgeinitiative-show-us-the-data/train/{filename}.json')
     else:
@@ -65,6 +71,12 @@ def get_text(filename, train=False):
 
 
 def clean_text(txt):
+    """
+    Args:
+        txt: str
+    Returns:
+        txt: str
+    """
     return re.sub('[^A-Za-z0-9]+', ' ', str(txt).lower()).strip()
     #return re.sub('[^A-Za-z0-9]+', ' ', str(txt)).strip()
 
