@@ -10,7 +10,7 @@ tags_vals: "o o-dataset pad" # string w/ space delimiter
 use_pos: false
 #cv: true
 debug: true
-text_len: 0 #0 if not truncate
+text_len: 3000 #0 if not truncate
 
 # localnb001
 train_batch_size: 32
