@@ -222,6 +222,8 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |os.path.join()を活用してパス結合をしてみよう！|[URL](https://www.sejuku.net/blog/64408)|Done|os.path.join()の挙動まとめ|
 |Github 上の自分のコードを Kaggle Code Competition で使うのを CI で自動化|[URL](https://qiita.com/cfiken/items/a36b5742e9d26e0b4567)|Done|utility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
 |ファイルをBASE64 Encodingし、notebook上で復元する|[URL](https://www.m3tech.blog/entry/2021/01/13/180000)|Done|tility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
+|Inference Speed: Batch Size (1,2,4,8,16)|[URL](https://facilecode.com/inference-speed-batch-1-2-4-8/)|Done|一言"Less is Faster"|
+
 
 
 #### Documentation / Tutorials / StackOverflow / etc.
@@ -245,6 +247,8 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |(NetworkX) networkx.algorithms.components.node_connected_component|[URL](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.components.node_connected_component.html#networkx.algorithms.components.node_connected_component)|Done|　任意のnodeラベルを渡して接続している要素を全て取り出すメソッド|
 |What is the most efficient way to loop through dataframes with pandas?|[URL](https://stackoverflow.com/questions/7837722/what-is-the-most-efficient-way-to-loop-through-dataframes-with-pandas)|Done|itertuplesのススメ|
 |DATASETS & DATALOADERS|[URL](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)|Done|Datasetのindexing方法は対象オブジェクト依存|
+|What is the trade-off between batch size and number of iterations to train a neural network?|[URL](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu)|Done|train時のbatch_sizeの増減の影響を解説|
+
 
 
 
