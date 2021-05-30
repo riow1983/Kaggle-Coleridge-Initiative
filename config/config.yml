@@ -19,4 +19,4 @@ epochs: 5
 learning_rate: 2.0e-05
 
 # kagglenb004
-test_batch_size: 16
+test_batch_size: 4
