@@ -220,6 +220,8 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |PandasのDataFrameのappendの高速化|[URL](https://takazawa.github.io/hobby/pandas_append_fast/)|Done|df.iteritems()とdf.from_dict()を使ったdf.append()の高速化|
 |Python joblibの並列処理はuWSGI環境だと動かない。uWSGI上で並列処理するには？|[URL](https://qiita.com/taai/items/15bf6acb5121ae5f5060)|Done|joblib特有のエラーを疑うきっかけとなった記事|
 |os.path.join()を活用してパス結合をしてみよう！|[URL](https://www.sejuku.net/blog/64408)|Done|os.path.join()の挙動まとめ|
+|Github 上の自分のコードを Kaggle Code Competition で使うのを CI で自動化|[URL](https://qiita.com/cfiken/items/a36b5742e9d26e0b4567)|Done|utility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
+|ファイルをBASE64 Encodingし、notebook上で復元する|[URL](https://www.m3tech.blog/entry/2021/01/13/180000)|Done|tility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
 
 
 #### Documentation / Tutorials / StackOverflow / etc.
@@ -273,6 +275,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |Bert for Question Answering Baseline: Inference|[URL](https://www.kaggle.com/theoviel/bert-for-question-answering-baseline-inference)|Reading|BERT Q&Atタスク (inference)|
 |score 57ish with additional govt datasets|[URL](https://www.kaggle.com/mlconsult/score-57ish-with-additional-govt-datasets/data)|Reading|Best score notebook (as of 11 May)<br>外部データgovt datasetを使用しているがPrivate Datasetになっている|
 |The Ultimate PyTorch+TPU Tutorial (Jigsaw XLM-R)|[URL](https://www.kaggle.com/tanlikesmath/the-ultimate-pytorch-tpu-tutorial-jigsaw-xlm-r#Running-PyTorch-model-training-on-8-core-TPUs)|Bookmarked|PyTorch + TPUの参考程度|
+|imet-2019-submission|[URL](https://www.kaggle.com/lopuhin/imet-2019-submission)|Bookmarked|utility.py(オレオレPythonファイル)をKaggle Datasetを経由することなく<br>Kaggle Notebookで呼び出すためbs4を使用した恐らく最初の例|
 
 
 #### Kaggle Datasets
@@ -1202,7 +1205,12 @@ inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-tra
 <br>
 <br>
 
-#### 2021-05-29
+#### 2021-05-29 ~ 2021-05-30
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にてsubmit失敗(`Notebook Timeout`)  
+状況確認中. 
+
+
 
 
 
