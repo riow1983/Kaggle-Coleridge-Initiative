@@ -1,6 +1,14 @@
 # Kaggle-Coleridge-Initiative
 
 ***
+## 実験管理テーブル
+|commitSHA|comment|Local CV|Public LB|
+|89a6af4ffaee120db89b91d71be0a677823fe480|simple string matching|-|0.522|
+|83d655925a96326f2e6d320c52d1b9b8c31d7c4e|text cleaned before label matching|-|0.533|
+|c1a856648016fad967882676680dc901081cfcc5|batch_size=4|-|Notebook Timeout|
+|e29fe7843bbdb6895cd989b15db7fb653347576e|batch_size=128|-|Notebook Timeout|
+|cee078d2341e25dc7406ce1931eff4eff49c126f|batch_size=1|-|Notebook Timeout|
+
 ## My Assets
 [notebook命名規則]  
 - kagglenb001-hoge.ipynb: Kaggle platform上で新規作成されたKaggle notebook (kernel).
@@ -248,7 +256,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |What is the most efficient way to loop through dataframes with pandas?|[URL](https://stackoverflow.com/questions/7837722/what-is-the-most-efficient-way-to-loop-through-dataframes-with-pandas)|Done|itertuplesのススメ|
 |DATASETS & DATALOADERS|[URL](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)|Done|Datasetのindexing方法は対象オブジェクト依存|
 |What is the trade-off between batch size and number of iterations to train a neural network?|[URL](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu)|Done|train時のbatch_sizeの増減の影響を解説|
-
+|Tutorial: Fine tuning BERT for Sentiment Analysis|[URL](https://skimai.com/fine-tuning-bert-for-sentiment-analysis/)|Bookmarked|huggingface + PyTorchでsentiment analysisをやっている例|
 
 
 
@@ -262,7 +270,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |Colab crashes due to tcmalloc large allocation|[URL](https://github.com/huggingface/transformers/issues/4668)|Done|不明だったエラーメッセージ`tcmalloc: large alloc`はやはりColab上のメモリーエラーを指すらしい|
 |Fast Alternative to pd.concat() for row-wise concatenation|[URL](https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e)|Done|2018年時点の情報で, 今は必ずしもそうではないらしい|
 |Multiprocessing spaCy: Can't find model 'en_model.vectors' in en_core_web_lg|[URL](https://github.com/explosion/spaCy/issues/3552)|Done|spaCyを使った処理を並列化する際は, nlp.load()を対象の関数内に記載する必要がある|
-
+|(huggingface examples) Fine-tuning a model on a token classification task|[URL](https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb)|Bookmarked|huggingfaceによる各種NLPタスク例題<br>PyTorchの枠組み(Dataset, nn.module)は使われていない|
 
 
 #### Kaggle Notebooks
@@ -1213,7 +1221,11 @@ inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-tra
 [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
 inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-transformers-ner-inference)にてsubmit失敗(`Notebook Timeout`)  
 状況確認中. 
+<br>
+<br>
+<br>
 
+#### 2021-05-31
 
 
 
