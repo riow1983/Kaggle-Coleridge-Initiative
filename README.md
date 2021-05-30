@@ -3,11 +3,13 @@
 ***
 ## 実験管理テーブル
 |commitSHA|comment|Local CV|Public LB|
+|----|----|----|----|
 |89a6af4ffaee120db89b91d71be0a677823fe480|simple string matching|-|0.522|
 |83d655925a96326f2e6d320c52d1b9b8c31d7c4e|text cleaned before label matching|-|0.533|
 |c1a856648016fad967882676680dc901081cfcc5|batch_size=4|-|Notebook Timeout|
 |e29fe7843bbdb6895cd989b15db7fb653347576e|batch_size=128|-|Notebook Timeout|
 |cee078d2341e25dc7406ce1931eff4eff49c126f|batch_size=1|-|Notebook Timeout|
+|89c87f757d81cfc608e5fe8b416043adf5ea4b25|max_len=512|-|Running|
 
 ## My Assets
 [notebook命名規則]  
