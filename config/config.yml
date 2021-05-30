@@ -4,17 +4,15 @@ is_single: false
 
 # src/bridge.py
 train: true
-max_len: 200 #290
+max_len: 512
 tags_vals: "o o-dataset pad" # string w/ space delimiter
-#gettext: false
 use_pos: false
-#cv: true
 debug: true
-text_len: 3000 #0 if not truncate
+text_len: 3000 # 0 if not truncate
 
 # localnb001
-train_batch_size: 32
-valid_batch_size: 16
+train_batch_size: 8
+valid_batch_size: 4
 epochs: 5
 learning_rate: 2.0e-05
 
