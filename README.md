@@ -233,6 +233,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |Github 上の自分のコードを Kaggle Code Competition で使うのを CI で自動化|[URL](https://qiita.com/cfiken/items/a36b5742e9d26e0b4567)|Done|utility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
 |ファイルをBASE64 Encodingし、notebook上で復元する|[URL](https://www.m3tech.blog/entry/2021/01/13/180000)|Done|tility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
 |Inference Speed: Batch Size (1,2,4,8,16)|[URL](https://facilecode.com/inference-speed-batch-1-2-4-8/)|Done|一言"Less is Faster"|
+|spaCyのCLIで文書のカテゴリ分類を学習する|[URL](https://qiita.com/kyamamoto9120/items/84d62c3b33fb77c03fbe)|Done|全てjsonファイルに格納してspaCy CLIに渡す|
 
 
 
@@ -1228,6 +1229,16 @@ inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-tra
 <br>
 
 #### 2021-05-31
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+引き続き`Notebook Timeout`を回避すべくハイパラ調整中.  
+<br>
+[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+cosine similarity計算前の目視確認による辞書作成完了, CVデータ本日中にチーム内リリース予定.  
+<br>
+<br>
+<br>
+
+#### 2021-06-01
 
 
 
