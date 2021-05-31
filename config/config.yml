@@ -1,6 +1,7 @@
 # nb009
-use_cosine: false
+use_cosine: true
 is_single: false
+cv_debug: false
 
 # src/bridge.py
 train: true
