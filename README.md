@@ -12,7 +12,8 @@
 |89c87f757d81cfc608e5fe8b416043adf5ea4b25|max_len=512|-|Notebook Timeout|
 |dceb8a5cab5d93f49a53faf32985b5fc08a94578|w/ govt|-|0.328|
 |12d1b66eb4cd0fbd79e945ad57b473e28782e73e|simple string matching w/ govt|-|0.243|
-||string or list matching w/o govt|-|Running|
+|c0570361cac81e789bf70c13dbcf2e3ea5a74bd8|string or list matching w/o govt|-|0.532|
+||acronym more than 2 characters added|-|Running|
 
 ## My Assets
 [notebook命名規則]  
