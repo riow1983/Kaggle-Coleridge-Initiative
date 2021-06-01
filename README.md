@@ -10,6 +10,7 @@
 |e29fe7843bbdb6895cd989b15db7fb653347576e|batch_size=128|-|Notebook Timeout|
 |cee078d2341e25dc7406ce1931eff4eff49c126f|batch_size=1|-|Notebook Timeout|
 |89c87f757d81cfc608e5fe8b416043adf5ea4b25|max_len=512|-|Notebook Timeout|
+|dceb8a5cab5d93f49a53faf32985b5fc08a94578|w/ govt|-|0.328|
 
 ## My Assets
 [notebook命名規則]  
@@ -1245,6 +1246,7 @@ cosine similarity計算前の目視確認による辞書作成完了, CVデー�
 <br>
 
 #### 2021-06-01
+優先順位見直し. [string matching a.k.a. LB proving #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)を第一優先事項に.  
 
 
 
