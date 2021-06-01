@@ -13,7 +13,7 @@
 |dceb8a5cab5d93f49a53faf32985b5fc08a94578|w/ govt|-|0.328|
 |12d1b66eb4cd0fbd79e945ad57b473e28782e73e|simple string matching w/ govt|-|0.243|
 |c0570361cac81e789bf70c13dbcf2e3ea5a74bd8|string or list matching w/o govt|-|0.532|
-||acronym more than 2 characters added|-|Running|
+|f1e8a4643993a56a99e867eb5a92103dbe7eb411|acronym more than 2 characters added|-|0.494|
 
 ## My Assets
 [notebook命名規則]  
