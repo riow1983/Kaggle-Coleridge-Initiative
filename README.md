@@ -9,7 +9,7 @@
 |c1a856648016fad967882676680dc901081cfcc5|batch_size=4|-|Notebook Timeout|
 |e29fe7843bbdb6895cd989b15db7fb653347576e|batch_size=128|-|Notebook Timeout|
 |cee078d2341e25dc7406ce1931eff4eff49c126f|batch_size=1|-|Notebook Timeout|
-|89c87f757d81cfc608e5fe8b416043adf5ea4b25|max_len=512|-|Running|
+|89c87f757d81cfc608e5fe8b416043adf5ea4b25|max_len=512|-|Notebook Timeout|
 
 ## My Assets
 [notebook命名規則]  
@@ -234,6 +234,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |ファイルをBASE64 Encodingし、notebook上で復元する|[URL](https://www.m3tech.blog/entry/2021/01/13/180000)|Done|tility.pyをinference notebookのinputに入れるとerrorになるとか, そんなことはないということの確認で|
 |Inference Speed: Batch Size (1,2,4,8,16)|[URL](https://facilecode.com/inference-speed-batch-1-2-4-8/)|Done|一言"Less is Faster"|
 |spaCyのCLIで文書のカテゴリ分類を学習する|[URL](https://qiita.com/kyamamoto9120/items/84d62c3b33fb77c03fbe)|Done|全てjsonファイルに格納してspaCy CLIに渡す|
+|Removing Stop Words from Strings in Python|[URL](https://stackabuse.com/removing-stop-words-from-strings-in-python)|Done|各種ライブラリによるstopwords除外方法について|
 
 
 
@@ -260,6 +261,8 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |DATASETS & DATALOADERS|[URL](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)|Done|Datasetのindexing方法は対象オブジェクト依存|
 |What is the trade-off between batch size and number of iterations to train a neural network?|[URL](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu)|Done|train時のbatch_sizeの増減の影響を解説|
 |Tutorial: Fine tuning BERT for Sentiment Analysis|[URL](https://skimai.com/fine-tuning-bert-for-sentiment-analysis/)|Bookmarked|huggingface + PyTorchでsentiment analysisをやっている例|
+|Delete digits in Python (Regex)|[URL](https://stackoverflow.com/questions/817122/delete-digits-in-python-regex)|Done|正規表現で数字を除外する方法|
+
 
 
 
@@ -298,6 +301,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |----|----|----|----|
 |shahules/ner-coleridge-initiative|[URL](https://www.kaggle.com/shahules/ner-coleridge-initiative)|Bookmarked|NERタスク用のデータセット<br>[ディスカッション](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)に作成コードが紹介されている|
 |joshi98kishan/pytorch-xla-setup-script|[URL](https://www.kaggle.com/joshi98kishan/pytorch-xla-setup-script)|Bookmarked|PyTorch-XLAをofflineでインストールするためのスクリプト|
+|bigger_govt_dataset_list|[URL](https://www.kaggle.com/mlconsult/bigger-govt-dataset-list)|Adopted|いわゆるgovt<br>世にあるデータセットの蒐集|
 
 #### Kaggle Discussion
 |name|url|status|comment|
@@ -1229,16 +1233,19 @@ inference notebook [kagglenb004](https://www.kaggle.com/riow1983/kagglenb004-tra
 <br>
 
 #### 2021-05-31
+実験管理テーブルを本READMEのtopに記載することとした. なおsubmitしたら返す刀でgit pushする習慣にする. その際LBスコアの結果が出てないことが大半なのでgit commit messageにはLBスコアは空白とし, kaggle submit messageをコピペしておくこととし(e.g., `git commit -m "[Submit] {kaggle submit message} LB= {issue #}"`), LBスコアは後で得られ次第README上の実験管理テーブルに記載するようにする. こうすることで連続実験(serial experiments)にも耐え得るはず.    
+<br>
 [issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
 引き続き`Notebook Timeout`を回避すべくハイパラ調整中.  
 <br>
 [issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
-cosine similarity計算前の目視確認による辞書作成完了, CVデータ本日中にチーム内リリース予定.  
+cosine similarity計算前の目視確認による辞書作成完了, CVデータをチーム内リリース.  
 <br>
 <br>
 <br>
 
 #### 2021-06-01
+
 
 
 
