@@ -14,6 +14,7 @@
 |12d1b66eb4cd0fbd79e945ad57b473e28782e73e|simple string matching w/ govt|-|0.243|
 |c0570361cac81e789bf70c13dbcf2e3ea5a74bd8|string or list matching w/o govt|-|0.532|
 |f1e8a4643993a56a99e867eb5a92103dbe7eb411|acronym more than 2 characters added|-|0.494|
+||w/ additional govt w/o acronym|-|Running|
 
 ## My Assets
 [notebook命名規則]  
@@ -306,6 +307,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |shahules/ner-coleridge-initiative|[URL](https://www.kaggle.com/shahules/ner-coleridge-initiative)|Bookmarked|NERタスク用のデータセット<br>[ディスカッション](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/230341)に作成コードが紹介されている|
 |joshi98kishan/pytorch-xla-setup-script|[URL](https://www.kaggle.com/joshi98kishan/pytorch-xla-setup-script)|Bookmarked|PyTorch-XLAをofflineでインストールするためのスクリプト|
 |bigger_govt_dataset_list|[URL](https://www.kaggle.com/mlconsult/bigger-govt-dataset-list)|Adopted|いわゆるgovt<br>世にあるデータセットの蒐集|
+|Coleridge additional_gov_datasets_22000popular|[URL](https://www.kaggle.com/chienhsianghung/coleridge-additional-gov-datasets-22000popular)|Adopted|改良版govt<br>詳細は[Discussion](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/241592)で|
 
 #### Kaggle Discussion
 |name|url|status|comment|
