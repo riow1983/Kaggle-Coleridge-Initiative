@@ -1280,6 +1280,12 @@ govtやacronym, matching方式の工夫(string in string / string in List)など
 <br>
 [Secondary]  
 [issue #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)  
+<br>
+<br>
+<br>
+
+#### 2021-06-04
+
 
 
 
