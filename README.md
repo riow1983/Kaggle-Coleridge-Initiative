@@ -1257,6 +1257,32 @@ cosine similarity計算前の目視確認による辞書作成完了, CVデー�
 <br>
 
 #### 2021-06-02
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+チームメイトによる指摘でBERT tokenizerが一単語を複数トークンに分割する仕様になっていることを認識. huggingface + PyTorchのハイブリッド方式でモデルを作成する場合, どのようにこの点を考慮すれば良いか検討する必要が出てきた.  
+<br>
+[issue #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)について  
+govtやacronym, matching方式の工夫(string in string / string in List)など実験したがgovtを使うと精度が落ちるようだった.  
+<br>
+チームメイトによるsubmit後のNotebook Runtimeの長短に関する事象報告とLB provingに関する考察:  
+- (正しいinference notebook) string matchingでlabelが取得**できなかった**場合に限って, NERモデルによる予測実行  
+- (誤ったinference notebook) string matchingでlabelを取得**できた**場合に限って, NERモデルによる予測実行  
+
+(誤)によるNotebook Runtimeが, (正)によるものよりも大幅に短かった. これはhidden test dataにおいてstring matchingでlabelを取得できたケースが少なく, NERモデルによる予測実行の機会が少なかったことによるものと推測される. つまりstring matchingによる精度改善はhidden test dataにおいてはそれほど期待できないという結論になる.  
+これはBERTなどによる言語モデルによる予測を全うにやっていかなければコンペに勝てないということを意味するため, やはり[issue #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)よりも[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)を優先しようと思う.  
+<br>
+<br>
+<br>
+
+#### 2021-06-03
+優先順位見直し.  
+[Focused]  
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)  
+<br>
+[Secondary]  
+[issue #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)  
+
+
+
 
 
 
