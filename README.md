@@ -15,6 +15,7 @@
 |c0570361cac81e789bf70c13dbcf2e3ea5a74bd8|string or list matching w/o govt|-|0.532|
 |f1e8a4643993a56a99e867eb5a92103dbe7eb411|acronym more than 2 characters added|-|0.494|
 |2ba0af840e1a87ff3c1cbdce20f76221d70f86af|w/ additional govt w/o acronym|-|0.528|
+||probe_threshold = 1.1 (sanity check)|-|Running|
 
 ## My Assets
 [notebook命名規則]  
