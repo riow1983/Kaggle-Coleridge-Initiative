@@ -19,7 +19,7 @@
 |b8a25ab241a6e80d72eacbbf5d9ea83d7c7dba37|probe_threshold = 0.2|-|0.529|
 |741771d71cc92ecbf492366b7c11649fb6ab6ab2|probe_threshold = 0.3|-|0.529|
 |72d967eedcd3c82a6ee0c31aa128ebdc4287b506|probe_threshold = 0.4|-|0.529|
-||probe_threshold = 0.5|-|Running|
+|399adfadb44e8e771b6b703e4692ea9dc766be64|probe_threshold = 0.5|-|0.000|
 
 
 ## My Assets
@@ -1291,8 +1291,14 @@ govtやacronym, matching方式の工夫(string in string / string in List)など
 <br>
 
 #### 2021-06-04
+[issue #10](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/10)について  
+testデータの行数に対し, string matchする行をカウントしていき, カウント数/testデータ行数(=p)が閾値以下であればpredを全てnull string("")に置き換える処理を書いてsubmitしたところ, 0.4 \<= p \< 0.5であることが判明した.  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210604.png?raw=true)  
+<br>
+<br>
+<br>
 
-
+#### 2021-06-05
 
 
 
