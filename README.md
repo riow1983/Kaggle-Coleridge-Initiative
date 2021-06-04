@@ -16,7 +16,8 @@
 |f1e8a4643993a56a99e867eb5a92103dbe7eb411|acronym more than 2 characters added|-|0.494|
 |2ba0af840e1a87ff3c1cbdce20f76221d70f86af|w/ additional govt w/o acronym|-|0.528|
 |95f51e10ec0631fdba070b5c2724521f0d8a0aa0|probe_threshold = 1.1 (sanity check)|-|0.000|
-||probe_threshold = 0.2|-|Running|
+|b8a25ab241a6e80d72eacbbf5d9ea83d7c7dba37|probe_threshold = 0.2|-|0.529|
+||robe_threshold = 0.3|-|Running|
 
 ## My Assets
 [notebook命名規則]  
