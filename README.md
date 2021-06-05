@@ -1316,7 +1316,7 @@ valid_ids - [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1] # 0 for '##mb'
 valid_idsがword-piece tokenのmain-subの関係情報を記述している. ここでいうvalid_idsと同等のものがhuggingface tokenizerにも内蔵されていると思われる. (でなければtokenizer.decoderは機能し得ない.) 
 
 <br>
-その上で依然として問題になるのが, tokenizer.encode_plus()でmax_lenでtruncateされることで(このtruncateは後続のBERTモデルに入力する際にlen(ids)とlen(tags)の長さがmax_lenに揃っていないとエラーになるため必須), special tokensとword-piece tokenのsub分だけ復元した文が尻切れトンボになる点だ.  
+その上で依然として問題になるのが, tokenizer.encode_plus()でmax_lenでtruncateされることで(このtruncateは後続のBERTモデルに入力する際にlen(ids)とlen(tags)の長さがmax_lenに揃っていないとエラーになるため必須), special tokensとword-piece tokenのsubのトークン数分だけ復元した文が尻切れトンボになる点だ.  
 以下2例を示す:  
 
 ```
