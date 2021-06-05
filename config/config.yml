@@ -14,7 +14,7 @@ text_len: 3000 # 0 if not truncate
 # localnb001
 train_batch_size: 8
 valid_batch_size: 4
-epochs: 5
+epochs: 1
 learning_rate: 2.0e-05
 
 # kagglenb004
