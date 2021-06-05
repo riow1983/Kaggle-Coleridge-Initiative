@@ -1299,6 +1299,60 @@ testデータの行数に対し, string matchする行をカウントしてい�
 <br>
 
 #### 2021-06-05
+[issue #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)について  
+max_len=5にしてBERT tokenizerのword-piece tokenizerの動きを確認. huggingface公式ドキュメントにピンポイントの説明をまだ見つけられていないが, まずtokenizer.decoderはspecial tokens ([CLS], [SEP])およびword-piece tokenのsub (##で始まるもの)を考慮して元の文に戻す(復元する)ことができる,  
+https://huggingface.co/transformers/glossary.html#token-type-ids 
+<br>
+つまり一見ids-tagの対応関係が崩れているように見えるが, huggingface tokenizerの機能としてこの対応関係は保持されている.    
+これに関してMediumの記事([Fine Tuning BERT for NER on CoNLL 2003 dataset with TF 2.0](https://medium.com/analytics-vidhya/fine-tuning-bert-for-ner-on-conll-2003-dataset-with-tf-2-2-0-2f242ca2ce06))に以下の図が参考になった:  
+```
+input_ids - [101, 7270, 22961, 1528, 1840, 1106, 21423, 1418, 2495, 12913, 119, 102, 0, 0, 0, 0]
+input_mask - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
+segment_ids - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+label_ids - [10, 6, 1, 2, 1, 1, 1, 2, 1, 1, 11, 0, 0, 0, 0, 0]
+label_mask - [True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False]
+valid_ids - [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1] # 0 for '##mb'
+```  
+valid_idsがword-piece tokenのmain-subの関係情報を記述している. ここでいうvalid_idsと同等のものがhuggingface tokenizerにも内蔵されていると思われる. (でなければtokenizer.decoderは機能し得ない.) 
+
+<br>
+その上で依然として問題になるのが, tokenizer.encode_plus()でmax_lenでtruncateされることで(このtruncateは後続のBERTモデルに入力する際にlen(ids)とlen(tags)の長さがmax_lenに揃っていないとエラーになるため必須), special tokensとword-piece tokenのsub分だけ復元した文が尻切れトンボになる点だ.  
+以下2例を示す:  
+
+```
+# 例1
+id: 5df96c17-d198-4116-b7cd-55bf8904b3c8 ---- index: 9 ---- len(ids): 5 ---- len(label): 5
+<<< original_tokens: of the probability distribution with >>>
+<<< decoded_tokens:  of the probability >>>
+<<< overflowing_tokens:                      ['with', 'distribution'] >>>
+
+recovered_token <----> original_token
+-------------------------------------
+of <----> of
+the <----> the
+probability <----> probability
+
+
+
+# 例2
+id: 5df96c17-d198-4116-b7cd-55bf8904b3c8 ---- index: 10 ---- len(ids): 5 ---- len(label): 5
+<<< original_tokens: various thresholds for extremeness commonly >>>
+<<< decoded_tokens:  various thresholds >>>
+<<< overflowing_tokens:                      ['commonly', '##ness', 'extreme', 'for'] >>>
+
+recovered_token <----> original_token
+-------------------------------------
+various <----> various
+threshold <----> thresholds
+##s <----> for
+```  
+この問題は, 入力のsentenceを尻切れトンボ分を見越して一定長のoverlapを設けることで解消するのが最も単純な方法だと思う.  
+<br>
+<br>
+<br>
+
+#### 2021-06-06
+
 
 
 
