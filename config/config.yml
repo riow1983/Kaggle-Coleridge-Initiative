@@ -5,7 +5,7 @@ cv_debug: false
 
 # src/bridge.py
 train: true
-max_len: 512
+max_len: 5
 tags_vals: "o o-dataset pad" # string w/ space delimiter
 use_pos: false
 debug: true
