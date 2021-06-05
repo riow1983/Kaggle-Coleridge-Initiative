@@ -20,6 +20,7 @@
 |741771d71cc92ecbf492366b7c11649fb6ab6ab2|probe_threshold = 0.3|-|0.529|
 |72d967eedcd3c82a6ee0c31aa128ebdc4287b506|probe_threshold = 0.4|-|0.529|
 |399adfadb44e8e771b6b703e4692ea9dc766be64|probe_threshold = 0.5|-|0.000|
+|32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Running|
 
 
 ## My Assets
