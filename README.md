@@ -51,7 +51,8 @@
 |src/bridge.py|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/src/bridge.py)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|./dataset.pkl|作成中|CVデータ読み込みからPyTorch Datasetクラスへの受け渡しまでのgapを埋める処理をまとめたもの|
 |config/config.yml|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/config/config.yml)|-|-|作成中|nb009, src/bridge.py, localnb001, kagglenb004の各種パラメータを管理|
 |kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|hidden testの"string matchingできる度合い"などを評価するLB probingを担当<br>ちなみに名称誤りで"prover"では無く"prober"が正しいか|
-
+|kagglenb011-ner-conll|[URL](https://www.kaggle.com/riow1983/kagglenb011-ner-conll)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|完了|NERの基本に立ち返って実装理解|
+|nb011-ner-conll|URL|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ|
 
 
 
