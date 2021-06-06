@@ -20,7 +20,7 @@
 |741771d71cc92ecbf492366b7c11649fb6ab6ab2|probe_threshold = 0.3|-|0.529|
 |72d967eedcd3c82a6ee0c31aa128ebdc4287b506|probe_threshold = 0.4|-|0.529|
 |399adfadb44e8e771b6b703e4692ea9dc766be64|probe_threshold = 0.5|-|0.000|
-|32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Running|
+|32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Notebook Exceeded Allowed Compute|
 
 
 ## My Assets
@@ -50,7 +50,7 @@
 |nb009-cv|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb009-cv.ipynb)|../input/coleridgeinitiative-show-us-the-data/train.csv|riow1983/nb009-cv/folds_pubcat.pkl|作成中|kagglenb009-cvから引き継ぎ|
 |src/bridge.py|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/src/bridge.py)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|./dataset.pkl|作成中|CVデータ読み込みからPyTorch Datasetクラスへの受け渡しまでのgapを埋める処理をまとめたもの|
 |config/config.yml|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/config/config.yml)|-|-|作成中|nb009, src/bridge.py, localnb001, kagglenb004の各種パラメータを管理|
-|kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|simple string matchingなどを試したもの|
+|kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|hidden testの"string matchingできる度合い"などを評価するLB probingを担当<br>ちなみに名称誤りで"prover"では無く"prober"が正しいか|
 
 
 
@@ -274,6 +274,10 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |What is the trade-off between batch size and number of iterations to train a neural network?|[URL](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu)|Done|train時のbatch_sizeの増減の影響を解説|
 |Tutorial: Fine tuning BERT for Sentiment Analysis|[URL](https://skimai.com/fine-tuning-bert-for-sentiment-analysis/)|Bookmarked|huggingface + PyTorchでsentiment analysisをやっている例|
 |Delete digits in Python (Regex)|[URL](https://stackoverflow.com/questions/817122/delete-digits-in-python-regex)|Done|正規表現で数字を除外する方法|
+|(huggingface) Glossary|[URL](https://huggingface.co/transformers/glossary.html)|Bookmarked|idsからdecodeする様子や, position idsなどの各種idsの説明が集約されている|
+|(huggingface) Tokenizer|[URL](https://huggingface.co/transformers/v2.11.0/main_classes/tokenizer.html)|Bookmarked|Tokenizerの各種メソッド, encode_plusのargumentsが集約されている|
+|(huggingface) Utilities for Tokenizers|[URL](https://huggingface.co/transformers/internal/tokenization_utils.html#transformers.tokenization_utils_base.PreTrainedTokenizerBase.encode_plus)|Bookmarked|Tokenizerのサブページ(?)<br>encode_plusのargumentsが集約されている|
+
 
 
 
@@ -296,6 +300,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |----|----|----|----|
 |Coleridge - Huggingface Question Answering|[URL](https://www.kaggle.com/jamesmcguigan/coleridge-huggingface-question-answering)|Done|QAのtoy example的なやつ. <br>結局こんな精度じゃ話にならない. <br>また事後学習する方法が分からず終い.|
 |HuggingFace Tutorial; Custom PyTorch training|[URL](https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb)|Bookmarked|huggingfaceのpre-trainedモデルをfine-tuningするも<br>PyTorch標準のsave方式を採用している<br>らしいところは参考になる|
+|HuggingFace Tutorial; Custom PyTorch training (Forked)|[URL](https://www.kaggle.com/riow1983/huggingface-tutorial-custom-pytorch-training)|Done|[HuggingFace Tutorial; Custom PyTorch training](https://www.kaggle.com/moeinshariatnia/simple-distilbert-fine-tuning-0-84-lb)をforkしてBERTの`tokenizer.convert_ids_to_tokens(ids)`を試したもの<br>元がdocument classificationタスクなのでtokenごとのtagが無く, そこは参考にならず|
 |Bert PyTorch HuggingFace Starter|[URL](https://www.kaggle.com/theoviel/bert-pytorch-huggingface-starter)|Bookmarked|huggignface PyTorchのとても綺麗なコード.<br>参考になるがfine-tuned modelのsave実装はない.|
 |[Training] PyTorch-TPU-8-Cores (Ver.21)|[URL](https://www.kaggle.com/joshi98kishan/foldtraining-pytorch-tpu-8-cores/data?scriptVersionId=48061653)|Bookmarked|offlineでPyTorch-XLAインストールスクリプトが有用|
 |EDA & Baseline Model|[URL](https://www.kaggle.com/prashansdixit/coleridge-initiative-eda-baseline-model)|Done|dataset_label, dataset_title, cleaned_labelをsetにして<br>existing_labelsにしている|
@@ -315,6 +320,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |joshi98kishan/pytorch-xla-setup-script|[URL](https://www.kaggle.com/joshi98kishan/pytorch-xla-setup-script)|Bookmarked|PyTorch-XLAをofflineでインストールするためのスクリプト|
 |bigger_govt_dataset_list|[URL](https://www.kaggle.com/mlconsult/bigger-govt-dataset-list)|Adopted|いわゆるgovt<br>世にあるデータセットの蒐集|
 |Coleridge additional_gov_datasets_22000popular|[URL](https://www.kaggle.com/chienhsianghung/coleridge-additional-gov-datasets-22000popular)|Adopted|改良版govt<br>詳細は[Discussion](https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/discussion/241592)で|
+|CoNLL003 (English-version)|[URL](https://www.kaggle.com/alaakhaled/conll003-englishversion)|確認中|BERT NERタスクの基礎トレーニングで使用可能か|
 
 #### Kaggle Discussion
 |name|url|status|comment|
