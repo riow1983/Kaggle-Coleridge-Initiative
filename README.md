@@ -52,7 +52,7 @@
 |config/config.yml|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/config/config.yml)|-|-|作成中|nb009, src/bridge.py, localnb001, kagglenb004の各種パラメータを管理|
 |kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|hidden testの"string matchingできる度合い"などを評価するLB probingを担当<br>ちなみに名称誤りで"prover"では無く"prober"が正しいか|
 |kagglenb011-ner-conll|[URL](https://www.kaggle.com/riow1983/kagglenb011-ner-conll)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|完了|NERの基本に立ち返って実装理解|
-|nb011-ner-conll|URL|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ|
+|nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
 
 
 
@@ -223,6 +223,22 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 
 # Of course, concat is the best if memory allows:
 # df = pd.concat(dfs, axis=0, ignore_index=True)
+```  
+```Python
+# hoge.txtが/path/toに存在するか否か
+import os
+if os.path.exists("/path/to/hoge.txt"):
+  print("hoge.txt exists!")
+else:
+  print("hoge.txt does not exist.")
+```  
+```Python
+# plot sentence lengths as a histogram
+import matplotlib.pyplot as plt
+tmp = [len(sentence) for sentence in sentences]
+print(f"max length: {np.max(tmp)} \nmin length: {np.min(tmp)}")
+plt.hist(tmp)
+plt.xlabel('length of sentence');
 ```
 
 
@@ -248,6 +264,7 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 |Inference Speed: Batch Size (1,2,4,8,16)|[URL](https://facilecode.com/inference-speed-batch-1-2-4-8/)|Done|一言"Less is Faster"|
 |spaCyのCLIで文書のカテゴリ分類を学習する|[URL](https://qiita.com/kyamamoto9120/items/84d62c3b33fb77c03fbe)|Done|全てjsonファイルに格納してspaCy CLIに渡す|
 |Removing Stop Words from Strings in Python|[URL](https://stackabuse.com/removing-stop-words-from-strings-in-python)|Done|各種ライブラリによるstopwords除外方法について|
+|Deep Learningの学習の様子を可視化する、fastprogressがすごく良さげ|[URL](https://qiita.com/AnchorBlues/items/fd9b9bd00042337ed0e2)|Done|fastprogressを使うとtrain loop中の進捗とloss推移を簡単に可視化できる<br>nb011-ner-conllで動作確認|
 
 
 
@@ -1360,6 +1377,14 @@ threshold <----> thresholds
 <br>
 
 #### 2021-06-06
+優先順位見直し.  
+[Focused]  
+[CONLL Corpora (2003) でNERモデル構築 (huggingface + PyTorch 利用) #11](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/11)  
+<br>
+<br>
+<br>
+
+#### 2021-06-07
 
 
 

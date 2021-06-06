@@ -17,6 +17,7 @@ pytorch-xla-env-setup.py
 notebooks/my_seqeval.py
 notebooks/my_seqeval.py.lock
 /notebooks/localnb001-transformers-ner
+/notebooks/nb011-ner-conll
 
 
 # Byte-compiled / optimized / DLL files
