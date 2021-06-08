@@ -295,6 +295,9 @@ plt.xlabel('length of sentence');
 |(huggingface) Glossary|[URL](https://huggingface.co/transformers/glossary.html)|Bookmarked|idsからdecodeする様子や, position idsなどの各種idsの説明が集約されている|
 |(huggingface) Tokenizer|[URL](https://huggingface.co/transformers/v2.11.0/main_classes/tokenizer.html)|Bookmarked|Tokenizerの各種メソッド, encode_plusのargumentsが集約されている|
 |(huggingface) Utilities for Tokenizers|[URL](https://huggingface.co/transformers/internal/tokenization_utils.html#transformers.tokenization_utils_base.PreTrainedTokenizerBase.encode_plus)|Bookmarked|Tokenizerのサブページ(?)<br>encode_plusのargumentsが集約されている|
+|Display GPU Usage While Code is Running in Colab|[URL](https://stackoverflow.com/questions/62620268/display-gpu-usage-while-code-is-running-in-colab)|Done|`watch nvidia-smi`などでGPUの動作状況を監視できる|
+|Eager execution|[URL](https://www.tensorflow.org/guide/eager)|Bookmarked|TensorFlowのeager executionモードでGPU使用をどのように指定するのか調査. <br>"Computation is automatically offloaded to GPUs during eager execution."というのは本当なのか?|
+
 
 
 
@@ -1385,6 +1388,20 @@ threshold <----> thresholds
 <br>
 
 #### 2021-06-07
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+CV作成前に論文Idの重複を手当てする処理を加える修正を追加した.  
+<br>
+<br>
+<br>
+
+#### 2021-06-08
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+Idでは無くpub_titleをunique keyとして重複の手当てをするよう修正.  
+<br>
+<br>
+<br>
+
+#### 2021-06-09
 
 
 
