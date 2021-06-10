@@ -17,6 +17,7 @@ train_batch_size: 32
 valid_batch_size: 64
 epochs: 2
 learning_rate: 2.0e-05
+embedding_dim: 100
 
 # kagglenb004
 test_batch_size: 64
