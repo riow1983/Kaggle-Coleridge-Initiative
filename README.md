@@ -265,6 +265,9 @@ plt.xlabel('length of sentence');
 |spaCyのCLIで文書のカテゴリ分類を学習する|[URL](https://qiita.com/kyamamoto9120/items/84d62c3b33fb77c03fbe)|Done|全てjsonファイルに格納してspaCy CLIに渡す|
 |Removing Stop Words from Strings in Python|[URL](https://stackabuse.com/removing-stop-words-from-strings-in-python)|Done|各種ライブラリによるstopwords除外方法について|
 |Deep Learningの学習の様子を可視化する、fastprogressがすごく良さげ|[URL](https://qiita.com/AnchorBlues/items/fd9b9bd00042337ed0e2)|Done|fastprogressを使うとtrain loop中の進捗とloss推移を簡単に可視化できる<br>nb011-ner-conllで動作確認|
+|Painless Fine-Tuning of BERT in Pytorch|[URL](https://medium.com/swlh/painless-fine-tuning-of-bert-in-pytorch-b91c14912caa)|Bookmarked|huggingface + PyTorchのハイブリッド方式でMLM fine-tuneをやる方法<br>[MLMなのでlabelはモデルには入力せず, loss関数にだけ入れる](https://github.com/kabirahuja2431/FineTuneBERT/blob/master/src/model.py)|
+
+
 
 
 
@@ -297,6 +300,11 @@ plt.xlabel('length of sentence');
 |(huggingface) Utilities for Tokenizers|[URL](https://huggingface.co/transformers/internal/tokenization_utils.html#transformers.tokenization_utils_base.PreTrainedTokenizerBase.encode_plus)|Bookmarked|Tokenizerのサブページ(?)<br>encode_plusのargumentsが集約されている|
 |Display GPU Usage While Code is Running in Colab|[URL](https://stackoverflow.com/questions/62620268/display-gpu-usage-while-code-is-running-in-colab)|Done|`watch nvidia-smi`などでGPUの動作状況を監視できる|
 |Eager execution|[URL](https://www.tensorflow.org/guide/eager)|Bookmarked|TensorFlowのeager executionモードでGPU使用をどのように指定するのか調査. <br>"Computation is automatically offloaded to GPUs during eager execution."というのは本当なのか?|
+|(huggingface) Summary of the tasks|[URL](https://huggingface.co/transformers/task_summary.html)|Done|NERやMLMなど各種NLPタスクをhuggingfaceで行う方法|
+|(huggingface) Convert tokens and token-labels to string|[URL](https://discuss.huggingface.co/t/convert-tokens-and-token-labels-to-string/2086)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokenに対応するlabelを-100に変換してモデルが無視できるようにする案が提示されている|
+|(huggingface) Converting Word-level labels to WordPiece-level for Token Classification|[URL](https://discuss.huggingface.co/t/converting-word-level-labels-to-wordpiece-level-for-token-classification/2118)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokeに対応するlabelをffill方式で埋める方式が提示されている|
+
+
 
 
 
@@ -314,6 +322,8 @@ plt.xlabel('length of sentence');
 |Fast Alternative to pd.concat() for row-wise concatenation|[URL](https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e)|Done|2018年時点の情報で, 今は必ずしもそうではないらしい|
 |Multiprocessing spaCy: Can't find model 'en_model.vectors' in en_core_web_lg|[URL](https://github.com/explosion/spaCy/issues/3552)|Done|spaCyを使った処理を並列化する際は, nlp.load()を対象の関数内に記載する必要がある|
 |(huggingface examples) Fine-tuning a model on a token classification task|[URL](https://github.com/huggingface/notebooks/blob/master/examples/token_classification.ipynb)|Bookmarked|huggingfaceによる各種NLPタスク例題<br>PyTorchの枠組み(Dataset, nn.module)は使われていない|
+|(huggingface) New tokenizers issue in NER demo #2936|[URL](https://github.com/huggingface/transformers/issues/2936)|Bookmarked|`pad_token_label_id`について|
+|(huggingface) Named entity recognition fine-tuning: utilities to work with CoNLL-2003 task.|[URL](https://github.com/huggingface/transformers/blob/master/examples/legacy/token-classification/utils_ner.py)|Bookmarked|`pad_token_label_id`について|
 
 
 #### Kaggle Notebooks
@@ -1402,6 +1412,22 @@ Idでは無くpub_titleをunique keyとして重複の手当てをするよう�
 <br>
 
 #### 2021-06-09
+BERT tokenizerのword-piece tokenizerに関する問題で, huggingface + PyTorchにおいてはlabel(=tag) sequenceの振り直しが別途必要だという認識に至った.  
+https://github.com/qllolollp/Kaggle-Coleridge-Initiative/issues/4#issuecomment-857620720  
+https://github.com/qllolollp/Kaggle-Coleridge-Initiative/issues/4#issuecomment-857624550  
+https://github.com/qllolollp/Kaggle-Coleridge-Initiative/issues/4#issuecomment-857653645  
+<br>
+<br>
+<br>
+
+#### 2021-06-10
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+nb009-cv.ipynbを編集するも完了できず.  
+<br>
+<br>
+<br>
+
+#### 2021-06-11
 
 
 
