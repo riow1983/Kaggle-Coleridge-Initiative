@@ -112,29 +112,61 @@ def convert_tokens(row, m, max_len, train=False, use_pos=False, verbose=False, t
         
     
     if train:
-        entity = row['dataset_label']
+        #### RIOW
+        #entity = row['dataset_label'] #str
+        entities = row['dataset_label'] #List[str]
+        #### RIOWRIOW
         
         ## main
         tokens=[]
         k=0
-        for i,x in enumerate(text):
+        #### RIOW
+        # for i,x in enumerate(text):
 
-            if k==0:
-                if x==entity.split()[0]:
-                    entity_len = len(entity.split())
-                    if entity == ' '.join(text[i:i+entity_len]):
-                        tokens.extend(['o-dataset']*len(entity.split()))
-                        k = entity_len
-                        #print('k updated')
+        #     if k==0:
+        #         if x==entity.split()[0]:
+        #             entity_len = len(entity.split())
+        #             if entity == ' '.join(text[i:i+entity_len]):
+        #                 tokens.extend(['o-dataset']*len(entity.split()))
+        #                 k = entity_len
+        #                 #print('k updated')
+        #             else:
+        #                 #print(x,'o1')
+        #                 tokens.append('o')
+        #         else:
+        #             #print(x,'o2')
+        #             tokens.append('o')
+
+
+        #     k = max(0,k-1)
+        
+        for entity in entities:
+            _tokens=[]
+            k = 0            
+            for i,x in enumerate(text):
+
+                if k==0:
+                    if x==entity.split()[0]:
+                        entity_len = len(entity.split())
+                        if entity == ' '.join(text[i:i+entity_len]):
+                            _tokens.extend([1]*len(entity.split()))
+                            k = entity_len
+                        else:
+                            _tokens.append(0)
                     else:
-                        #print(x,'o1')
-                        tokens.append('o')
-                else:
-                    #print(x,'o2')
-                    tokens.append('o')
+                        _tokens.append(0)
 
 
-            k = max(0,k-1)
+                k = max(0,k-1)
+            tokens.append(_tokens) # List[List]
+
+        tokens = np.array(tokens) # (number of entities) by (length of text) matrix
+        tokens = np.sum(tokens, axis=0) # 1d matrix
+        tokens = np.where(tokens>0, "o-dataset", "o") # 1d matrix
+        tokens = tokens.tolist() # List[str]
+        
+
+        #### RIOWRIOW
                 
     k=0
     sentence_hash=[]
@@ -144,27 +176,8 @@ def convert_tokens(row, m, max_len, train=False, use_pos=False, verbose=False, t
         sentence_hash.extend([f'sentence#{k}']* len(text[i:i+max_len]))
         k+=1
     
-    #### RIOW
-    # df = pd.DataFrame()  
-    # #df['token'] = list(map(str,text))
-    # df['word'] = text
-    # if verbose:
-    #     print(list(map(str,text)))
-    #     print("length of token:", len(list(map(str,text))))
-    #     print(pos)
-    #     print("length of pos:", len(pos))
-    # if use_pos:
-    #     df['pos'] = pos
-    # else:
-    #     df['pos'] = None
-    # df['sentence'] = f'sentence{m}'
-    # df['sentence#'] = sentence_hash
-    # if train:
-    #     df['tag'] = tokens
-
-    # return df
     
-
+    
     row["word"] = text
     if use_pos:
         row["pos"] = pos
@@ -177,8 +190,6 @@ def convert_tokens(row, m, max_len, train=False, use_pos=False, verbose=False, t
         tokens = [tag2idx.get(t) for t in tokens]
         row["tag"] = tokens
     return row
-
-    #### RIOWRIOW
 
 
 
@@ -589,15 +600,15 @@ if __name__ == '__main__':
     text_len = int(args[4])
     tags_vals = args[5:]
     
-    print(f"train: Bool: {train}")
-    print(f"max_len: Int: {max_len}")
+    print(f"train: bool: {train}")
+    print(f"max_len: int: {max_len}")
     print(f"tags_vals: List[str]: {tags_vals}")
     #print("....type of tags_vals: ", type(tags_vals))
     #print(f"gettext: Bool: {gettext}")
-    print(f"use_pos: Bool: {use_pos}")
+    print(f"use_pos: bool: {use_pos}")
     #print(f"cv: Bool: {cv}")
-    print(f"debug: Bool: {debug}")
-    print(f"text_len: Int: {text_len}")
+    print(f"debug: bool: {debug}")
+    print(f"text_len: int: {text_len}")
     
     main(train=train, 
          max_len=max_len, 
