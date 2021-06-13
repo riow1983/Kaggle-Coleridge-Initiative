@@ -225,10 +225,11 @@ with tqdm(total=len(dfs), desc="Appending to dict...") as pbar:
 # df = pd.concat(dfs, axis=0, ignore_index=True)
 ```  
 ```Python
-# hoge.txtが/path/toに存在するか否か
+# hoge.txtが/path/toに存在するか否か (そして存在していたら削除)
 import os
 if os.path.exists("/path/to/hoge.txt"):
   print("hoge.txt exists!")
+  os.remove("/path/to/hoge.txt")
 else:
   print("hoge.txt does not exist.")
 ```  
@@ -239,7 +240,43 @@ tmp = [len(sentence) for sentence in sentences]
 print(f"max length: {np.max(tmp)} \nmin length: {np.min(tmp)}")
 plt.hist(tmp)
 plt.xlabel('length of sentence');
+```  
+```Python
+# array: np.array からランダムサンプリングする方法
+n = 5
+sampled_array = np.random.choice(array, size=n, replace=False)
+```  
+```Python
+# ある条件下においてのみglobal変数に値を格納する関数
+res = 0
+
+def myadd(x, y):
+  global res
+  if x==y:
+    pass
+  else:
+    res = x + y
+
+# myadd(1, 2)
+# 3
+
+# myadd(1, 1)
+# 0
+```  
+```Python
+# 複数のlistをzipにして各要素を横に並べてtxtファイルに追加していく方法
+
+# まずファイルの初期化というか削除
+if os.path.exists(f"./hoge.txt"):
+    os.remove(f"./hoge.txt")
+
+# 4つのlist, e.g., text, tokens, sentence_hash, sentenceを束ねて書き込む
+for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
+    file = open(f"./hoge.txt", mode="a") # mode="a"でappend modeに
+    file.write(w+' '+t+' '+h+' '+s+'\n')
+    file.close()
 ```
+
 
 
 #### Papers
@@ -266,7 +303,7 @@ plt.xlabel('length of sentence');
 |Removing Stop Words from Strings in Python|[URL](https://stackabuse.com/removing-stop-words-from-strings-in-python)|Done|各種ライブラリによるstopwords除外方法について|
 |Deep Learningの学習の様子を可視化する、fastprogressがすごく良さげ|[URL](https://qiita.com/AnchorBlues/items/fd9b9bd00042337ed0e2)|Done|fastprogressを使うとtrain loop中の進捗とloss推移を簡単に可視化できる<br>nb011-ner-conllで動作確認|
 |Painless Fine-Tuning of BERT in Pytorch|[URL](https://medium.com/swlh/painless-fine-tuning-of-bert-in-pytorch-b91c14912caa)|Bookmarked|huggingface + PyTorchのハイブリッド方式でMLM fine-tuneをやる方法<br>[MLMなのでlabelはモデルには入力せず, loss関数にだけ入れる](https://github.com/kabirahuja2431/FineTuneBERT/blob/master/src/model.py)|
-
+|(numpy) Lambda function - TypeError: unhashable type: 'numpy.ndarray'|[URL](https://www.debugcn.com/en/article/36276293.html)|Done|np.arrayに対してlambda functionを適用させる際はnp.vectorizeが必要|
 
 
 
@@ -303,6 +340,8 @@ plt.xlabel('length of sentence');
 |(huggingface) Summary of the tasks|[URL](https://huggingface.co/transformers/task_summary.html)|Done|NERやMLMなど各種NLPタスクをhuggingfaceで行う方法|
 |(huggingface) Convert tokens and token-labels to string|[URL](https://discuss.huggingface.co/t/convert-tokens-and-token-labels-to-string/2086)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokenに対応するlabelを-100に変換してモデルが無視できるようにする案が提示されている|
 |(huggingface) Converting Word-level labels to WordPiece-level for Token Classification|[URL](https://discuss.huggingface.co/t/converting-word-level-labels-to-wordpiece-level-for-token-classification/2118)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokeに対応するlabelをffill方式で埋める方式が提示されている|
+|parallel excution and file writing on python|[URL](https://stackoverflow.com/questions/22147166/parallel-excution-and-file-writing-on-python)|Done|file書き込みを並列処理で実行する方法<br>普通にやったら順序崩れる|
+
 
 
 
@@ -1428,6 +1467,21 @@ nb009-cv.ipynbを編集するも完了できず.
 <br>
 
 #### 2021-06-11
+[issue #2](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
+実装&チーム内シェア完了.  
+<br>
+<br>
+<br>
+
+#### 2021-06-12 ~ 13
+[issue #11](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/11)について  
+BiLSTMの本コンペへの移行処理完了できず. dfからlistに変換する際高速化を取ればRAMがもたず, RAMを取れば時間内に終えられずといったところ. (ちなみにColab Pro runtime typeはinference notebookの所要時間/RAMを見積もるためあえてstandardを使用.) BiLSTMにbatchずつ入力すれば良さそうなところだがTFの実装が分からない. ということでBiLSTMはここまでにして[記事続編のBERTの実装](https://medium.com/analytics-vidhya/fine-tuning-bert-for-ner-on-conll-2003-dataset-with-tf-2-2-0-2f242ca2ce06)に飛び移るつもり.  
+<br>
+<br>
+<br>
+
+#### 2021-06-14
+
 
 
 
