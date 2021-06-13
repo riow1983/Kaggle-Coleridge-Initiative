@@ -149,12 +149,12 @@ def convert_tokens(row, m, max_len, train=False, use_pos=False, verbose=False, t
                     if x==entity.split()[0]:
                         entity_len = len(entity.split())
                         if entity == ' '.join(text[i:i+entity_len]):
-                            _tokens.extend([1]*len(entity.split()))
+                            _tokens.extend([1]*len(entity.split())) # 1 stands for "o-dataset"
                             k = entity_len
                         else:
-                            _tokens.append(0)
+                            _tokens.append(0) # 0 stands for "o"
                     else:
-                        _tokens.append(0)
+                        _tokens.append(0) # 0 stands for "o"
 
 
                 k = max(0,k-1)

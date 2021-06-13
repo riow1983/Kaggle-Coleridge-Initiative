@@ -10,12 +10,12 @@ max_len: 128
 tags_vals: "o o-dataset pad" # string w/ space delimiter
 use_pos: false
 debug: true
-text_len: 0 # 0 if not truncate
+text_len: 15000 # 0 if not truncate
 
 # localnb001 or localnb002
 train_batch_size: 32
 valid_batch_size: 64
-epochs: 2
+epochs: 10
 learning_rate: 2.0e-05
 embedding_dim: 100
 
