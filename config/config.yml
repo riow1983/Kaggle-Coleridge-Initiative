@@ -3,6 +3,7 @@ use_cosine: true
 is_single: false
 cv_debug: false
 unique_key: "pub_title"
+use_pprocess: false
 
 # src/bridge.py
 train: true
