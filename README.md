@@ -43,7 +43,7 @@
 |nb005-pytorch-bert-for-ner|URL|kagglenb007-get-text's output files|fine-tuned BERT model <br> [nb005-pytorch-bert-for-ner-512](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner-512) <br> [nb005-pytorch-bert-for-ner](https://www.kaggle.com/riow1983/nb005-pytorch-bert-for-ner)|EPOCHS>5で訓練完了<br>lossが下がらない原因調査中|epochs\>1でもlossが下がらずLB=0.700のまま|
 |kagglenb006-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb006-get-text)|riow1983/nb009-cv/folds_pubcat.pkl|folds_pubcat.pkl|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
 |kagglenb007-get-text|[URL](https://www.kaggle.com/riow1983/kagglenb007-get-text)|-|train/test dataset<br>section構造をそのまま保持|Done|JSONファイルからパースしたtextを新規列として加える<br>Colab側で作業する際, Google Driveに置いたJSONファイルをreadする処理に時間がかかるためKaggle上で実施した|
-|kagglenb008-pytorch-bert-for-ner-inference|[URL]()|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
+|kagglenb008-pytorch-bert-for-ner-inference|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/kagglenb008-pytorch-bert-for-ner-inference.ipynb)|nb005-pytorch-bert-for-ner|submission.csv|Done|[kaggle notebook (Coleridge: Matching + BERT NER)](https://www.kaggle.com/tungmphung/coleridge-matching-bert-ner)をcopyしたもの<br>|nb005-pytorch-bert-for-nerのinference側|
 |localnb001-transformers-ner|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb001-transformers-ner.ipynb)|riow1983/kagglenb006-get-text/folds_pubcat.pkl|fine-tuned BERTモデル|作成中|ネット上に落ちていた[Colab notebook](https://colab.research.google.com/github/abhimishra91/transformers-tutorials/blob/master/transformers_ner.ipynb)を本コンペ用に改造したもの. <br>huggingface pre-trainedモデルのfine-tuned後の保存は成功. <br>PytorchXLAによるTPU使用. <br>fine-tuned BERTモデルはkagglenb004-transformers-ner-inferenceの入力になる.|
 |l2knb001-transformers-ner|[URL](https://www.kaggle.com/riow1983/l2knb001-transformers-ner)|nb003-annotation-data (5 fold CV data)|fine-tuned BERTモデル|使用予定なし(チームシェア用)|-|
 |kagglenb009-cv|[URL](https://www.kaggle.com/riow1983/kagglenb009-cv)|../input/coleridgeinitiative-show-us-the-data/train.csv|-|nb009-cvへ引き継ぎ|[issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)に応じたCV作成ノートブック|
@@ -53,7 +53,7 @@
 |kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|hidden testの"string matchingできる度合い"などを評価するLB probingを担当<br>ちなみに名称誤りで"prover"では無く"prober"が正しいか|
 |kagglenb011-ner-conll|[URL](https://www.kaggle.com/riow1983/kagglenb011-ner-conll)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|完了|NERの基本に立ち返って実装理解|
 |nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
-
+|kagglenb012-spacy3-to-huggingface-inference|[URL]()|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
 
 
 
@@ -341,6 +341,9 @@ for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
 |(huggingface) Convert tokens and token-labels to string|[URL](https://discuss.huggingface.co/t/convert-tokens-and-token-labels-to-string/2086)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokenに対応するlabelを-100に変換してモデルが無視できるようにする案が提示されている|
 |(huggingface) Converting Word-level labels to WordPiece-level for Token Classification|[URL](https://discuss.huggingface.co/t/converting-word-level-labels-to-wordpiece-level-for-token-classification/2118)|Done|BERT word-piece tokenizerに対応するlabel sequenceの振り直し処理について<br>##tokeに対応するlabelをffill方式で埋める方式が提示されている|
 |parallel excution and file writing on python|[URL](https://stackoverflow.com/questions/22147166/parallel-excution-and-file-writing-on-python)|Done|file書き込みを並列処理で実行する方法<br>普通にやったら順序崩れる|
+|(huggingface) Loading a model from local with best checkpoint|[URL](https://discuss.huggingface.co/t/loading-a-model-from-local-with-best-checkpoint/1707)|Done|huggingface Trainerでbest scoreモデルを回収する方法について|
+|(huggingface) Trainer|[URL](https://huggingface.co/transformers/main_classes/trainer.html)|Done|huggingface Trainerでbest score modelを回収するには`load_best_model_at_end=True`とする|
+
 
 
 
