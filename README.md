@@ -1491,14 +1491,16 @@ BiLSTMの本コンペへの移行処理完了できず. dfからlistに変換す
 #### 2021-06-14 ~ 20
 - [CONLL Corpora (2003) でNERモデル構築 (huggingface + PyTorch 利用) #11](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/11)  
   * CONLLを使ったBiSLTMを本コンペ用に改修する作業は進捗せず. クローズ.  
-<br>
+
 - [huggingface transformers + PyTorch for NER task fine-tuning #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)  
   * 作業時間確保できずクローズ.  
-<br>
+
 - [cleaned_labelをカテゴライズしたものでGroup KfoldしたCVを作成する (train.csvに対して) #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)
   * 同じcleaned_labelがtrain/valid両方に現れないようにするというゴールは達成できたが, groupに指定した`pub_category`ごとの論文数に大きな差があるため, foldによってはvalidの数が不十分となった. 妥協策としてvalidの数が辛うじて十分なfold2とfold3を使用する方針となった.  
+
 - [[Merge] spaCyモデルをhuggingfaceモデルに置き換えてsubmitしてみる #12](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/12)  
   * チームメイトのsubmissionが銀圏に到達したため協力体制を強化. spaCy3によるモデルを[nb005](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb005-pytorch-bert-for-ner.ipynb)で訓練したhuggingfaceモデルに換装したinference notebook [kagglenb012](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)を作成しsubmit (LB=0.573).  
+
 <br>
 huggingfaceで訓練すると途中経過としてcheckpointごとにモデルがdiskに保存されるが, 1 checkpointごとに0.8 GBほどのスペースを消費するので, 1 foldの学習だけで使用storageが一挙に50 GB程度跳ね上がる.
 <br>
