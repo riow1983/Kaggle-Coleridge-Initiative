@@ -21,8 +21,8 @@
 |72d967eedcd3c82a6ee0c31aa128ebdc4287b506|probe_threshold = 0.4|-|0.529|
 |399adfadb44e8e771b6b703e4692ea9dc766be64|probe_threshold = 0.5|-|0.000|
 |32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Notebook Exceeded Allowed Compute|
-||best score model trained by fold 3|f1=0.000|0.533|
-||Ito's post processing w/ spaCy3 being replaced w/ huggingface|f1=0.000|0.573|
+|eba8ded66f19aacc8d5c62b3404987d75c44eaad|best score model trained by fold 3|f1=0.000|0.533|
+|27424d03055295b64fb83e379491a5d403693229|Ito's post processing w/ spaCy3 being replaced w/ huggingface|f1=0.000|0.573|
 
 
 ## My Assets
