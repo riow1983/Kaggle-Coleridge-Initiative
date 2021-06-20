@@ -21,6 +21,8 @@
 |72d967eedcd3c82a6ee0c31aa128ebdc4287b506|probe_threshold = 0.4|-|0.529|
 |399adfadb44e8e771b6b703e4692ea9dc766be64|probe_threshold = 0.5|-|0.000|
 |32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Notebook Exceeded Allowed Compute|
+||best score model trained by fold 3|f1=0.000|0.533|
+||Ito's post processing w/ spaCy3 being replaced w/ huggingface|f1=0.000|0.573|
 
 
 ## My Assets
@@ -53,7 +55,7 @@
 |kagglenb010-lb-prover|[URL](https://www.kaggle.com/riow1983/kagglenb010-lb-prover)|sample_submission.csv|submission.csv|Done|hidden testの"string matchingできる度合い"などを評価するLB probingを担当<br>ちなみに名称誤りで"prover"では無く"prober"が正しいか|
 |kagglenb011-ner-conll|[URL](https://www.kaggle.com/riow1983/kagglenb011-ner-conll)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|完了|NERの基本に立ち返って実装理解|
 |nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
-|kagglenb012-spacy3-to-huggingface-inference|[URL]()|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
+|kagglenb012-spacy3-to-huggingface-inference|[URL](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
 
 
 
@@ -304,6 +306,9 @@ for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
 |Deep Learningの学習の様子を可視化する、fastprogressがすごく良さげ|[URL](https://qiita.com/AnchorBlues/items/fd9b9bd00042337ed0e2)|Done|fastprogressを使うとtrain loop中の進捗とloss推移を簡単に可視化できる<br>nb011-ner-conllで動作確認|
 |Painless Fine-Tuning of BERT in Pytorch|[URL](https://medium.com/swlh/painless-fine-tuning-of-bert-in-pytorch-b91c14912caa)|Bookmarked|huggingface + PyTorchのハイブリッド方式でMLM fine-tuneをやる方法<br>[MLMなのでlabelはモデルには入力せず, loss関数にだけ入れる](https://github.com/kabirahuja2431/FineTuneBERT/blob/master/src/model.py)|
 |(numpy) Lambda function - TypeError: unhashable type: 'numpy.ndarray'|[URL](https://www.debugcn.com/en/article/36276293.html)|Done|np.arrayに対してlambda functionを適用させる際はnp.vectorizeが必要|
+|(git) 
+gitで特定のファイルだけ前の状態に戻したいときのコマンド|[URL](https://konbu13.hatenablog.com/entry/2014/12/01/070255)|Done|そのまま|
+
 
 
 
@@ -1483,7 +1488,26 @@ BiLSTMの本コンペへの移行処理完了できず. dfからlistに変換す
 <br>
 <br>
 
-#### 2021-06-14
+#### 2021-06-14 ~ 20
+- [CONLL Corpora (2003) でNERモデル構築 (huggingface + PyTorch 利用) #11](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/11)  
+  * CONLLを使ったBiSLTMを本コンペ用に改修する作業は進捗せず. クローズ.  
+<br>
+- [huggingface transformers + PyTorch for NER task fine-tuning #7](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/7)  
+  * 作業時間確保できずクローズ.  
+<br>
+- [cleaned_labelをカテゴライズしたものでGroup KfoldしたCVを作成する (train.csvに対して) #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)
+  * 同じcleaned_labelがtrain/valid両方に現れないようにするというゴールは達成できたが, groupに指定した`pub_category`ごとの論文数に大きな差があるため, foldによってはvalidの数が不十分となった. 妥協策としてvalidの数が辛うじて十分なfold2とfold3を使用する方針となった.  
+- [[Merge] spaCyモデルをhuggingfaceモデルに置き換えてsubmitしてみる #12](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/12)  
+  * チームメイトのsubmissionが銀圏に到達したため協力体制を強化. spaCy3によるモデルを[nb005](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb005-pytorch-bert-for-ner.ipynb)で訓練したhuggingfaceモデルに換装したinference notebook [kagglenb012](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)を作成しsubmit (LB=0.573).  
+<br>
+huggingfaceで訓練すると途中経過としてcheckpointごとにモデルがdiskに保存されるが, 1 checkpointごとに0.8 GBほどのスペースを消費するので, 1 foldの学習だけで使用storageが一挙に50 GB程度跳ね上がる.
+<br>
+<br>
+<br>
+
+#### 2021-06-21
+
+
 
 
 
