@@ -19,7 +19,7 @@ notebooks/my_seqeval.py.lock
 /notebooks/localnb001-transformers-ner
 /notebooks/nb011-ner-conll
 /notebooks/localnb002-bilstm-ner
-
+/notebooks/nb005-pytorch-bert-for-ner-fold-2
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
