@@ -23,6 +23,8 @@
 |32345fbecbfe2d3647f8fc8defea202057d6543b|max_len=5, epochs=1|f1=0.000|Notebook Exceeded Allowed Compute|
 |eba8ded66f19aacc8d5c62b3404987d75c44eaad|best score model trained by fold 3|f1=0.000|0.533|
 |27424d03055295b64fb83e379491a5d403693229|Ito's post processing w/ spaCy3 being replaced w/ huggingface|f1=0.000|0.573|
+|d73756ac5e220333fcd12bcfd97f90069517272d|fold=2|f1=0.000|0.519|
+|b3f53e283190fea649c8a6697b2adb6351ad37ec|fold=3, uncased, num_step=100|f1=0.000|0.573|
 
 
 ## My Assets
@@ -308,7 +310,7 @@ for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
 |(numpy) Lambda function - TypeError: unhashable type: 'numpy.ndarray'|[URL](https://www.debugcn.com/en/article/36276293.html)|Done|np.arrayに対してlambda functionを適用させる際はnp.vectorizeが必要|
 |(git) 
 gitで特定のファイルだけ前の状態に戻したいときのコマンド|[URL](https://konbu13.hatenablog.com/entry/2014/12/01/070255)|Done|そのまま|
-
+|(Markdown) Markdown: リストを入れ子にする|[URL](https://step-learn.com/article/markdown/md-ul-nest.html)|Done|Markdownで入れ子リストを書く方法について分かりやすい|
 
 
 
