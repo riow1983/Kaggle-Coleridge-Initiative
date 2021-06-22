@@ -60,7 +60,8 @@
 |nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
 |kagglenb012-spacy3-to-huggingface-inference|[URL](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
 |kagglenb013-spacy3-to-mlm-inferenc|[URL](https://www.kaggle.com/riow1983/kagglenb013-spacy3-to-mlm-inferenc?scriptVersionId=66294035)|[[Coleridge] BERT - MLMv4](https://www.kaggle.com/chienhsianghung/coleridge-bert-mlmv4)|submission.csv|Done|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>MLM部分は[External_Datasets_Matching + MLMv4](https://www.kaggle.com/chienhsianghung/external-datasets-matching-mlmv4)から
-
+|localnb003-spacy-dataset|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)|nb009-cv|.spacyデータセット|伊藤氏作成の[spacy-train-data-rf.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train-data-rf.ipynb)をnb009-cvに対応させたもの|
+|
 
 
 
@@ -1541,7 +1542,12 @@ huggingfaceで訓練すると途中経過としてcheckpointごとにモデル�
 <br>
 
 #### 2021-06-22
-
+[[データ加工] nb009を.spacy形式に変換する #14](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/14)について  
+[localnb003-spacy-dataset](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)を作成. このnotebookはColab内で実行し, 2時間程度で完了した. Google Drive内に作成した`../input`フォルダから各論文の本文を格納したjsonファイルを読み込んでテーブルに結合させる処理も, joblibなどで並列化すれば充分速くなることが分かった. (Google Driveからの読み込みが絡むとそこがボトルネックになってどうやっても遅くなると思っていたため、これまでそれを迂回するためにKaggle Platform上にnotebookを上げるなどの対策を取ってきた(cf. kagglenb006, kagglenb007)が, 不要だった可能性がある.)  
+<br>
+submit状況:  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/my_submissions_20210622.png?raw=true)
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/lb_20210622.png?raw=true)
 
 
 
