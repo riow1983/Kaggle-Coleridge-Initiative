@@ -1,7 +1,8 @@
 # Kaggle-Coleridge-Initiative
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/header.png?raw=true)
 https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview  
-どんなコンペ?: 論文で使われているデータセット名を当てるコンペ. ただしどこに書いてあるかまでは問われない.
+どんなコンペ?: 論文で使われているデータセット名を当てるコンペ. ただしどこに書いてあるかまでは問われない.  
+開催期間: 2021-03-23 ~ 2021-06-22
 
 ***
 ## 実験管理テーブル
@@ -313,6 +314,7 @@ df.groupby("Id").sum()
 |----|----|----|----|
 |Big Bird: Transformers for Longer Sequences|[URL](https://arxiv.org/pdf/2007.14062.pdf)|Reading|Turing completeの意味が分からん|
 |Neural Architectures for Named Entity Recognition|[URL](https://arxiv.org/pdf/1603.01360.pdf)|Reading|[arXivTimesで"NER"と検索したら出てきた](https://github.com/arXivTimes/arXivTimes/issues/185)論文.<br>2016年の論文でLSTMベースのNER用モデルの提案.<br>BERT, Transformer系以外のものも見てみようという思い.<br>実装はTheano.|
+|Dice Loss for Data-imbalanced NLP Tasks|[URL](https://www.aclweb.org/anthology/2020.acl-main.45.pdf)|Done|各種NLPタスクは正例/負例のバランスが悪くなる傾向にあるため, train時に用いるCEやMLEとtest時に用いるF1スコアとの乖離が問題となる.<br>そこを手当てするDice Lossを提案<br>本コンペでも使えた??|
 
 #### Blogs / Qiita / etc.
 |name|url|status|comment|
