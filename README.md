@@ -1,6 +1,6 @@
 # Kaggle-Coleridge-Initiative
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/header.png?raw=true)
-https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
+https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview  
 どんなコンペ?: 論文で使われているデータセット名を当てるコンペ. ただしどこに書いてあるかまでは問われない.
 
 ***
