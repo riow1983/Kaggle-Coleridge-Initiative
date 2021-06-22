@@ -25,6 +25,7 @@
 |27424d03055295b64fb83e379491a5d403693229|Ito's post processing w/ spaCy3 being replaced w/ huggingface|f1=0.000|0.573|
 |d73756ac5e220333fcd12bcfd97f90069517272d|fold=2|f1=0.000|0.519|
 |b3f53e283190fea649c8a6697b2adb6351ad37ec|fold=3, uncased, num_step=100|f1=0.000|0.573|
+|fa8078969f2961da02b80f6997e90f2c16e73f6a|MLM|-|0.573|
 
 
 ## My Assets
@@ -58,6 +59,7 @@
 |kagglenb011-ner-conll|[URL](https://www.kaggle.com/riow1983/kagglenb011-ner-conll)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|完了|NERの基本に立ち返って実装理解|
 |nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
 |kagglenb012-spacy3-to-huggingface-inference|[URL](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
+|kagglenb013-spacy3-to-mlm-inferenc|[URL](https://www.kaggle.com/riow1983/kagglenb013-spacy3-to-mlm-inferenc?scriptVersionId=66294035)|[[Coleridge] BERT - MLMv4](https://www.kaggle.com/chienhsianghung/coleridge-bert-mlmv4)|submission.csv|Done|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>MLM部分は[External_Datasets_Matching + MLMv4](https://www.kaggle.com/chienhsianghung/external-datasets-matching-mlmv4)から
 
 
 
@@ -279,6 +281,25 @@ for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
     file = open(f"./hoge.txt", mode="a") # mode="a"でappend modeに
     file.write(w+' '+t+' '+h+' '+s+'\n')
     file.close()
+```  
+```Python
+# groupbyとsumによるdf集約
+
+df = pd.DataFrame({"Id": [1,1,2,3,3], "tag":[["o", "b"],["b", "b"], ["o",], ["o", "o"], ["o", "b"]]})
+df
+#    Id     tag
+# 0   1  [o, b]
+# 1   1  [b, b]
+# 2   2     [o]
+# 3   3  [o, o]
+# 4   3  [o, b]
+
+df.groupby("Id").sum()
+#              tag
+# Id              
+# 1   [o, b, b, b]
+# 2            [o]
+# 3   [o, o, o, b]
 ```
 
 
@@ -1510,7 +1531,16 @@ huggingfaceで訓練すると途中経過としてcheckpointごとにモデル�
 <br>
 
 #### 2021-06-21
+[[Merge] spaCyモデルをhuggingfaceモデルに置き換えてsubmitしてみる #12](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/12)について  
+- fold 2にて訓練したモデルをsubmit. しかしLB=0.519.  
 
+- MLMに換装したkagglenb013を作成し, submit. しかしLB=0.573.  
+
+<br>
+<br>
+<br>
+
+#### 2021-06-22
 
 
 
