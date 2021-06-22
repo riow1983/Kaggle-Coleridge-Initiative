@@ -20,6 +20,8 @@ notebooks/my_seqeval.py.lock
 /notebooks/nb011-ner-conll
 /notebooks/localnb002-bilstm-ner
 /notebooks/nb005-pytorch-bert-for-ner-fold-2
+/notebooks/l2knb003-spacy-dataset
+/notebooks/localnb003-spacy-dataset
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
