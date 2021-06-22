@@ -1,4 +1,7 @@
 # Kaggle-Coleridge-Initiative
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/header.png?raw=true)
+https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
+どんなコンペ?: 論文で使われているデータセット名を当てるコンペ. ただしどこに書いてあるかまでは問われない.
 
 ***
 ## 実験管理テーブル
@@ -1543,7 +1546,7 @@ huggingfaceで訓練すると途中経過としてcheckpointごとにモデル�
 
 #### 2021-06-22
 [[データ加工] nb009を.spacy形式に変換する #14](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/14)について  
-[localnb003-spacy-dataset](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)を作成. このnotebookはColab内で実行し, 2時間程度で完了した. Google Drive内に作成した`../input`フォルダから各論文の本文を格納したjsonファイルを読み込んでテーブルに結合させる処理も, joblibなどで並列化すれば充分速くなることが分かった. (Google Driveからの読み込みが絡むとそこがボトルネックになってどうやっても遅くなると思っていたため、これまでそれを迂回するためにKaggle Platform上にnotebookを上げるなどの対策を取ってきた(cf. kagglenb006, kagglenb007)が, 不要だった可能性がある.)  
+[localnb003-spacy-dataset](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)を作成. このnotebookはColab内で実行し, 2時間程度で完了した. Google Drive内に作成した`../input`フォルダから各論文の本文を格納したjsonファイルを読み込んでテーブルに結合させる処理も, joblibなどで並列化すれば充分速くなることが分かった. (Google Driveからの読み込みが絡むとそこがボトルネックになってどうやっても遅くなると思っていたため、これまでそれを迂回するためにKaggle Platform上にnotebookを作成するなどの対策を取ってきた(cf. kagglenb006, kagglenb007)が, 不要だった可能性がある.)  
 <br>
 submit状況:  
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/my_submissions_20210622.png?raw=true)
