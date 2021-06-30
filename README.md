@@ -64,8 +64,7 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
 |nb011-ner-conll|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/nb011-ner-conll.ipynb)|[CoNLL003 (English-version)](https://www.kaggle.com/alaakhaled/conll003-englishversion)|-|作成中|kagglenb011から引き継ぎ<br>BiLSTM NERからBERT NERへ移行予定<br>実装はTensorFlow|
 |kagglenb012-spacy3-to-huggingface-inference|[URL](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
 |kagglenb013-spacy3-to-mlm-inferenc|[URL](https://www.kaggle.com/riow1983/kagglenb013-spacy3-to-mlm-inferenc?scriptVersionId=66294035)|[[Coleridge] BERT - MLMv4](https://www.kaggle.com/chienhsianghung/coleridge-bert-mlmv4)|submission.csv|Done|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>MLM部分は[External_Datasets_Matching + MLMv4](https://www.kaggle.com/chienhsianghung/external-datasets-matching-mlmv4)から
-|localnb003-spacy-dataset|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)|nb009-cv|.spacyデータセット|伊藤氏作成の[spacy-train-data-rf.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train-data-rf.ipynb)をnb009-cvに対応させたもの|
-|
+|localnb003-spacy-dataset|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)|nb009-cv|.spacy files|Done|.spacyデータセット|伊藤氏作成の[spacy-train-data-rf.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train-data-rf.ipynb)をnb009-cvに対応させたもの|
 
 
 
@@ -288,7 +287,7 @@ for w,t,h,s in zip(text, tokens, sentence_hash, sentence):
     file.close()
 ```  
 ```Python
-# groupbyとsumによるdf集約
+# groupbyとsumによるdfの行方向集約
 
 df = pd.DataFrame({"Id": [1,1,2,3,3], "tag":[["o", "b"],["b", "b"], ["o",], ["o", "o"], ["o", "b"]]})
 df
@@ -338,6 +337,8 @@ df.groupby("Id").sum()
 |(git) 
 gitで特定のファイルだけ前の状態に戻したいときのコマンド|[URL](https://konbu13.hatenablog.com/entry/2014/12/01/070255)|Done|そのまま|
 |(Markdown) Markdown: リストを入れ子にする|[URL](https://step-learn.com/article/markdown/md-ul-nest.html)|Done|Markdownで入れ子リストを書く方法について分かりやすい|
+|(Typing) Union と Optional ってなに？|[URL](https://python.ms/union-and-optional/#_1-union-%E5%9E%8B)|Bookmarked|Noneになり得る変数の型はOptionalを使うと良い<br>後半regexに関する記述は読み飛ばしたが示唆に富んでいる気がするので後で読む|
+|(spaCy) Custom Named Entity Recognition (NER) model with spaCy 3 in Four Steps|[URL](https://medium.com/analytics-vidhya/custom-named-entity-recognition-ner-model-with-spacy-3-in-four-steps-7e903688d51)|Bookmarked|.spacy fileを作成する手順まとめ|
 
 
 
@@ -377,8 +378,9 @@ gitで特定のファイルだけ前の状態に戻したいときのコマン�
 |parallel excution and file writing on python|[URL](https://stackoverflow.com/questions/22147166/parallel-excution-and-file-writing-on-python)|Done|file書き込みを並列処理で実行する方法<br>普通にやったら順序崩れる|
 |(huggingface) Loading a model from local with best checkpoint|[URL](https://discuss.huggingface.co/t/loading-a-model-from-local-with-best-checkpoint/1707)|Done|huggingface Trainerでbest scoreモデルを回収する方法について|
 |(huggingface) Trainer|[URL](https://huggingface.co/transformers/main_classes/trainer.html)|Done|huggingface Trainerでbest score modelを回収するには`load_best_model_at_end=True`とする|
-
-
+|(huggingface) :hugs:Trainer not saving after save_steps|[URL](https://discuss.huggingface.co/t/trainer-not-saving-after-save-steps/5464)|Done|:hugs:Trainerでは`load_best_model_at_end=True`とすると`save_strategy`が無視される仕様|
+|(huggingface) Examples|[URL](https://huggingface.co/transformers/v2.0.0/examples.html#language-model-fine-tuning)|Bookmarked|各種NLPタスク(LM, LG, GLUE, SQuAD, etc.)を:hugs:でやる例がまとまっている|
+|(spaCy) explosion/spacy-models en_core_web_trf-3.0.0a0|[URL](https://newreleases.io/project/github/explosion/spacy-models/release/en_core_web_trf-3.0.0a0)|Done|spaCyのpipelineファイル. <br>[localnb003-spacy-dataset](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)で使用.|
 
 
 
@@ -1313,6 +1315,7 @@ Starting to convert df to dataset...
 ^C
 ```  
 <br>
+
 [issue #9](https://github.com/riow1983/Kaggle-Coleridge-Initiative/issues/9)について  
 [kagglenb009-cv](https://www.kaggle.com/riow1983/kagglenb009-cv)をlocal(Colab)にpullしたnb009-cvで作業継続. 130 x 130のペアワイズコサイン類似度を求めることにしたが, その前段で目視確認による人手マッピングを噛ませて精度向上を図る.  
 <br>
@@ -1552,7 +1555,27 @@ huggingfaceで訓練すると途中経過としてcheckpointごとにモデル�
 <br>
 submit状況:  
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/my_submissions_20210622.png?raw=true)
-![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/lb_20210622.png?raw=true)
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/lb_20210622.png?raw=true)  
+<br>
+<br>
+<br>
+
+#### 2021-06-29
+43位銀メダル確定した.  
+![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210629.png?raw=true)  
+<br>
+[全体を通しての感想]
+CV-LB相関が取れない, 論文で使用したと言及されたデータセットの一部しか教師ラベルになっていない, 途中で評価関数の改定が入る, などなどコンペ自体の評価としては最低レベルになるに違いない. その証拠にLBの上位にGMがいなかった.<br>
+NLP系コンペで文書分類問題やセンテンス分類問題はあったが, 今回のコンペは何という問題だと表現すれば良いのだろうか? NERタスク? QAタスク? それともMLMタスク?<br>
+コンペのお題"論文で使われたデータセット名は何?"を素直に受け止めるならQAタスクで良いだろう. しかしQAタスクモデル1本で予測を実行しても精度は出なかった. QAモデルはまだ発展途上だからなのだろうか?<br>  
+単語ごとにデータセット名なのかそうでないのかを判別するNERタスクだと解釈することもできた. 実際NERモデルで予測を立てるとある程度の精度は出た. しかしそれはtrainデータにある教師ラベルを丸暗記しているだけで未知のデータセットを言い当てるようにするには工夫が必要だった.<br> 
+MLMタスクとしてこの問題に取り組む参加者も一定数いた. 1位チームの解法はMLMだった. (同じく１位チームのもう一方の解法はQAモデルだった.) しかしMLMによるfine-tuningについて私はまだ半分も理解していない.<br>
+対して我々のチームの解法はspaCyによるNERモデルだった. huggingfaceによるNERモデルも試していたが未知データセットに対しては全く反応しないモデルしか作れなかった.  
+後処理としてFP (偽陽性)を削減させる措置を上位のどのチームも採用していた印象で, これは我々のチームも同じであり, これが上位に食い込めた１番の要因なのではないかと感じている.<br>
+開催初期から参入し, 開催期間中ゴールデンウィークもあったことから投下できる時間は潤沢にあった. しかし残念ながら没頭できるほどにはならなかった. 理由としてはやはりコンペの印象が相当程度低下していたのが原因だろう. 今回は純粋にNLPの学習をしていたと総括すればある程度の成果はあったと言えなくもないが. あとは分析環境の整備及び実験管理法の確立という観点でGoogle Colab ProとGitHubを連携した分析体制を整えることができた. 本格的な実験管理手法(MLFlow, WandB, etc.)の導入にまでは至らなかったが. もしかしたら実験管理はGitHubで充分かも知れない.  
+<br>
+<br>
+<br>
 
 
 
