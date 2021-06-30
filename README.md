@@ -3,7 +3,7 @@
 https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview  
 どんなコンペ?: 論文で使われているデータセット名を当てるコンペ. ただしどこに書いてあるかまでは問われない.  
 開催期間: 2021-03-23 ~ 2021-06-22  
-[結果](#result)  
+[結果](#2021-06-29)  
 <br>
 <br>
 <br>
@@ -309,10 +309,9 @@ df.groupby("Id").sum()
 # 3   [o, o, o, b]
 ```  
 ```Markdown
-[こちらへジャンプ](#hoge)
+[The Headerへジャンプ](#the-header)
 
-<a name="hoge"></a>
-こちらに書かれたジャンプ先の情報です.
+# The Header
 ```
 
 
@@ -1569,7 +1568,6 @@ submit状況:
 <br>
 <br>
 
-<a name="result"></a>
 #### 2021-06-29
 43位銀メダル確定した.  
 ![input file image](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/png/20210629.png?raw=true)  
