@@ -22,6 +22,8 @@ notebooks/my_seqeval.py.lock
 /notebooks/nb005-pytorch-bert-for-ner-fold-2
 /notebooks/l2knb003-spacy-dataset
 /notebooks/localnb003-spacy-dataset
+/notebooks/solutions
+/notebooks/localnb004-spacy-train
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
