@@ -33,6 +33,13 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
 |d73756ac5e220333fcd12bcfd97f90069517272d|fold=2|f1=0.000|0.519|
 |b3f53e283190fea649c8a6697b2adb6351ad37ec|fold=3, uncased, num_step=100|f1=0.000|0.573|
 |fa8078969f2961da02b80f6997e90f2c16e73f6a|MLM|-|0.573|
+<br>
+
+## Late Submissions
+|commitSHA|comment|Local CV|Private LB|Public LB|
+|----|----|----|----|----|
+|7b90adef595fa9942f510d4d48cd3f3eca5e9249|spacy model made by fold3|-|0.317|0.566|
+<br>
 
 
 ## My Assets
@@ -1586,7 +1593,6 @@ MLMタスクとしてこの問題に取り組む参加者も一定数いた. 1�
 <br>
 <br>
 <br>
-
 
 
 
