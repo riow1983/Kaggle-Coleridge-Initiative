@@ -39,6 +39,7 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
 |commitSHA|comment|Local CV|Private LB|Public LB|
 |----|----|----|----|----|
 |7b90adef595fa9942f510d4d48cd3f3eca5e9249|spacy model made by fold3|-|0.317|0.566|
+|-|late submission cv0 & cv1 & cv2|-|0.135|0.573|
 <br>
 
 
@@ -75,8 +76,8 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
 |kagglenb012-spacy3-to-huggingface-inference|[URL](https://www.kaggle.com/riow1983/kagglenb012-spacy3-to-huggingface-inference?scriptVersionId=66183166&select=submission.csv)|-|submission.csv|作成中|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>huggingface部分はkagglenb008から|
 |kagglenb013-spacy3-to-mlm-inferenc|[URL](https://www.kaggle.com/riow1983/kagglenb013-spacy3-to-mlm-inferenc?scriptVersionId=66294035)|[[Coleridge] BERT - MLMv4](https://www.kaggle.com/chienhsianghung/coleridge-bert-mlmv4)|submission.csv|Done|伊藤氏作成の[Fork of EX_Data_patern+Spacy3_TR_comment_out version 2](https://www.kaggle.com/ti110106/fork-of-ex-data-patern-spacy3-tr-comment-out?scriptVersionId=65886474)から作成<br>MLM部分は[External_Datasets_Matching + MLMv4](https://www.kaggle.com/chienhsianghung/external-datasets-matching-mlmv4)から
 |localnb003-spacy-dataset|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb003-spacy-dataset.ipynb)|nb009-cv|.spacy files|.spacyデータセット|Done|伊藤氏作成の[spacy-train-data-rf.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train-data-rf.ipynb)をnb009-cvに対応させたもの|
-|localnb004-spacy-train|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb004-spacy-train.ipynb)|.spacyデータセット|spacyモデル|作成中|伊藤氏作成の[spacy-train.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train.ipynb)のコピー|
-|kagglenb014-spacy-inference|[URL](https://www.kaggle.com/riow1983/kagglenb014-spacy-inference?scriptVersionId=68130625)|-|submission.csv|作成中|伊藤氏作成の[EX_Data_patern+Spacy3_TR(0.604) ver.2](https://www.kaggle.com/ti110106/ex-data-patern-spacy3-tr-0-604?scriptVersionId=66122583) のコピー. inputデータはlocalnb004-spacy-trainのoutput.|
+|localnb004-spacy-train|[URL](https://github.com/riow1983/Kaggle-Coleridge-Initiative/blob/main/notebooks/localnb004-spacy-train.ipynb)|.spacyデータセット|spacyモデル|Done|伊藤氏作成の[spacy-train.ipynb](https://github.com/Toru-Ito1/Kaggle-Coleridge/blob/master/spacy-train.ipynb)のコピー|
+|kagglenb014-spacy-inference|[URL](https://www.kaggle.com/riow1983/kagglenb014-spacy-inference?scriptVersionId=68130625)|./notebooks/localnb004-spacy-train/|submission.csv|Done|伊藤氏作成の[EX_Data_patern+Spacy3_TR(0.604) ver.2](https://www.kaggle.com/ti110106/ex-data-patern-spacy3-tr-0-604?scriptVersionId=66122583) のコピー|
 
 
 
