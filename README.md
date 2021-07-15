@@ -39,7 +39,7 @@ https://www.kaggle.com/c/coleridgeinitiative-show-us-the-data/overview
 |commitSHA|comment|Local CV|Private LB|Public LB|
 |----|----|----|----|----|
 |7b90adef595fa9942f510d4d48cd3f3eca5e9249|spacy model made by fold3|-|0.317|0.566|
-|-|late submission cv0 & cv1 & cv2|-|0.135|0.573|
+|dbd415df3a46bcdb5af696c3dd71f334edcecf61|late submission cv0 & cv1 & cv2|-|0.135|0.573|
 <br>
 
 
